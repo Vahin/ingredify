@@ -1,0 +1,10 @@
+---
+description: Структура проектной документации и Obsidian-совместимость
+alwaysApply: true
+---
+
+# Project Documentation
+
+Project planning and documentation are stored in `info/` as Markdown files.
+
+These files are intended to be read and edited with Obsidian, so keep links and formatting compatible with Obsidian where practical.

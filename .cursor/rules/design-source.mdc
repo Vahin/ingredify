@@ -1,0 +1,28 @@
+---
+description: Источник дизайн-системы и дизайн-ассетов Ingredify
+globs: **/*.{ts,tsx,css,md,mdx}
+alwaysApply: false
+---
+
+# Design Source
+
+The source of truth for Ingredify UI is the Open Design project.
+
+From the Ingredify project root, start Open Design with:
+
+```bash
+pnpm run design
+```
+
+This project script runs Open Design from `../open-design` with:
+
+```bash
+pnpm tools-dev run web --daemon-port 17456 --web-port 17573
+```
+
+Expected local endpoints:
+
+- Daemon API: `http://127.0.0.1:17456`
+- Web UI: `http://127.0.0.1:17573`
+
+Before making UI changes, inspect the active Open Design project via the daemon API. Use Open Design as the source of truth for colors, typography, spacing, radius, shadows, components, and page layout conventions.

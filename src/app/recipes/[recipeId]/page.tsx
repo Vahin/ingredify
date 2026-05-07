@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { RecipeDetailsPage } from "@/views/recipes/details/recipe-details-page";
+import { RecipeDetails } from "@/views/recipe-details";
 
 type RecipePageProps = {
   params: Promise<{
@@ -13,7 +13,7 @@ export async function generateMetadata({
   const { recipeId } = await params;
 
   return {
-    title: "Вишнёвый коблер",
+    title: "Вишневый коблер с миндальной крошкой",
     description: `Страница рецепта ${recipeId} в Ingredify.`,
   };
 }
@@ -21,5 +21,5 @@ export async function generateMetadata({
 export default async function RecipePage({ params }: RecipePageProps) {
   const { recipeId } = await params;
 
-  return <RecipeDetailsPage recipeId={recipeId} />;
+  return <RecipeDetails recipeId={recipeId} />;
 }

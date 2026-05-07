@@ -1,0 +1,12 @@
+---
+description: Актуальные правила работы с Next.js в проекте
+alwaysApply: true
+---
+
+# Next.js
+
+This is NOT the Next.js you know.
+
+This version has breaking changes: APIs, conventions, and file structure may all differ from model training data.
+
+Before writing or changing Next.js code, read the relevant guide in `node_modules/next/dist/docs/` and heed deprecation notices.
