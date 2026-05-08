@@ -1,6 +1,7 @@
 import { Icon } from "@/shared/ui/icon";
 import Image from "next/image";
-import { Recipe } from "../../model/recipe";
+
+import { type Recipe } from "@/entities/recipe";
 
 export const RecipeHero = ({ recipe }: { recipe: Recipe }) => {
   return (
@@ -9,7 +10,7 @@ export const RecipeHero = ({ recipe }: { recipe: Recipe }) => {
       className="grid gap-[18px] rounded-2xl border border-border bg-card p-4 shadow-[0_12px_34px_color-mix(in_oklch,var(--foreground)_10%,transparent)] md:grid-cols-[clamp(188px,24%,212px)_1fr] md:items-center md:gap-[22px]"
       data-od-id="recipe-hero"
     >
-      <div className="relative mx-auto aspect-[9/18] w-[min(240px,100%)] overflow-hidden rounded-[14px] bg-muted shadow-[inset_0_0_0_1px_rgba(255,255,255,0.55)] md:w-full">
+      <div className="relative mx-auto aspect-9/18 w-[min(240px,100%)] overflow-hidden rounded-[14px] bg-muted shadow-[inset_0_0_0_1px_rgba(255,255,255,0.55)] md:w-full">
         <Image
           alt="Теплый вишневый коблер в керамической форме"
           className="object-cover"
@@ -76,7 +77,7 @@ export const RecipeHero = ({ recipe }: { recipe: Recipe }) => {
 
         <div className="flex flex-wrap gap-2.5">
           <button
-            className="inline-flex min-h-[42px] items-center justify-center gap-[9px] rounded-[10px] bg-accent px-[17px] text-sm font-bold text-white shadow-[0_8px_18px_color-mix(in_oklch,var(--accent)_22%,transparent)] transition hover:-translate-y-px hover:bg-accent-hover focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent/25 active:translate-y-0"
+            className="inline-flex min-h-[42px] items-center justify-center gap-[9px] rounded-[10px] bg-accent px-[17px] text-sm font-bold text-white shadow-[0_8px_18px_color-mix(in_oklch,var(--accent)_22%,transparent)] transition hover:-translate-y-px hover:bg-accent-hover focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent/25 active:translate-y-0"
             type="button"
           >
             <Icon name="bookmark" className="size-[17px]" />

@@ -1,5 +1,6 @@
 import { Icon } from "@/shared/ui/icon";
-import { Recipe } from "../../model/recipe";
+
+import { type Recipe } from "@/entities/recipe";
 
 export function IngredientsCard({ recipe }: { recipe: Recipe }) {
   return (

@@ -1,4 +1,4 @@
-import { Recipe } from "../../model/recipe";
+import { type Recipe } from "@/entities/recipe";
 
 export const EquipmentCard = ({ recipe }: { recipe: Recipe }) => {
   return (

@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { Recipe } from "../../model/recipe";
+
+import { type Recipe } from "@/entities/recipe";
 
 export const CookingStep = ({ recipe }: { recipe: Recipe }) => {
   return (
