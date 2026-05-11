@@ -1,0 +1,10 @@
+// Схема Prisma — добавляйте модели по мере разработки
+
+generator client {
+  provider = "prisma-client"
+  output   = "./client"
+}
+
+datasource db {
+  provider = "postgresql"
+}

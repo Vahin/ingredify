@@ -1,8 +1,8 @@
-import { IngredientsCard } from '../ingredient-card/ingredient-card';
-import { EquipmentCard } from '../equipment-card/equipment-card';
 import { getRecipe } from '@/entities/recipe';
-import { RecipeDescription } from '../recipe-description/recipe-description';
+import { RecipeDetailsContent } from '../recipe-details-content/recipe-details-content';
 import { RecipeLayout } from '../recipe-layout/recipe-layout';
+import { EquipmentCard } from '@/entities/equipment';
+import { IngredientsCard } from '@/entities/ingredient';
 
 type RecipeDetailsProps = {
   recipeId: string;
@@ -13,7 +13,7 @@ export async function RecipeDetails({ recipeId }: RecipeDetailsProps) {
 
   return (
     <RecipeLayout
-      content={<RecipeDescription recipe={recipe} />}
+      content={<RecipeDetailsContent recipe={recipe} />}
       sidebar={
         <>
           <IngredientsCard recipe={recipe} />

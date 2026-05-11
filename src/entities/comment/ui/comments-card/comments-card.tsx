@@ -1,6 +1,5 @@
-import { Icon } from '@/shared/ui/icon';
-
 import { type Recipe } from '@/entities/recipe';
+import { Icon } from '@/shared/ui/icon';
 
 export const CommentsCard = ({ recipe }: { recipe: Recipe }) => {
   return (
