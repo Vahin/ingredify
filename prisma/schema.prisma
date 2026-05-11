@@ -8,3 +8,97 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Recipe {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  author      String
+  authorRole  String
+  title       String
+  description String
+  image       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  stats       RecipeStat[]
+  ingredients RecipeIngredient[]
+  equipment   RecipeEquipment[]
+  steps       RecipeStep[]
+  comments    RecipeComment[]
+
+  @@index([slug])
+}
+
+model RecipeStat {
+  id        String   @id @default(cuid())
+  recipeId  String
+  order     Int
+  icon      String
+  label     String
+  value     String
+  tone      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+}
+
+model RecipeIngredient {
+  id        String   @id @default(cuid())
+  recipeId  String
+  order     Int
+  name      String
+  amount    String
+  checked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+}
+
+model RecipeEquipment {
+  id        String   @id @default(cuid())
+  recipeId  String
+  order     Int
+  label     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+}
+
+model RecipeStep {
+  id        String   @id @default(cuid())
+  recipeId  String
+  order     Int
+  text      String
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+}
+
+model RecipeComment {
+  id        String   @id @default(cuid())
+  recipeId  String
+  order     Int
+  initials  String
+  name      String
+  text      String
+  label     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@index([recipeId])
+}

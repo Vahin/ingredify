@@ -51,7 +51,12 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-
+  Recipe: 'Recipe',
+  RecipeStat: 'RecipeStat',
+  RecipeIngredient: 'RecipeIngredient',
+  RecipeEquipment: 'RecipeEquipment',
+  RecipeStep: 'RecipeStep',
+  RecipeComment: 'RecipeComment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -68,4 +73,112 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const RecipeScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  author: 'author',
+  authorRole: 'authorRole',
+  title: 'title',
+  description: 'description',
+  image: 'image',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecipeScalarFieldEnum = (typeof RecipeScalarFieldEnum)[keyof typeof RecipeScalarFieldEnum]
+
+
+export const RecipeStatScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  order: 'order',
+  icon: 'icon',
+  label: 'label',
+  value: 'value',
+  tone: 'tone',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecipeStatScalarFieldEnum = (typeof RecipeStatScalarFieldEnum)[keyof typeof RecipeStatScalarFieldEnum]
+
+
+export const RecipeIngredientScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  order: 'order',
+  name: 'name',
+  amount: 'amount',
+  checked: 'checked',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecipeIngredientScalarFieldEnum = (typeof RecipeIngredientScalarFieldEnum)[keyof typeof RecipeIngredientScalarFieldEnum]
+
+
+export const RecipeEquipmentScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  order: 'order',
+  label: 'label',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecipeEquipmentScalarFieldEnum = (typeof RecipeEquipmentScalarFieldEnum)[keyof typeof RecipeEquipmentScalarFieldEnum]
+
+
+export const RecipeStepScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  order: 'order',
+  text: 'text',
+  image: 'image',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecipeStepScalarFieldEnum = (typeof RecipeStepScalarFieldEnum)[keyof typeof RecipeStepScalarFieldEnum]
+
+
+export const RecipeCommentScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  order: 'order',
+  initials: 'initials',
+  name: 'name',
+  text: 'text',
+  label: 'label',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecipeCommentScalarFieldEnum = (typeof RecipeCommentScalarFieldEnum)[keyof typeof RecipeCommentScalarFieldEnum]
+
+
+export const SortOrder = {
+  asc: 'asc',
+  desc: 'desc'
+} as const
+
+export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

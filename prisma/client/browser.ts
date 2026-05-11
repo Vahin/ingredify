@@ -17,4 +17,33 @@ import * as Prisma from './internal/prismaNamespaceBrowser'
 export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
-
+/**
+ * Model Recipe
+ * 
+ */
+export type Recipe = Prisma.RecipeModel
+/**
+ * Model RecipeStat
+ * 
+ */
+export type RecipeStat = Prisma.RecipeStatModel
+/**
+ * Model RecipeIngredient
+ * 
+ */
+export type RecipeIngredient = Prisma.RecipeIngredientModel
+/**
+ * Model RecipeEquipment
+ * 
+ */
+export type RecipeEquipment = Prisma.RecipeEquipmentModel
+/**
+ * Model RecipeStep
+ * 
+ */
+export type RecipeStep = Prisma.RecipeStepModel
+/**
+ * Model RecipeComment
+ * 
+ */
+export type RecipeComment = Prisma.RecipeCommentModel

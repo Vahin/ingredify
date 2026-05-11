@@ -8,4 +8,10 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Recipe'
+export type * from './models/RecipeStat'
+export type * from './models/RecipeIngredient'
+export type * from './models/RecipeEquipment'
+export type * from './models/RecipeStep'
+export type * from './models/RecipeComment'
 export type * from './commonInputTypes'

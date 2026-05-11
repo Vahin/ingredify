@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getRecipe } from "@/entities/recipe";
 import { RecipeDetails } from "@/views/recipe-details";
 
 type RecipePageProps = {
@@ -11,10 +12,11 @@ export async function generateMetadata({
   params,
 }: RecipePageProps): Promise<Metadata> {
   const { recipeId } = await params;
+  const recipe = await getRecipe(recipeId);
 
   return {
-    title: "Вишневый коблер с миндальной крошкой",
-    description: `Страница рецепта ${recipeId} в Ingredify.`,
+    title: recipe.title,
+    description: recipe.description,
   };
 }
 

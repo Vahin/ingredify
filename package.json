@@ -14,7 +14,8 @@
     "db:logs": "docker compose logs -f db",
     "db:psql": "docker compose exec db psql -U ingredify -d ingredify",
     "db:test": "docker compose exec -T db psql -U ingredify -d ingredify -c \"SELECT 1 AS ok;\"",
-    "db:prisma:test": "node scripts/prisma-db-test.mjs"
+    "db:prisma:test": "node scripts/prisma-db-test.mjs",
+    "db:seed": "prisma db seed"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -40,6 +41,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "prisma": "^7.8.0",
+    "tsx": "^4.21.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
