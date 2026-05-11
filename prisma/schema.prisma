@@ -20,7 +20,7 @@ model Recipe {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  stats       RecipeStat[]
+  nutrition   RecipeNutrition?
   ingredients RecipeIngredient[]
   equipment   RecipeEquipment[]
   steps       RecipeStep[]
@@ -29,20 +29,17 @@ model Recipe {
   @@index([slug])
 }
 
-model RecipeStat {
+model RecipeNutrition {
   id        String   @id @default(cuid())
-  recipeId  String   @map("recipe_id")
-  order     Int
-  icon      String
-  label     String
-  value     String
-  tone      String
+  recipeId  String   @unique @map("recipe_id")
+  calories  Int
+  protein   Decimal  @db.Decimal(6, 2)
+  fat       Decimal  @db.Decimal(6, 2)
+  carbs     Decimal  @db.Decimal(6, 2)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
-
-  @@index([recipeId])
 }
 
 model RecipeIngredient {

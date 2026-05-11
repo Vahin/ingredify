@@ -4,7 +4,7 @@ import { prisma } from '@/shared/lib/prisma';
 import type { Recipe } from '../model/types/recipe';
 
 const recipeInclude = {
-  stats: { orderBy: { order: 'asc' as const } },
+  nutrition: true,
   ingredients: { orderBy: { order: 'asc' as const } },
   equipment: { orderBy: { order: 'asc' as const } },
   steps: { orderBy: { order: 'asc' as const } },
@@ -12,6 +12,55 @@ const recipeInclude = {
 } satisfies Prisma.RecipeInclude;
 
 type RecipeRow = Prisma.RecipeGetPayload<{ include: typeof recipeInclude }>;
+
+/** Форматирование макронутриентов для карточек КБЖУ в UI */
+function formatMacroGrams(value: Prisma.Decimal | number): string {
+  const n = typeof value === 'number' ? value : Number(value);
+  const rounded = Math.round(n * 10) / 10;
+  const str = Number.isInteger(rounded)
+    ? String(rounded)
+    : rounded.toFixed(1).replace(/\.0$/, '');
+  return `${str} г`;
+}
+
+/**
+ * Сборка визуальных «статов» из числовых нутриентов.
+ * Иконки, подписи и цвета не хранятся в БД.
+ */
+function mapNutritionToStats(
+  nutrition: RecipeRow['nutrition'],
+): Recipe['stats'] {
+  if (nutrition === null) {
+    return [];
+  }
+
+  return [
+    {
+      icon: '/icons/kbju/calories.svg',
+      label: 'Калории',
+      value: String(nutrition.calories),
+      tone: 'text-orange-500',
+    },
+    {
+      icon: '/icons/kbju/protein.svg',
+      label: 'Белки',
+      value: formatMacroGrams(nutrition.protein),
+      tone: 'text-accent',
+    },
+    {
+      icon: '/icons/kbju/fat.svg',
+      label: 'Жиры',
+      value: formatMacroGrams(nutrition.fat),
+      tone: 'text-amber-500',
+    },
+    {
+      icon: '/icons/kbju/carbs.svg',
+      label: 'Углеводы',
+      value: formatMacroGrams(nutrition.carbs),
+      tone: 'text-violet-500',
+    },
+  ];
+}
 
 /** Преобразование строк БД в DTO для UI */
 function mapRecipeRowToDto(row: RecipeRow): Recipe {
@@ -21,12 +70,7 @@ function mapRecipeRowToDto(row: RecipeRow): Recipe {
     title: row.title,
     description: row.description,
     image: row.image,
-    stats: row.stats.map((s) => ({
-      icon: s.icon,
-      label: s.label,
-      value: s.value,
-      tone: s.tone,
-    })),
+    stats: mapNutritionToStats(row.nutrition),
     ingredients: row.ingredients.map((ing) => ({
       name: ing.name,
       amount: ing.amount,

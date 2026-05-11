@@ -385,7 +385,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   Recipe: 'Recipe',
-  RecipeStat: 'RecipeStat',
+  RecipeNutrition: 'RecipeNutrition',
   RecipeIngredient: 'RecipeIngredient',
   RecipeEquipment: 'RecipeEquipment',
   RecipeStep: 'RecipeStep',
@@ -405,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "recipe" | "recipeStat" | "recipeIngredient" | "recipeEquipment" | "recipeStep" | "recipeComment"
+    modelProps: "recipe" | "recipeNutrition" | "recipeIngredient" | "recipeEquipment" | "recipeStep" | "recipeComment"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -483,77 +483,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    RecipeStat: {
-      payload: Prisma.$RecipeStatPayload<ExtArgs>
-      fields: Prisma.RecipeStatFieldRefs
+    RecipeNutrition: {
+      payload: Prisma.$RecipeNutritionPayload<ExtArgs>
+      fields: Prisma.RecipeNutritionFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.RecipeStatFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeStatPayload> | null
+          args: Prisma.RecipeNutritionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeNutritionPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.RecipeStatFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeStatPayload>
+          args: Prisma.RecipeNutritionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeNutritionPayload>
         }
         findFirst: {
-          args: Prisma.RecipeStatFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeStatPayload> | null
+          args: Prisma.RecipeNutritionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeNutritionPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.RecipeStatFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeStatPayload>
+          args: Prisma.RecipeNutritionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeNutritionPayload>
         }
         findMany: {
-          args: Prisma.RecipeStatFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeStatPayload>[]
+          args: Prisma.RecipeNutritionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeNutritionPayload>[]
         }
         create: {
-          args: Prisma.RecipeStatCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeStatPayload>
+          args: Prisma.RecipeNutritionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeNutritionPayload>
         }
         createMany: {
-          args: Prisma.RecipeStatCreateManyArgs<ExtArgs>
+          args: Prisma.RecipeNutritionCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.RecipeStatCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeStatPayload>[]
+          args: Prisma.RecipeNutritionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeNutritionPayload>[]
         }
         delete: {
-          args: Prisma.RecipeStatDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeStatPayload>
+          args: Prisma.RecipeNutritionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeNutritionPayload>
         }
         update: {
-          args: Prisma.RecipeStatUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeStatPayload>
+          args: Prisma.RecipeNutritionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeNutritionPayload>
         }
         deleteMany: {
-          args: Prisma.RecipeStatDeleteManyArgs<ExtArgs>
+          args: Prisma.RecipeNutritionDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.RecipeStatUpdateManyArgs<ExtArgs>
+          args: Prisma.RecipeNutritionUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.RecipeStatUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeStatPayload>[]
+          args: Prisma.RecipeNutritionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeNutritionPayload>[]
         }
         upsert: {
-          args: Prisma.RecipeStatUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeStatPayload>
+          args: Prisma.RecipeNutritionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RecipeNutritionPayload>
         }
         aggregate: {
-          args: Prisma.RecipeStatAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateRecipeStat>
+          args: Prisma.RecipeNutritionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRecipeNutrition>
         }
         groupBy: {
-          args: Prisma.RecipeStatGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.RecipeStatGroupByOutputType>[]
+          args: Prisma.RecipeNutritionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RecipeNutritionGroupByOutputType>[]
         }
         count: {
-          args: Prisma.RecipeStatCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.RecipeStatCountAggregateOutputType> | number
+          args: Prisma.RecipeNutritionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RecipeNutritionCountAggregateOutputType> | number
         }
       }
     }
@@ -907,19 +907,18 @@ export const RecipeScalarFieldEnum = {
 export type RecipeScalarFieldEnum = (typeof RecipeScalarFieldEnum)[keyof typeof RecipeScalarFieldEnum]
 
 
-export const RecipeStatScalarFieldEnum = {
+export const RecipeNutritionScalarFieldEnum = {
   id: 'id',
   recipeId: 'recipeId',
-  order: 'order',
-  icon: 'icon',
-  label: 'label',
-  value: 'value',
-  tone: 'tone',
+  calories: 'calories',
+  protein: 'protein',
+  fat: 'fat',
+  carbs: 'carbs',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type RecipeStatScalarFieldEnum = (typeof RecipeStatScalarFieldEnum)[keyof typeof RecipeStatScalarFieldEnum]
+export type RecipeNutritionScalarFieldEnum = (typeof RecipeNutritionScalarFieldEnum)[keyof typeof RecipeNutritionScalarFieldEnum]
 
 
 export const RecipeIngredientScalarFieldEnum = {
@@ -1045,6 +1044,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal'
+ */
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+/**
+ * Reference to a field of type 'Decimal[]'
+ */
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 
@@ -1179,7 +1192,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   recipe?: Prisma.RecipeOmit
-  recipeStat?: Prisma.RecipeStatOmit
+  recipeNutrition?: Prisma.RecipeNutritionOmit
   recipeIngredient?: Prisma.RecipeIngredientOmit
   recipeEquipment?: Prisma.RecipeEquipmentOmit
   recipeStep?: Prisma.RecipeStepOmit

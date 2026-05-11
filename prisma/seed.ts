@@ -12,32 +12,13 @@ const cherryCobbler = {
   description:
     "Теплый домашний десерт с сочной вишневой начинкой, нежным миндалем и золотистой хрустящей шапкой. Хорош для воскресного ужина и отлично держит форму после остывания.",
   image: "/recipes/ingredify-cherry-cobbler-hero.png",
-  stats: [
-    {
-      icon: "/icons/kbju/calories.svg",
-      label: "Калории",
-      value: "385",
-      tone: "text-orange-500",
-    },
-    {
-      icon: "/icons/kbju/protein.svg",
-      label: "Белки",
-      value: "6 г",
-      tone: "text-accent",
-    },
-    {
-      icon: "/icons/kbju/fat.svg",
-      label: "Жиры",
-      value: "15 г",
-      tone: "text-amber-500",
-    },
-    {
-      icon: "/icons/kbju/carbs.svg",
-      label: "Углеводы",
-      value: "59 г",
-      tone: "text-violet-500",
-    },
-  ],
+  /** КБЖУ в БД; оформление карточек задаётся в коде приложения */
+  nutrition: {
+    calories: 385,
+    protein: 6,
+    fat: 15,
+    carbs: 59,
+  },
   ingredients: [
     { name: "Вишня без косточек", amount: "500 г", checked: true },
     { name: "Сахар", amount: "120 г", checked: false },
@@ -120,14 +101,8 @@ async function main() {
         title: cherryCobbler.title,
         description: cherryCobbler.description,
         image: cherryCobbler.image,
-        stats: {
-          create: cherryCobbler.stats.map((s, i) => ({
-            order: i,
-            icon: s.icon,
-            label: s.label,
-            value: s.value,
-            tone: s.tone,
-          })),
+        nutrition: {
+          create: cherryCobbler.nutrition,
         },
         ingredients: {
           create: cherryCobbler.ingredients.map((ing, i) => ({

@@ -52,7 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Recipe: 'Recipe',
-  RecipeStat: 'RecipeStat',
+  RecipeNutrition: 'RecipeNutrition',
   RecipeIngredient: 'RecipeIngredient',
   RecipeEquipment: 'RecipeEquipment',
   RecipeStep: 'RecipeStep',
@@ -90,19 +90,18 @@ export const RecipeScalarFieldEnum = {
 export type RecipeScalarFieldEnum = (typeof RecipeScalarFieldEnum)[keyof typeof RecipeScalarFieldEnum]
 
 
-export const RecipeStatScalarFieldEnum = {
+export const RecipeNutritionScalarFieldEnum = {
   id: 'id',
   recipeId: 'recipeId',
-  order: 'order',
-  icon: 'icon',
-  label: 'label',
-  value: 'value',
-  tone: 'tone',
+  calories: 'calories',
+  protein: 'protein',
+  fat: 'fat',
+  carbs: 'carbs',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type RecipeStatScalarFieldEnum = (typeof RecipeStatScalarFieldEnum)[keyof typeof RecipeStatScalarFieldEnum]
+export type RecipeNutritionScalarFieldEnum = (typeof RecipeNutritionScalarFieldEnum)[keyof typeof RecipeNutritionScalarFieldEnum]
 
 
 export const RecipeIngredientScalarFieldEnum = {
