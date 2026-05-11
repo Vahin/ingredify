@@ -13,12 +13,12 @@ model Recipe {
   id          String   @id @default(cuid())
   slug        String   @unique
   author      String
-  authorRole  String
+  authorRole  String   @map("author_role")
   title       String
   description String
   image       String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   stats       RecipeStat[]
   ingredients RecipeIngredient[]
@@ -31,14 +31,14 @@ model Recipe {
 
 model RecipeStat {
   id        String   @id @default(cuid())
-  recipeId  String
+  recipeId  String   @map("recipe_id")
   order     Int
   icon      String
   label     String
   value     String
   tone      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
@@ -47,13 +47,13 @@ model RecipeStat {
 
 model RecipeIngredient {
   id        String   @id @default(cuid())
-  recipeId  String
+  recipeId  String   @map("recipe_id")
   order     Int
   name      String
   amount    String
   checked   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
@@ -62,11 +62,11 @@ model RecipeIngredient {
 
 model RecipeEquipment {
   id        String   @id @default(cuid())
-  recipeId  String
+  recipeId  String   @map("recipe_id")
   order     Int
   label     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
@@ -75,12 +75,12 @@ model RecipeEquipment {
 
 model RecipeStep {
   id        String   @id @default(cuid())
-  recipeId  String
+  recipeId  String   @map("recipe_id")
   order     Int
   text      String
   image     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
@@ -89,14 +89,14 @@ model RecipeStep {
 
 model RecipeComment {
   id        String   @id @default(cuid())
-  recipeId  String
+  recipeId  String   @map("recipe_id")
   order     Int
   initials  String
   name      String
   text      String
   label     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
