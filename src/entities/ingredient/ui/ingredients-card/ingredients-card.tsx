@@ -1,5 +1,5 @@
 import { type Recipe } from '@/entities/recipe';
-import { Icon } from '@/shared/ui/icon';
+import { IconOld } from '@/shared/ui/icon';
 
 export const IngredientsCard = ({ recipe }: { recipe: Recipe }) => {
   return (
@@ -24,7 +24,7 @@ export const IngredientsCard = ({ recipe }: { recipe: Recipe }) => {
             className='grid size-6 place-items-center rounded-full bg-card text-sm font-[850] leading-none text-secondary shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--foreground)_7%,transparent)] transition hover:-translate-y-px hover:bg-accent hover:text-white'
             type='button'
           >
-            <Icon name='minus' className='size-3.5' />
+            <IconOld name='minus' className='size-3.5' />
           </button>
           <span className='text-center font-mono text-xs font-extrabold tabular-nums text-foreground'>
             2
@@ -34,7 +34,7 @@ export const IngredientsCard = ({ recipe }: { recipe: Recipe }) => {
             className='grid size-6 place-items-center rounded-full bg-card text-sm font-[850] leading-none text-secondary shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--foreground)_7%,transparent)] transition hover:-translate-y-px hover:bg-accent hover:text-white'
             type='button'
           >
-            <Icon name='plus' className='size-3.5' />
+            <IconOld name='plus' className='size-3.5' />
           </button>
         </div>
       </div>
@@ -55,7 +55,7 @@ export const IngredientsCard = ({ recipe }: { recipe: Recipe }) => {
               }`}
             >
               {ingredient.checked ? (
-                <Icon name='check' className='size-3' />
+                <IconOld name='check' className='size-3' />
               ) : null}
             </span>
             <span

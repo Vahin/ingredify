@@ -1,7 +1,8 @@
-import { Icon } from '@/shared/ui/icon';
+import { IconOld } from '@/shared/ui/icon';
 import Image from 'next/image';
 
 import { type Recipe } from '@/entities/recipe';
+import { NutritionStats } from '@/entities/nutrition';
 
 export const RecipeHero = ({ recipe }: { recipe: Recipe }) => {
   return (
@@ -46,48 +47,21 @@ export const RecipeHero = ({ recipe }: { recipe: Recipe }) => {
           </p>
         </div>
 
-        <div className='grid grid-cols-1 gap-2.5 min-[440px]:grid-cols-2 md:grid-cols-4'>
-          {recipe.stats.map((stat) => (
-            <div
-              className='grid min-h-16 grid-cols-[34px_1fr] items-center gap-2.5 rounded-xl bg-muted p-3'
-              key={stat.label}
-            >
-              <span
-                className={`grid size-[30px] place-items-center rounded-full bg-card ${stat.tone}`}
-              >
-                <Image
-                  alt=''
-                  aria-hidden='true'
-                  className='size-4'
-                  height={16}
-                  src={stat.icon}
-                  unoptimized
-                  width={16}
-                />
-              </span>
-              <div className='min-w-0'>
-                <p className='font-mono text-[17px] font-[850] leading-none tabular-nums'>
-                  {stat.value}
-                </p>
-                <p className='mt-1 text-[10px] text-secondary'>{stat.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <NutritionStats nutrition={recipe.nutrition} />
 
         <div className='flex flex-wrap gap-2.5'>
           <button
             className='inline-flex min-h-[42px] items-center justify-center gap-[9px] rounded-[10px] bg-accent px-[17px] text-sm font-bold text-white shadow-[0_8px_18px_color-mix(in_oklch,var(--accent)_22%,transparent)] transition hover:-translate-y-px hover:bg-accent-hover focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-accent/25 active:translate-y-0'
             type='button'
           >
-            <Icon name='bookmark' className='size-[17px]' />
+            <IconOld name='bookmark' className='size-[17px]' />
             Сохранить
           </button>
           <button
             className='inline-flex min-h-[42px] items-center justify-center gap-[9px] rounded-[10px] bg-muted px-[17px] text-sm font-bold text-foreground transition hover:-translate-y-px hover:bg-border/70 active:translate-y-0'
             type='button'
           >
-            <Icon name='message' className='size-[17px] text-secondary' />
+            <IconOld name='message' className='size-[17px] text-secondary' />
             12
           </button>
           <button
@@ -95,7 +69,7 @@ export const RecipeHero = ({ recipe }: { recipe: Recipe }) => {
             className='inline-flex min-h-[42px] items-center justify-center gap-[9px] rounded-[10px] bg-red-50 px-[17px] text-sm font-bold text-red-500 transition hover:-translate-y-px active:translate-y-0'
             type='button'
           >
-            <Icon name='heart' className='size-[17px]' />
+            <IconOld name='heart' className='size-[17px]' />
             124
           </button>
         </div>

@@ -1,15 +1,15 @@
 export type Recipe = {
+  nutrition: {
+    calories: number;
+    protein: number;
+    fat: number;
+    carbs: number;
+  };
   author: string;
   authorRole: string;
   title: string;
   description: string;
   image: string;
-  stats: {
-    icon: string;
-    label: string;
-    value: string;
-    tone: string;
-  }[];
   ingredients: {
     name: string;
     amount: string;

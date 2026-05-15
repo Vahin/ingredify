@@ -1,5 +1,5 @@
 import { type Recipe } from '@/entities/recipe';
-import { Icon } from '@/shared/ui/icon';
+import { IconOld } from '@/shared/ui/icon';
 
 export const CommentsCard = ({ recipe }: { recipe: Recipe }) => {
   return (
@@ -54,7 +54,7 @@ export const CommentsCard = ({ recipe }: { recipe: Recipe }) => {
           className='grid size-11 place-items-center rounded-full bg-accent text-white transition hover:-translate-y-px hover:bg-accent-hover'
           type='button'
         >
-          <Icon name='send' className='size-[18px]' />
+          <IconOld name='send' className='size-[18px]' />
         </button>
       </div>
     </section>

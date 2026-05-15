@@ -23,45 +23,6 @@ function formatMacroGrams(value: Prisma.Decimal | number): string {
   return `${str} г`;
 }
 
-/**
- * Сборка визуальных «статов» из числовых нутриентов.
- * Иконки, подписи и цвета не хранятся в БД.
- */
-function mapNutritionToStats(
-  nutrition: RecipeRow['nutrition'],
-): Recipe['stats'] {
-  if (nutrition === null) {
-    return [];
-  }
-
-  return [
-    {
-      icon: '/icons/kbju/calories.svg',
-      label: 'Калории',
-      value: String(nutrition.calories),
-      tone: 'text-orange-500',
-    },
-    {
-      icon: '/icons/kbju/protein.svg',
-      label: 'Белки',
-      value: formatMacroGrams(nutrition.protein),
-      tone: 'text-accent',
-    },
-    {
-      icon: '/icons/kbju/fat.svg',
-      label: 'Жиры',
-      value: formatMacroGrams(nutrition.fat),
-      tone: 'text-amber-500',
-    },
-    {
-      icon: '/icons/kbju/carbs.svg',
-      label: 'Углеводы',
-      value: formatMacroGrams(nutrition.carbs),
-      tone: 'text-violet-500',
-    },
-  ];
-}
-
 /** Преобразование строк БД в DTO для UI */
 function mapRecipeRowToDto(row: RecipeRow): Recipe {
   return {
@@ -70,7 +31,12 @@ function mapRecipeRowToDto(row: RecipeRow): Recipe {
     title: row.title,
     description: row.description,
     image: row.image,
-    stats: mapNutritionToStats(row.nutrition),
+    nutrition: {
+      calories: row.nutrition?.calories ?? 0,
+      protein: Number(row.nutrition?.protein ?? 0),
+      fat: Number(row.nutrition?.fat ?? 0),
+      carbs: Number(row.nutrition?.carbs ?? 0),
+    },
     ingredients: row.ingredients.map((ing) => ({
       name: ing.name,
       amount: ing.amount,
