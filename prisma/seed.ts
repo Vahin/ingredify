@@ -1,10 +1,13 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
+import bcrypt from "bcryptjs";
 import { PrismaClient } from "./client/client";
 
-/** Данные стартового рецепта (раньше были в `src/entities/recipe/model/recipe.ts`) */
+const DEMO_USER_ID = "demo_user_ingredify";
+const DEMO_USER_EMAIL = "demo@ingredify.local";
 const CHERRY_COBBLER_SLUG = "cherry-cobbler";
 
+/** Данные стартового рецепта */
 const cherryCobbler = {
   author: "Алена Кравцова",
   authorRole: "автор рецепта",
@@ -12,7 +15,6 @@ const cherryCobbler = {
   description:
     "Теплый домашний десерт с сочной вишневой начинкой, нежным миндалем и золотистой хрустящей шапкой. Хорош для воскресного ужина и отлично держит форму после остывания.",
   image: "/recipes/ingredify-cherry-cobbler-hero.png",
-  /** КБЖУ в БД; оформление карточек задаётся в коде приложения */
   nutrition: {
     calories: 385,
     protein: 6,
@@ -81,11 +83,28 @@ async function main() {
     throw new Error("DATABASE_URL не задан");
   }
 
+  const demoPassword = process.env.SEED_DEMO_PASSWORD ?? "password123";
+  const passwordHash = await bcrypt.hash(demoPassword, 12);
+
   const adapter = new PrismaPg({ connectionString: url });
   const prisma = new PrismaClient({ adapter });
 
   try {
-    // Идемпотентно: пересоздаём рецепт по slug (каскад удалит дочерние строки)
+    await prisma.user.upsert({
+      where: { id: DEMO_USER_ID },
+      update: {
+        name: cherryCobbler.author,
+        email: DEMO_USER_EMAIL,
+        passwordHash,
+      },
+      create: {
+        id: DEMO_USER_ID,
+        email: DEMO_USER_EMAIL,
+        name: cherryCobbler.author,
+        passwordHash,
+      },
+    });
+
     const existing = await prisma.recipe.findUnique({
       where: { slug: CHERRY_COBBLER_SLUG },
     });
@@ -96,6 +115,7 @@ async function main() {
     await prisma.recipe.create({
       data: {
         slug: CHERRY_COBBLER_SLUG,
+        userId: DEMO_USER_ID,
         author: cherryCobbler.author,
         authorRole: cherryCobbler.authorRole,
         title: cherryCobbler.title,
@@ -137,7 +157,7 @@ async function main() {
       },
     });
 
-    console.log(`Seed: рецепт «${CHERRY_COBBLER_SLUG}» создан.`);
+    console.log(`Seed: пользователь ${DEMO_USER_EMAIL} и рецепт «${CHERRY_COBBLER_SLUG}» готовы.`);
   } finally {
     await prisma.$disconnect();
   }

@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Inter, Geist } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/shared/lib/utils';
-import { Header } from '@/widgets/header';
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -38,10 +37,7 @@ export default function RootLayout({
       )}
     >
       <body className='min-h-full bg-background font-sans text-foreground'>
-        <div className='min-h-screen bg-background pb-14'>
-          <Header />
-          {children}
-        </div>
+        {children}
       </body>
     </html>
   );

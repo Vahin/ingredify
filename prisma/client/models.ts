@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/User'
 export type * from './models/Recipe'
 export type * from './models/RecipeNutrition'
 export type * from './models/RecipeIngredient'
