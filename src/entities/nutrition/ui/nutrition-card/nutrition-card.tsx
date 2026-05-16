@@ -19,7 +19,7 @@ export const NutritionCard = ({ variant, stat }: NutritionCardProps) => {
       <NutritionIcon variant={variant} />
       <div className='min-w-0'>
         <p className='font-mono text-[17px] font-[850] leading-none tabular-nums'>
-          {stat}
+          {variant === 'calories' ? stat : `${stat} г`}
         </p>
         <p className='mt-1 text-[10px] text-secondary'>
           {nutritionLabels[variant]}

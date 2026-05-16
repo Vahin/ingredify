@@ -13,14 +13,10 @@ const recipeInclude = {
 
 type RecipeRow = Prisma.RecipeGetPayload<{ include: typeof recipeInclude }>;
 
-/** Форматирование макронутриентов для карточек КБЖУ в UI */
-function formatMacroGrams(value: Prisma.Decimal | number): string {
+/** Округление макронутриентов для карточек КБЖУ в UI */
+function formatMacroGrams(value: Prisma.Decimal | number): number {
   const n = typeof value === 'number' ? value : Number(value);
-  const rounded = Math.round(n * 10) / 10;
-  const str = Number.isInteger(rounded)
-    ? String(rounded)
-    : rounded.toFixed(1).replace(/\.0$/, '');
-  return `${str} г`;
+  return Math.round(n * 10) / 10;
 }
 
 /** Преобразование строк БД в DTO для UI */
@@ -33,9 +29,9 @@ function mapRecipeRowToDto(row: RecipeRow): Recipe {
     image: row.image,
     nutrition: {
       calories: row.nutrition?.calories ?? 0,
-      protein: Number(row.nutrition?.protein ?? 0),
-      fat: Number(row.nutrition?.fat ?? 0),
-      carbs: Number(row.nutrition?.carbs ?? 0),
+      protein: formatMacroGrams(row.nutrition?.protein ?? 0),
+      fat: formatMacroGrams(row.nutrition?.fat ?? 0),
+      carbs: formatMacroGrams(row.nutrition?.carbs ?? 0),
     },
     ingredients: row.ingredients.map((ing) => ({
       name: ing.name,
