@@ -4,17 +4,11 @@ import { redirect } from 'next/navigation';
 import { prisma } from '@/shared/lib/prisma';
 import {
   createSession,
+  safeNextPath,
   setSessionCookie,
   verifyPassword,
 } from '@/shared/lib/auth';
 import { LoginSchema, type AuthFormState } from '../model/schemas';
-
-function safeNextPath(next: string | null): string {
-  if (!next || !next.startsWith('/') || next.startsWith('//')) {
-    return '/profile';
-  }
-  return next;
-}
 
 export async function login(
   _prevState: AuthFormState,

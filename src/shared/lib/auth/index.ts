@@ -17,3 +17,10 @@ export {
   getLoginRedirectPath,
   type CurrentUser,
 } from './dal';
+export {
+  isProtectedPath,
+  safeNextPath,
+  getCurrentPathname,
+  buildLoginHref,
+  resolveLogoutRedirect,
+} from './navigation';

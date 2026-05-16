@@ -2,22 +2,15 @@ import Link from 'next/link';
 import { IconOld } from '@/shared/ui/icon';
 import { getCurrentUser } from '@/entities/user';
 import { logout } from '@/features/auth';
+import { buildLoginHref, getCurrentPathname } from '@/shared/lib/auth';
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/lib/utils';
-
-function getInitials(name: string): string {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  if (parts.length === 0) {
-    return '?';
-  }
-  if (parts.length === 1) {
-    return parts[0]!.slice(0, 1).toUpperCase();
-  }
-  return `${parts[0]!.slice(0, 1)}${parts[1]!.slice(0, 1)}`.toUpperCase();
-}
+import { getInitials } from '@/shared/lib/helpers';
 
 export async function Header() {
   const user = await getCurrentUser();
+  const pathname = await getCurrentPathname();
+  const loginHref = buildLoginHref(pathname);
 
   return (
     <header className='sticky top-0 z-20 border-b border-border bg-card/95 backdrop-blur-[14px]'>
@@ -58,6 +51,7 @@ export async function Header() {
                 {getInitials(user.name)}
               </Link>
               <form action={logout}>
+                <input type='hidden' name='next' value={pathname} />
                 <Button type='submit' variant='ghost' size='sm'>
                   Выйти
                 </Button>
@@ -66,7 +60,7 @@ export async function Header() {
           ) : (
             <>
               <Button asChild variant='ghost' size='sm'>
-                <Link href='/login'>Войти</Link>
+                <Link href={loginHref}>Войти</Link>
               </Button>
               <Button asChild size='sm'>
                 <Link href='/register'>Регистрация</Link>

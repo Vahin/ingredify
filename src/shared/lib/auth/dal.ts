@@ -1,7 +1,7 @@
 import { cache } from 'react';
-import { headers } from 'next/headers';
 import { unauthorized } from 'next/navigation';
 import { prisma } from '@/shared/lib/prisma';
+import { buildLoginHref, getCurrentPathname } from './navigation';
 import { getSessionIdFromCookie } from './session';
 import { getSession } from './session-store';
 
@@ -48,10 +48,6 @@ export async function verifySession(): Promise<CurrentUser> {
 
 /** Путь для редиректа на логин после 401 (из proxy или текущего URL) */
 export async function getLoginRedirectPath(): Promise<string> {
-  const headersList = await headers();
-  const pathname =
-    headersList.get('x-pathname') ??
-    headersList.get('x-url') ??
-    '/profile';
-  return `/login?next=${encodeURIComponent(pathname)}`;
+  const pathname = await getCurrentPathname();
+  return buildLoginHref(pathname);
 }

@@ -1,15 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { SESSION_COOKIE_NAME } from '@/shared/lib/auth';
-
-function isProtectedPath(pathname: string): boolean {
-  if (pathname === '/profile' || pathname.startsWith('/profile/')) {
-    return true;
-  }
-
-  const editMatch = /^\/recipes\/[^/]+\/edit\/?$/.exec(pathname);
-  return editMatch !== null;
-}
+import { isProtectedPath } from '@/shared/lib/auth/navigation';
+import { SESSION_COOKIE_NAME } from '@/shared/lib/auth/session';
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -33,5 +25,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/profile', '/profile/:path*', '/recipes/:recipeId/edit'],
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)',
+  ],
 };
