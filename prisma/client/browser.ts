@@ -33,10 +33,25 @@ export type Recipe = Prisma.RecipeModel
  */
 export type RecipeNutrition = Prisma.RecipeNutritionModel
 /**
+ * Model Ingredient
+ * 
+ */
+export type Ingredient = Prisma.IngredientModel
+/**
+ * Model MeasurementUnit
+ * 
+ */
+export type MeasurementUnit = Prisma.MeasurementUnitModel
+/**
  * Model RecipeIngredient
  * 
  */
 export type RecipeIngredient = Prisma.RecipeIngredientModel
+/**
+ * Model RecipeIngredientGroup
+ * 
+ */
+export type RecipeIngredientGroup = Prisma.RecipeIngredientGroupModel
 /**
  * Model RecipeEquipment
  * 

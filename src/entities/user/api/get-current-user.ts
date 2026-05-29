@@ -1,1 +1,1 @@
-export { getCurrentUser, type CurrentUser } from '@/shared/lib/auth';
+export { getCurrentUser, type CurrentUser } from '@/shared/lib/auth/dal';

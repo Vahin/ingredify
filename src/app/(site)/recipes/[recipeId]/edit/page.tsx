@@ -25,7 +25,7 @@ export default async function RecipeEditPage({ params }: RecipeEditPageProps) {
   const user = await verifySession();
   const recipe = await getRecipeForEdit(recipeId);
 
-  if (recipe.userId !== user.id) {
+  if (recipe.authorId !== user.id) {
     forbidden();
   }
 

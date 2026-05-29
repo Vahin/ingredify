@@ -1,14 +1,6 @@
-import { headers } from 'next/headers';
+import { isProtectedPath } from './protected-path';
 
-/** Защищённые маршруты — без сессии недоступны */
-export function isProtectedPath(pathname: string): boolean {
-  if (pathname === '/profile' || pathname.startsWith('/profile/')) {
-    return true;
-  }
-
-  const editMatch = /^\/recipes\/[^/]+\/edit\/?$/.exec(pathname);
-  return editMatch !== null;
-}
+export { isProtectedPath };
 
 /** Валидация относительного пути (защита от open redirect) */
 export function safeNextPath(
@@ -19,12 +11,6 @@ export function safeNextPath(
     return fallback;
   }
   return next;
-}
-
-/** Текущий pathname из заголовка proxy */
-export async function getCurrentPathname(): Promise<string> {
-  const headersList = await headers();
-  return headersList.get('x-pathname') ?? headersList.get('x-url') ?? '/';
 }
 
 /** Ссылка на логин с возвратом на текущую страницу */

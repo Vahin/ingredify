@@ -1,4 +1,14 @@
+import type { RecipeIngredientLine } from '@/entities/ingredient/model/types/recipe-ingredient-line';
+import type { RecipeOutput } from './recipe-output';
+
+export type RecipeIngredientSection = {
+  id: string | null;
+  label: string | null;
+  lines: RecipeIngredientLine[];
+};
+
 export type Recipe = {
+  output: RecipeOutput;
   nutrition: {
     calories: number;
     protein: number;
@@ -6,15 +16,10 @@ export type Recipe = {
     carbs: number;
   };
   author: string;
-  authorRole: string;
   title: string;
   description: string;
   image: string;
-  ingredients: {
-    name: string;
-    amount: string;
-    checked?: boolean;
-  }[];
+  ingredientSections: RecipeIngredientSection[];
   equipment: string[];
   steps: {
     text: string;

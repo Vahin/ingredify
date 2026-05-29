@@ -1,10 +1,10 @@
 export { hashPassword, verifyPassword } from './password';
 export {
-  SESSION_COOKIE_NAME,
   setSessionCookie,
   clearSessionCookie,
   getSessionIdFromCookie,
 } from './session';
+export { SESSION_COOKIE_NAME } from './session-cookie';
 export {
   createSession,
   getSession,
@@ -20,7 +20,7 @@ export {
 export {
   isProtectedPath,
   safeNextPath,
-  getCurrentPathname,
   buildLoginHref,
   resolveLogoutRedirect,
 } from './navigation';
+export { getCurrentPathname } from './current-pathname';

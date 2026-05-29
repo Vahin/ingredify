@@ -447,10 +447,6 @@ export type RecipeStepUncheckedUpdateManyWithoutRecipeNestedInput = {
   deleteMany?: Prisma.RecipeStepScalarWhereInput | Prisma.RecipeStepScalarWhereInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type RecipeStepCreateWithoutRecipeInput = {
   id?: string
   order: number

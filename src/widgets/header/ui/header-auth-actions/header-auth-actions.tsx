@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@/entities/user';
 import { UserMenuButton } from '@/features/show-user-menu';
-import { buildLoginHref, getCurrentPathname } from '@/shared/lib/auth';
+import { getCurrentPathname } from '@/shared/lib/auth/current-pathname';
+import { buildLoginHref } from '@/shared/lib/auth/navigation';
 import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 

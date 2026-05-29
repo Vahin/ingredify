@@ -1,0 +1,137 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { isPortionOutput } from '@/entities/recipe/lib/is-portion-output';
+import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
+import { IconOld } from '@/shared/ui/icon';
+import {
+  clampOutputQuantity,
+  getMaxOutputQuantity,
+  parseOutputQuantityInput,
+} from '../../lib/output-quantity';
+
+const getPortionLabel = (count: number) => {
+  const mod100 = count % 100;
+  const mod10 = count % 10;
+
+  if (mod100 >= 11 && mod100 <= 14) {
+    return 'Порций';
+  }
+
+  if (mod10 === 1) {
+    return 'Порция';
+  }
+
+  if (mod10 >= 2 && mod10 <= 4) {
+    return 'Порции';
+  }
+
+  return 'Порций';
+};
+
+type IngredientSidebarHeaderProps = {
+  /** Управление количеством выхода рецепта (порции, граммы, мл и т.д.) */
+  quantityControl: {
+    value: number;
+    output: RecipeOutput;
+    onChange: (value: number) => void;
+    onDecrease: () => void;
+    onIncrease: () => void;
+  };
+};
+
+export const IngredientSidebarHeader = ({
+  quantityControl,
+}: IngredientSidebarHeaderProps) => {
+  const { value, output, onChange, onDecrease, onIncrease } = quantityControl;
+  const portionRecipe = isPortionOutput(output);
+  const [inputDraft, setInputDraft] = useState(String(value));
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (!isEditing) {
+      setInputDraft(String(value));
+    }
+  }, [isEditing, value]);
+
+  const commitDraft = () => {
+    const parsed = parseOutputQuantityInput(inputDraft);
+
+    if (parsed === null) {
+      setInputDraft(String(value));
+      setIsEditing(false);
+      return;
+    }
+
+    const next = clampOutputQuantity(parsed, output);
+    onChange(next);
+    setInputDraft(String(next));
+    setIsEditing(false);
+  };
+
+  const maxQuantity = getMaxOutputQuantity(output);
+  const unitLabel = portionRecipe
+    ? getPortionLabel(value)
+    : output.unitShortName;
+
+  const quantityAriaLabel = portionRecipe
+    ? 'Количество порций'
+    : `Количество выхода, ${output.unitShortName}`;
+
+  return (
+    <div className='mb-4 flex flex-col items-start gap-2'>
+      <h2
+        className='min-w-0 text-[22px] font-[850] leading-[1.15] text-foreground'
+        id='ingredients-title'
+      >
+        Ингредиенты
+      </h2>
+      <div className='flex items-center gap-2'>
+        <div
+          aria-label={quantityAriaLabel}
+          className='flex h-7 items-center gap-[3px] overflow-hidden rounded-full bg-muted p-0.5'
+        >
+          <button
+            aria-label='Уменьшить количество'
+            className='grid size-6 shrink-0 place-items-center rounded-full bg-card text-sm font-[850] leading-none text-secondary shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--foreground)_7%,transparent)] transition hover:-translate-y-px hover:bg-accent hover:text-white disabled:pointer-events-none disabled:opacity-40'
+            disabled={value <= 1}
+            onClick={onDecrease}
+            type='button'
+          >
+            <IconOld name='minus' className='size-3.5' />
+          </button>
+          <input
+            aria-label={quantityAriaLabel}
+            className='h-6 w-12 min-w-0 border-0 bg-transparent px-0.5 text-center font-mono text-xs font-extrabold tabular-nums text-foreground outline-none focus:ring-0'
+            inputMode='decimal'
+            onBlur={commitDraft}
+            onChange={(event) => {
+              setIsEditing(true);
+              setInputDraft(event.target.value);
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.preventDefault();
+                commitDraft();
+              }
+            }}
+            type='text'
+            value={inputDraft}
+          />
+          <button
+            aria-label='Увеличить количество'
+            className='grid size-6 shrink-0 place-items-center rounded-full bg-card text-sm font-[850] leading-none text-secondary shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--foreground)_7%,transparent)] transition hover:-translate-y-px hover:bg-accent hover:text-white disabled:pointer-events-none disabled:opacity-40'
+            disabled={value >= maxQuantity}
+            onClick={onIncrease}
+            type='button'
+          >
+            <IconOld name='plus' className='size-3.5' />
+          </button>
+        </div>
+        <span className='text-xs font-extrabold tracking-[0.14em] text-secondary'>
+          {unitLabel}
+        </span>
+      </div>
+    </div>
+  );
+};

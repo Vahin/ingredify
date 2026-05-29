@@ -1,1 +1,1 @@
-export { IngredientsCard } from './ui/ingredients-card/ingredients-card';
+export { IngredientSticker } from './ui/ingredient-sticker/ingredient-sticker';

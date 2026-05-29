@@ -5,13 +5,203 @@ import { PrismaClient } from "./client/client";
 
 const DEMO_USER_ID = "demo_user_ingredify";
 const DEMO_USER_EMAIL = "demo@ingredify.local";
-const CHERRY_COBBLER_SLUG = "cherry-cobbler";
 
 /** Данные стартового рецепта */
+const DEMO_AUTHOR_NAME = "Алена Кравцова";
+
+/** Стартовые единицы измерения */
+const MEASUREMENT_UNITS = [
+  { shortName: "г", name: "Грамм" },
+  { shortName: "кг", name: "Килограмм" },
+  { shortName: "мл", name: "Миллилитр" },
+  { shortName: "л", name: "Литр" },
+  { shortName: "шт", name: "Штука" },
+  { shortName: "ч. л.", name: "Чайная ложка" },
+  { shortName: "ст. л.", name: "Столовая ложка" },
+  { shortName: "щепотка", name: "Щепотка" },
+  { shortName: "порц.", name: "Порция" },
+] as const;
+
+type SeedIngredient = {
+  name: string;
+  sticker: string;
+  quantity: number;
+  unitShortName: (typeof MEASUREMENT_UNITS)[number]["shortName"];
+};
+
+type SeedGroupedIngredient = SeedIngredient & {
+  groupLabel: "Паста" | "Соус";
+};
+
+const cherryCobblerIngredients: SeedIngredient[] = [
+  {
+    name: "Вишня без косточек",
+    sticker: "/ingredients/cherry.png",
+    quantity: 500,
+    unitShortName: "г",
+  },
+  {
+    name: "Сахар",
+    sticker: "/ingredients/sugar.png",
+    quantity: 120,
+    unitShortName: "г",
+  },
+  {
+    name: "Пшеничная мука",
+    sticker: "/ingredients/flour.png",
+    quantity: 145,
+    unitShortName: "г",
+  },
+  {
+    name: "Миндальная крошка",
+    sticker: "/ingredients/almond-crumb.png",
+    quantity: 35,
+    unitShortName: "г",
+  },
+  {
+    name: "Сливочное масло",
+    sticker: "/ingredients/butter.png",
+    quantity: 85,
+    unitShortName: "г",
+  },
+  {
+    name: "Молоко",
+    sticker: "/ingredients/milk.png",
+    quantity: 120,
+    unitShortName: "мл",
+  },
+  {
+    name: "Разрыхлитель",
+    sticker: "/ingredients/baking-powder.png",
+    quantity: 1,
+    unitShortName: "ч. л.",
+  },
+];
+
+/** Базовые продукты для подрецепта масла (не составные) */
+const brownButterIngredients: SeedIngredient[] = [
+  {
+    name: "Несолёное сливочное масло",
+    sticker: "/ingredients/unsalted-butter.png",
+    quantity: 100,
+    unitShortName: "г",
+  },
+  {
+    name: "Сахар",
+    sticker: "/ingredients/sugar.png",
+    quantity: 5,
+    unitShortName: "г",
+  },
+];
+
+const pastaAlfredoIngredients: SeedIngredient[] = [
+  {
+    name: "Феттучине",
+    sticker: "/ingredients/fettuccine.png",
+    quantity: 320,
+    unitShortName: "г",
+  },
+  {
+    name: "Сливки 20%",
+    sticker: "/ingredients/cream-20.png",
+    quantity: 250,
+    unitShortName: "мл",
+  },
+  {
+    name: "Пармезан",
+    sticker: "/ingredients/parmesan.png",
+    quantity: 90,
+    unitShortName: "г",
+  },
+  {
+    name: "Сливочное масло 82%",
+    sticker: "/ingredients/butter.png",
+    quantity: 40,
+    unitShortName: "г",
+  },
+  {
+    name: "Чеснок",
+    sticker: "/ingredients/garlic.png",
+    quantity: 2,
+    unitShortName: "шт",
+  },
+  {
+    name: "Чёрный перец",
+    sticker: "/ingredients/black-pepper.png",
+    quantity: 1,
+    unitShortName: "щепотка",
+  },
+];
+
+const pastaAlfredoHomemadeIngredients: SeedGroupedIngredient[] = [
+  {
+    name: "Пшеничная мука",
+    sticker: "/ingredients/flour.png",
+    quantity: 200,
+    unitShortName: "г",
+    groupLabel: "Паста",
+  },
+  {
+    name: "Яйцо",
+    sticker: "/ingredients/egg.png",
+    quantity: 2,
+    unitShortName: "шт",
+    groupLabel: "Паста",
+  },
+  {
+    name: "Соль",
+    sticker: "/ingredients/salt.png",
+    quantity: 1,
+    unitShortName: "щепотка",
+    groupLabel: "Паста",
+  },
+  {
+    name: "Оливковое масло",
+    sticker: "/ingredients/olive-oil.png",
+    quantity: 1,
+    unitShortName: "ч. л.",
+    groupLabel: "Паста",
+  },
+  {
+    name: "Сливки 20%",
+    sticker: "/ingredients/cream-20.png",
+    quantity: 250,
+    unitShortName: "мл",
+    groupLabel: "Соус",
+  },
+  {
+    name: "Пармезан",
+    sticker: "/ingredients/parmesan.png",
+    quantity: 90,
+    unitShortName: "г",
+    groupLabel: "Соус",
+  },
+  {
+    name: "Сливочное масло 82%",
+    sticker: "/ingredients/butter.png",
+    quantity: 40,
+    unitShortName: "г",
+    groupLabel: "Соус",
+  },
+  {
+    name: "Чеснок",
+    sticker: "/ingredients/garlic.png",
+    quantity: 2,
+    unitShortName: "шт",
+    groupLabel: "Соус",
+  },
+  {
+    name: "Чёрный перец",
+    sticker: "/ingredients/black-pepper.png",
+    quantity: 1,
+    unitShortName: "щепотка",
+    groupLabel: "Соус",
+  },
+];
+
 const cherryCobbler = {
-  author: "Алена Кравцова",
-  authorRole: "автор рецепта",
   title: "Вишневый коблер с миндальной крошкой",
+  output: { quantity: 6, unitShortName: "порц." as const },
   description:
     "Теплый домашний десерт с сочной вишневой начинкой, нежным миндалем и золотистой хрустящей шапкой. Хорош для воскресного ужина и отлично держит форму после остывания.",
   image: "/recipes/ingredify-cherry-cobbler-hero.png",
@@ -21,15 +211,6 @@ const cherryCobbler = {
     fat: 15,
     carbs: 59,
   },
-  ingredients: [
-    { name: "Вишня без косточек", amount: "500 г", checked: true },
-    { name: "Сахар", amount: "120 г", checked: false },
-    { name: "Пшеничная мука", amount: "145 г", checked: false },
-    { name: "Миндальная крошка", amount: "35 г", checked: false },
-    { name: "Сливочное масло", amount: "85 г", checked: false },
-    { name: "Молоко", amount: "120 мл", checked: false },
-    { name: "Разрыхлитель", amount: "1 ч. л.", checked: false },
-  ],
   equipment: [
     "Форма для запекания 22–24 см",
     "Миска для теста",
@@ -42,7 +223,7 @@ const cherryCobbler = {
       image: "/recipes/step-01-prepared-ingredients.png",
     },
     {
-      text: "В отдельной миске соедините муку, миндальную крошку, разрыхлитель, соль и сахар. Добавьте холодное масло и разотрите в крупную крошку.",
+      text: "В отдельной миске соедините муку, миндальную крошку, разрыхлитель, соль и сахар. Добавьте сливочное масло (можно заранее приготовить коричневое по ссылке в ингредиентах) и разотрите в крупную крошку.",
     },
     {
       text: "Влейте молоко и быстро замесите мягкое тесто. Выложите его ложками поверх начинки, оставляя небольшие просветы.",
@@ -77,6 +258,160 @@ const cherryCobbler = {
   ],
 } as const;
 
+const brownButter = {
+  title: "Коричневое сливочное масло",
+  output: { quantity: 85, unitShortName: "г" as const },
+  description:
+    "Ароматное топлёное масло с ореховыми нотами. Используется в коблере вместо обычного холодного масла — даёт более выразительный вкус крошки.",
+  image: "/recipes/ingredify-cherry-cobbler-hero.png",
+  nutrition: {
+    calories: 720,
+    protein: 1,
+    fat: 80,
+    carbs: 1,
+  },
+  equipment: ["Сотейник с толстым дном", "Миска со льдом"],
+  steps: [
+    {
+      text: "Нарежьте масло кубиками и растопите на среднем огне, помешивая. Когда пена осядёт, продолжайте готовить до золотистого цвета и орехового аромата, 4–6 минут.",
+    },
+    {
+      text: "Снимите с огня и перелейте в холодную миску, чтобы остановить приготовление. Остудите до комнатной температуры перед использованием в тесте.",
+    },
+  ],
+  comments: [
+    {
+      initials: "АК",
+      name: "Алена Кравцова",
+      text: "Не пережарьте: масло должно пахнуть фундуком, а не горечью. Из 100 г получается около 85 г готового продукта.",
+    },
+  ],
+} as const;
+
+const pastaAlfredo = {
+  title: "Паста Альфредо с пармезаном",
+  output: { quantity: 4, unitShortName: "порц." as const },
+  description:
+    "Кремовая паста с бархатным сливочным соусом, пармезаном и лёгким чесночным ароматом. Готовится быстро, а соус получается гладким за счёт крахмалистой воды от пасты.",
+  image: "/recipes/pasta-alfredo-hero.png",
+  nutrition: {
+    calories: 540,
+    protein: 18,
+    fat: 28,
+    carbs: 54,
+  },
+  equipment: [
+    "Большая кастрюля",
+    "Сковорода с толстым дном",
+    "Тёрка для сыра",
+    "Щипцы для пасты",
+  ],
+  steps: [
+    {
+      text: "Отварите феттучине в хорошо подсоленной воде до состояния al dente. Сохраните около стакана воды от пасты перед сливом.",
+    },
+    {
+      text: "Растопите сливочное масло на среднем огне, добавьте раздавленный чеснок и прогрейте 30–40 секунд, не давая ему потемнеть.",
+    },
+    {
+      text: "Влейте сливки, добавьте половину пармезана и немного воды от пасты. Перемешивайте, пока соус не станет однородным.",
+    },
+    {
+      text: "Добавьте пасту в сковороду, всыпьте оставшийся пармезан и чёрный перец. Активно перемешайте, подливая воду от пасты до нужной кремовой текстуры.",
+    },
+  ],
+  comments: [
+    {
+      initials: "АК",
+      name: "Алена Кравцова",
+      label: "автор рецепта",
+      text: "Не кипятите соус после добавления сыра: так пармезан плавится мягко и не собирается в комки.",
+    },
+    {
+      initials: "ДС",
+      name: "Дмитрий Сазонов",
+      text: "Получилось очень сливочно. В конце добавил ещё немного перца и пару ложек воды от пасты — соус отлично обволакивает феттучине.",
+    },
+  ],
+} as const;
+
+const pastaAlfredoHomemade = {
+  title: "Паста Альфредо с домашней феттучине",
+  output: { quantity: 4, unitShortName: "порц." as const },
+  description:
+    "Домашняя феттучине и сливочный соус Альфредо в одном рецепте. Ингредиенты разделены по этапам, чтобы удобно готовить тесто и соус отдельно.",
+  image: "/recipes/pasta-alfredo-hero.png",
+  nutrition: {
+    calories: 565,
+    protein: 20,
+    fat: 29,
+    carbs: 56,
+  },
+  equipment: [
+    "Большая миска",
+    "Скалка или паста-машина",
+    "Большая кастрюля",
+    "Сковорода с толстым дном",
+  ],
+  steps: [
+    {
+      text: "Смешайте муку, яйца, соль и оливковое масло, замесите плотное тесто и дайте ему отдохнуть 20 минут.",
+    },
+    {
+      text: "Раскатайте тесто и нарежьте феттучине. Отварите пасту до al dente, сохранив часть воды.",
+    },
+    {
+      text: "Для соуса растопите сливочное масло, прогрейте чеснок, влейте сливки и вмешайте пармезан до однородности.",
+    },
+    {
+      text: "Соедините пасту с соусом, добавьте чёрный перец и при необходимости доведите текстуру водой от пасты.",
+    },
+  ],
+  comments: [
+    {
+      initials: "АК",
+      name: "Алена Кравцова",
+      label: "автор рецепта",
+      text: "Если тесто кажется сухим, добавьте чайную ложку воды. Готовые полоски феттучине слегка подпылите мукой.",
+    },
+  ],
+  ingredientGroups: ["Паста", "Соус"] as const,
+} as const;
+
+async function upsertUnits(prisma: PrismaClient) {
+  const units = new Map<string, string>();
+
+  for (const unit of MEASUREMENT_UNITS) {
+    const row = await prisma.measurementUnit.upsert({
+      where: { shortName: unit.shortName },
+      update: { name: unit.name },
+      create: unit,
+    });
+    units.set(unit.shortName, row.id);
+  }
+
+  return units;
+}
+
+async function upsertIngredient(
+  prisma: PrismaClient,
+  data: SeedIngredient,
+  recipeId?: string,
+) {
+  return prisma.ingredient.upsert({
+    where: { name: data.name },
+    update: {
+      sticker: data.sticker,
+      ...(recipeId ? { recipeId } : { recipeId: null }),
+    },
+    create: {
+      name: data.name,
+      sticker: data.sticker,
+      ...(recipeId ? { recipeId } : {}),
+    },
+  });
+}
+
 async function main() {
   const url = process.env.DATABASE_URL;
   if (!url) {
@@ -93,45 +428,91 @@ async function main() {
     await prisma.user.upsert({
       where: { id: DEMO_USER_ID },
       update: {
-        name: cherryCobbler.author,
+        name: DEMO_AUTHOR_NAME,
         email: DEMO_USER_EMAIL,
         passwordHash,
       },
       create: {
         id: DEMO_USER_ID,
         email: DEMO_USER_EMAIL,
-        name: cherryCobbler.author,
+        name: DEMO_AUTHOR_NAME,
         passwordHash,
       },
     });
 
-    const existing = await prisma.recipe.findUnique({
-      where: { slug: CHERRY_COBBLER_SLUG },
-    });
-    if (existing) {
-      await prisma.recipe.delete({ where: { id: existing.id } });
-    }
+    const units = await upsertUnits(prisma);
 
-    await prisma.recipe.create({
+    await prisma.recipe.deleteMany({ where: { authorId: DEMO_USER_ID } });
+
+    const butterRecipe = await prisma.recipe.create({
       data: {
-        slug: CHERRY_COBBLER_SLUG,
-        userId: DEMO_USER_ID,
-        author: cherryCobbler.author,
-        authorRole: cherryCobbler.authorRole,
+        authorId: DEMO_USER_ID,
+        title: brownButter.title,
+        description: brownButter.description,
+        image: brownButter.image,
+        outputQuantity: brownButter.output.quantity,
+        outputUnitId: units.get(brownButter.output.unitShortName)!,
+        nutrition: { create: brownButter.nutrition },
+        equipment: {
+          create: brownButter.equipment.map((label, i) => ({
+            order: i,
+            label,
+          })),
+        },
+        steps: {
+          create: brownButter.steps.map((step, i) => ({
+            order: i,
+            text: step.text,
+          })),
+        },
+        comments: {
+          create: brownButter.comments.map((c, i) => ({
+            order: i,
+            initials: c.initials,
+            name: c.name,
+            text: c.text,
+          })),
+        },
+      },
+    });
+
+    const butterBaseCatalog = await Promise.all(
+      brownButterIngredients.map((ing) => upsertIngredient(prisma, ing)),
+    );
+
+    await prisma.recipeIngredient.createMany({
+      data: brownButterIngredients.map((ing, i) => ({
+        recipeId: butterRecipe.id,
+        ingredientId: butterBaseCatalog[i]!.id,
+        unitId: units.get(ing.unitShortName)!,
+        order: i,
+        quantity: ing.quantity,
+      })),
+    });
+
+    const butterIngredient = await upsertIngredient(
+      prisma,
+      cherryCobblerIngredients.find((i) => i.name === "Сливочное масло")!,
+      butterRecipe.id,
+    );
+
+    const catalogIngredients = await Promise.all(
+      cherryCobblerIngredients.map((ing) =>
+        ing.name === "Сливочное масло"
+          ? Promise.resolve(butterIngredient)
+          : upsertIngredient(prisma, ing),
+      ),
+    );
+
+    const cobblerRecipe = await prisma.recipe.create({
+      data: {
+        authorId: DEMO_USER_ID,
         title: cherryCobbler.title,
         description: cherryCobbler.description,
         image: cherryCobbler.image,
-        nutrition: {
-          create: cherryCobbler.nutrition,
-        },
-        ingredients: {
-          create: cherryCobbler.ingredients.map((ing, i) => ({
-            order: i,
-            name: ing.name,
-            amount: ing.amount,
-            checked: ing.checked,
-          })),
-        },
+        outputQuantity: cherryCobbler.output.quantity,
+        outputUnitId: units.get(cherryCobbler.output.unitShortName)!,
+        nutrition: { create: cherryCobbler.nutrition },
         equipment: {
           create: cherryCobbler.equipment.map((label, i) => ({
             order: i,
@@ -157,7 +538,127 @@ async function main() {
       },
     });
 
-    console.log(`Seed: пользователь ${DEMO_USER_EMAIL} и рецепт «${CHERRY_COBBLER_SLUG}» готовы.`);
+    await prisma.recipeIngredient.createMany({
+      data: cherryCobblerIngredients.map((ing, i) => ({
+        recipeId: cobblerRecipe.id,
+        ingredientId: catalogIngredients[i]!.id,
+        unitId: units.get(ing.unitShortName)!,
+        order: i,
+        quantity: ing.quantity,
+      })),
+    });
+
+    const pastaCatalogIngredients = await Promise.all(
+      pastaAlfredoIngredients.map((ing) => upsertIngredient(prisma, ing)),
+    );
+
+    const alfredoRecipe = await prisma.recipe.create({
+      data: {
+        authorId: DEMO_USER_ID,
+        title: pastaAlfredo.title,
+        description: pastaAlfredo.description,
+        image: pastaAlfredo.image,
+        outputQuantity: pastaAlfredo.output.quantity,
+        outputUnitId: units.get(pastaAlfredo.output.unitShortName)!,
+        nutrition: { create: pastaAlfredo.nutrition },
+        equipment: {
+          create: pastaAlfredo.equipment.map((label, i) => ({
+            order: i,
+            label,
+          })),
+        },
+        steps: {
+          create: pastaAlfredo.steps.map((step, i) => ({
+            order: i,
+            text: step.text,
+          })),
+        },
+        comments: {
+          create: pastaAlfredo.comments.map((c, i) => ({
+            order: i,
+            initials: c.initials,
+            name: c.name,
+            text: c.text,
+            label: "label" in c ? c.label : undefined,
+          })),
+        },
+      },
+    });
+
+    await prisma.recipeIngredient.createMany({
+      data: pastaAlfredoIngredients.map((ing, i) => ({
+        recipeId: alfredoRecipe.id,
+        ingredientId: pastaCatalogIngredients[i]!.id,
+        unitId: units.get(ing.unitShortName)!,
+        order: i,
+        quantity: ing.quantity,
+      })),
+    });
+
+    const pastaAlfredoHomemadeCatalogIngredients = await Promise.all(
+      pastaAlfredoHomemadeIngredients.map((ing) => upsertIngredient(prisma, ing)),
+    );
+
+    const homemadeAlfredoRecipe = await prisma.recipe.create({
+      data: {
+        authorId: DEMO_USER_ID,
+        title: pastaAlfredoHomemade.title,
+        description: pastaAlfredoHomemade.description,
+        image: pastaAlfredoHomemade.image,
+        outputQuantity: pastaAlfredoHomemade.output.quantity,
+        outputUnitId: units.get(pastaAlfredoHomemade.output.unitShortName)!,
+        nutrition: { create: pastaAlfredoHomemade.nutrition },
+        ingredientGroups: {
+          create: pastaAlfredoHomemade.ingredientGroups.map((label, i) => ({
+            order: i,
+            label,
+          })),
+        },
+        equipment: {
+          create: pastaAlfredoHomemade.equipment.map((label, i) => ({
+            order: i,
+            label,
+          })),
+        },
+        steps: {
+          create: pastaAlfredoHomemade.steps.map((step, i) => ({
+            order: i,
+            text: step.text,
+          })),
+        },
+        comments: {
+          create: pastaAlfredoHomemade.comments.map((c, i) => ({
+            order: i,
+            initials: c.initials,
+            name: c.name,
+            text: c.text,
+            label: "label" in c ? c.label : undefined,
+          })),
+        },
+      },
+      include: {
+        ingredientGroups: true,
+      },
+    });
+
+    const groupIdByLabel = new Map(
+      homemadeAlfredoRecipe.ingredientGroups.map((group) => [group.label, group.id]),
+    );
+
+    await prisma.recipeIngredient.createMany({
+      data: pastaAlfredoHomemadeIngredients.map((ing, i) => ({
+        recipeId: homemadeAlfredoRecipe.id,
+        groupId: groupIdByLabel.get(ing.groupLabel)!,
+        ingredientId: pastaAlfredoHomemadeCatalogIngredients[i]!.id,
+        unitId: units.get(ing.unitShortName)!,
+        order: i,
+        quantity: ing.quantity,
+      })),
+    });
+
+    console.log(
+      `Seed: пользователь ${DEMO_USER_EMAIL}, рецепты «${cherryCobbler.title}», «${brownButter.title}», «${pastaAlfredo.title}» и «${pastaAlfredoHomemade.title}» готовы.`,
+    );
   } finally {
     await prisma.$disconnect();
   }

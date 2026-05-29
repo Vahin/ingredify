@@ -2,7 +2,7 @@ import { getRecipe } from '@/entities/recipe';
 import { RecipeDetailsContent } from '../recipe-details-content/recipe-details-content';
 import { RecipeLayout } from '../recipe-layout/recipe-layout';
 import { EquipmentCard } from '@/entities/equipment';
-import { IngredientsCard } from '@/entities/ingredient';
+import { IngredientSidebar } from '@/features/ingredient-sidebar';
 
 type RecipeDetailsProps = {
   recipeId: string;
@@ -16,7 +16,10 @@ export async function RecipeDetails({ recipeId }: RecipeDetailsProps) {
       content={<RecipeDetailsContent recipe={recipe} />}
       sidebar={
         <>
-          <IngredientsCard recipe={recipe} />
+          <IngredientSidebar
+            sections={recipe.ingredientSections}
+            output={recipe.output}
+          />
           <EquipmentCard recipe={recipe} />
         </>
       }

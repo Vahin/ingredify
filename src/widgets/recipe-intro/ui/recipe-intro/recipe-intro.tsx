@@ -17,7 +17,7 @@ export const RecipeIntro = ({ recipe }: { recipe: Recipe }) => {
       <RecipeHeroImage image={recipe.image} />
 
       <div className='flex min-w-0 flex-col justify-center gap-5 py-1'>
-        <RecipeAuthor author={recipe.author} authorRole={recipe.authorRole} />
+        <RecipeAuthor author={recipe.author} />
         <RecipeMainInfo title={recipe.title} description={recipe.description} />
         <NutritionStats nutrition={recipe.nutrition} />
         <RecipeActions commentsCount={commentsCount} />

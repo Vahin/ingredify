@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { isProtectedPath } from '@/shared/lib/auth/navigation';
-import { SESSION_COOKIE_NAME } from '@/shared/lib/auth/session';
+import { isProtectedPath } from '@/shared/lib/auth/protected-path';
+import { SESSION_COOKIE_NAME } from '@/shared/lib/auth/session-cookie';
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;

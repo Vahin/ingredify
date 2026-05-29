@@ -1,7 +1,8 @@
 import { cache } from 'react';
 import { unauthorized } from 'next/navigation';
 import { prisma } from '@/shared/lib/prisma';
-import { buildLoginHref, getCurrentPathname } from './navigation';
+import { getCurrentPathname } from './current-pathname';
+import { buildLoginHref } from './navigation';
 import { getSessionIdFromCookie } from './session';
 import { getSession } from './session-store';
 

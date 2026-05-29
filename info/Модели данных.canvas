@@ -1,0 +1,212 @@
+{
+	"nodes": [
+		{
+			"id": "legend",
+			"type": "text",
+			"text": "# Модели данных\n\nИсточник: `prisma/schema.prisma`\n\nОбозначения связей:\n- `1:N` — одна запись связана со многими\n- `1:1?` — необязательная связь один-к-одному\n- `Cascade` — дочерние записи удаляются вместе с родителем\n- `Restrict` — удаление запрещено, пока есть ссылки\n- `SetNull` — ссылка очищается при удалении",
+			"x": -760,
+			"y": -420,
+			"width": 520,
+			"height": 300,
+			"color": "1"
+		},
+		{
+			"id": "recipe",
+			"type": "text",
+			"text": "## Recipe\n\nОсновная сущность рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| title | String |  |\n| description | String |  |\n| image | String |  |\n| authorId | String | FK -> User |\n| outputQuantity | Decimal | Decimal(10, 2) |\n| outputUnitId | String | FK -> MeasurementUnit |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- author: `User`\n- outputUnit: `MeasurementUnit`\n- nutrition: `RecipeNutrition?`\n- ingredientGroups: `RecipeIngredientGroup[]`\n- ingredients: `RecipeIngredient[]` через `RecipeIngredient.recipeId`\n- equipment: `RecipeEquipment[]`\n- steps: `RecipeStep[]`\n- comments: `RecipeComment[]`\n- preparedIngredient: `Ingredient?`",
+			"x": -80,
+			"y": -140,
+			"width": 560,
+			"height": 760,
+			"color": "4"
+		},
+		{
+			"id": "recipe-nutrition",
+			"type": "text",
+			"text": "## RecipeNutrition\n\nПищевая ценность рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| recipeId | String | unique, FK -> Recipe |\n| calories | Int |  |\n| protein | Decimal | Decimal(6, 2) |\n| fat | Decimal | Decimal(6, 2) |\n| carbs | Decimal | Decimal(6, 2) |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipe: `Recipe` (`Cascade`)",
+			"x": -760,
+			"y": 620,
+			"width": 520,
+			"height": 520,
+			"color": "6"
+		},
+		{
+			"id": "recipe-equipment",
+			"type": "text",
+			"text": "## RecipeEquipment\n\nОборудование или инвентарь для рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| recipeId | String | FK -> Recipe |\n| order | Int | порядок в списке |\n| label | String | название |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipe: `Recipe` (`Cascade`)",
+			"x": -80,
+			"y": 800,
+			"width": 500,
+			"height": 440,
+			"color": "6"
+		},
+		{
+			"id": "recipe-step",
+			"type": "text",
+			"text": "## RecipeStep\n\nШаг приготовления рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| recipeId | String | FK -> Recipe |\n| order | Int | порядок шага |\n| text | String | описание |\n| image | String? | опциональное изображение |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipe: `Recipe` (`Cascade`)",
+			"x": 600,
+			"y": 800,
+			"width": 500,
+			"height": 460,
+			"color": "6"
+		},
+		{
+			"id": "recipe-comment",
+			"type": "text",
+			"text": "## RecipeComment\n\nКомментарий или отзыв к рецепту.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| recipeId | String | FK -> Recipe |\n| order | Int | порядок вывода |\n| initials | String | инициалы автора |\n| name | String | имя автора |\n| text | String | текст комментария |\n| label | String? | опциональная метка |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipe: `Recipe` (`Cascade`)",
+			"x": 1280,
+			"y": 800,
+			"width": 520,
+			"height": 520,
+			"color": "6"
+		},
+		{
+			"id": "user",
+			"type": "text",
+			"text": "## User\n\nПользователь и автор рецептов.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| email | String | unique |\n| passwordHash | String | `password_hash` |\n| name | String |  |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipes: `Recipe[]`",
+			"x": -1000,
+			"y": 0,
+			"width": 500,
+			"height": 420,
+			"color": "2"
+		},
+		{
+			"id": "recipe-ingredient",
+			"type": "text",
+			"text": "## RecipeIngredient\n\nСтрока ингредиента внутри рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| recipeId | String | FK -> Recipe.id, `Cascade` |\n| groupId | String? | FK -> RecipeIngredientGroup |\n| ingredientId | String | FK -> Ingredient |\n| unitId | String | FK -> MeasurementUnit |\n| order | Int | порядок в списке |\n| quantity | Decimal | Decimal(10, 2) |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipe: `Recipe` через `recipeId` (`Cascade`)\n- group: `RecipeIngredientGroup?` (`SetNull`)\n- ingredient: `Ingredient` (`Restrict`)\n- unit: `MeasurementUnit` (`Restrict`)",
+			"x": 1100,
+			"y": -200,
+			"width": 560,
+			"height": 620,
+			"color": "6"
+		},
+		{
+			"id": "measurement-unit",
+			"type": "text",
+			"text": "## MeasurementUnit\n\nЕдиница измерения для ингредиентов и выхода рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| name | String |  |\n| shortName | String | unique, `short_name` |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- ingredients: `RecipeIngredient[]`\n- recipeOutputs: `Recipe[]`",
+			"x": -360,
+			"y": -1050,
+			"width": 560,
+			"height": 420,
+			"color": "3"
+		},
+		{
+			"id": "ingredient",
+			"type": "text",
+			"text": "## Ingredient\n\nСправочник ингредиентов. Может ссылаться на рецепт, если ингредиент является заготовкой.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| name | String | unique |\n| sticker | String |  |\n| recipeId | String? | unique, FK -> Recipe |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipe: `Recipe?`\n- usages: `RecipeIngredient[]`",
+			"x": 640,
+			"y": -1000,
+			"width": 540,
+			"height": 510,
+			"color": "5"
+		},
+		{
+			"id": "recipe-ingredient-group",
+			"type": "text",
+			"text": "## RecipeIngredientGroup\n\nГруппа ингредиентов внутри рецепта (например, «Паста» и «Соус»).\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| recipeId | String | FK -> Recipe.id, `Cascade` |\n| order | Int | порядок групп в карточке |\n| label | String | название группы |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipe: `Recipe` через `recipeId` (`Cascade`)\n- ingredients: `RecipeIngredient[]` (`SetNull` при удалении группы)",
+			"x": 1780,
+			"y": -220,
+			"width": 560,
+			"height": 560,
+			"color": "6"
+		}
+	],
+	"edges": [
+		{
+			"id": "user-to-recipe",
+			"fromNode": "user",
+			"fromSide": "right",
+			"toNode": "recipe",
+			"toSide": "left",
+			"label": "1:N author / Restrict"
+		},
+		{
+			"id": "unit-to-recipe",
+			"fromNode": "measurement-unit",
+			"fromSide": "bottom",
+			"toNode": "recipe",
+			"toSide": "top",
+			"label": "1:N outputUnit / Restrict"
+		},
+		{
+			"id": "recipe-to-nutrition",
+			"fromNode": "recipe",
+			"fromSide": "left",
+			"toNode": "recipe-nutrition",
+			"toSide": "right",
+			"label": "1:1? / Cascade"
+		},
+		{
+			"id": "ingredient-to-recipe-ingredient",
+			"fromNode": "ingredient",
+			"fromSide": "bottom",
+			"toNode": "recipe-ingredient",
+			"toSide": "top",
+			"label": "1:N / Restrict"
+		},
+		{
+			"id": "unit-to-recipe-ingredient",
+			"fromNode": "measurement-unit",
+			"fromSide": "right",
+			"toNode": "recipe-ingredient",
+			"toSide": "left",
+			"label": "1:N / Restrict"
+		},
+		{
+			"id": "recipe-to-prepared-ingredient",
+			"fromNode": "recipe",
+			"fromSide": "top",
+			"toNode": "ingredient",
+			"toSide": "left",
+			"label": "1:1? prepared / SetNull"
+		},
+		{
+			"id": "recipe-to-equipment",
+			"fromNode": "recipe",
+			"fromSide": "bottom",
+			"toNode": "recipe-equipment",
+			"toSide": "top",
+			"label": "1:N / Cascade"
+		},
+		{
+			"id": "recipe-to-step",
+			"fromNode": "recipe",
+			"fromSide": "bottom",
+			"toNode": "recipe-step",
+			"toSide": "top",
+			"label": "1:N / Cascade"
+		},
+		{
+			"id": "recipe-to-comment",
+			"fromNode": "recipe",
+			"fromSide": "right",
+			"toNode": "recipe-comment",
+			"toSide": "left",
+			"label": "1:N / Cascade"
+		},
+		{
+			"id": "recipe-to-recipe-ingredient",
+			"fromNode": "recipe",
+			"fromSide": "right",
+			"toNode": "recipe-ingredient",
+			"toSide": "left",
+			"label": "Recipe.ingredients 1:N RecipeIngredient.recipe / Cascade"
+		},
+		{
+			"id": "recipe-to-ingredient-group",
+			"fromNode": "recipe",
+			"fromSide": "right",
+			"toNode": "recipe-ingredient-group",
+			"toSide": "left",
+			"label": "1:N ingredientGroups / Cascade"
+		},
+		{
+			"id": "ingredient-group-to-recipe-ingredient",
+			"fromNode": "recipe-ingredient-group",
+			"fromSide": "left",
+			"toNode": "recipe-ingredient",
+			"toSide": "right",
+			"label": "1:N group / SetNull"
+		}
+	]
+}

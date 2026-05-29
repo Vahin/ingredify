@@ -1,7 +1,5 @@
 import { cookies } from 'next/headers';
-
-export const SESSION_COOKIE_NAME =
-  process.env.SESSION_COOKIE_NAME ?? 'ingredify_session';
+import { SESSION_COOKIE_NAME } from './session-cookie';
 
 const SESSION_TTL_SECONDS = Number(
   process.env.SESSION_TTL_SECONDS ?? 60 * 60 * 24 * 30,

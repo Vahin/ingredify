@@ -21,26 +21,28 @@ model User {
 }
 
 model Recipe {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  author      String
-  authorRole  String   @map("author_role")
-  title       String
-  description String
-  image       String
-  userId      String   @map("user_id")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id              String   @id @default(cuid())
+  title           String
+  description     String
+  image           String
+  authorId        String   @map("author_id")
+  outputQuantity  Decimal  @map("output_quantity") @db.Decimal(10, 2)
+  outputUnitId    String   @map("output_unit_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
 
-  user        User     @relation(fields: [userId], references: [id], onDelete: Restrict)
-  nutrition   RecipeNutrition?
-  ingredients RecipeIngredient[]
-  equipment   RecipeEquipment[]
-  steps       RecipeStep[]
-  comments    RecipeComment[]
+  author              User               @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  outputUnit          MeasurementUnit    @relation(fields: [outputUnitId], references: [id], onDelete: Restrict)
+  nutrition           RecipeNutrition?
+  ingredientGroups    RecipeIngredientGroup[]
+  ingredients         RecipeIngredient[]
+  equipment           RecipeEquipment[]
+  steps               RecipeStep[]
+  comments            RecipeComment[]
+  preparedIngredient  Ingredient?        @relation("IngredientPreparedRecipe")
 
-  @@index([slug])
-  @@index([userId])
+  @@index([authorId])
+  @@index([outputUnitId])
 }
 
 model RecipeNutrition {
@@ -56,17 +58,63 @@ model RecipeNutrition {
   recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }
 
-model RecipeIngredient {
+model Ingredient {
   id        String   @id @default(cuid())
-  recipeId  String   @map("recipe_id")
-  order     Int
-  name      String
-  amount    String
-  checked   Boolean  @default(false)
+  name      String   @unique
+  sticker   String
+  recipeId  String?  @unique @map("recipe_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipe Recipe?            @relation("IngredientPreparedRecipe", fields: [recipeId], references: [id], onDelete: SetNull)
+  usages RecipeIngredient[]
+
+  @@index([recipeId])
+}
+
+model MeasurementUnit {
+  id        String   @id @default(cuid())
+  name      String
+  shortName String   @unique @map("short_name")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  ingredients   RecipeIngredient[]
+  recipeOutputs Recipe[]
+}
+
+model RecipeIngredient {
+  id           String   @id @default(cuid())
+  recipeId     String   @map("recipe_id")
+  groupId      String?  @map("group_id")
+  ingredientId String   @map("ingredient_id")
+  unitId       String   @map("unit_id")
+  order        Int
+  quantity     Decimal  @db.Decimal(10, 2)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  recipe     Recipe                 @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  group      RecipeIngredientGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  ingredient Ingredient             @relation(fields: [ingredientId], references: [id], onDelete: Restrict)
+  unit       MeasurementUnit        @relation(fields: [unitId], references: [id], onDelete: Restrict)
+
+  @@index([recipeId])
+  @@index([groupId])
+  @@index([ingredientId])
+  @@index([unitId])
+}
+
+model RecipeIngredientGroup {
+  id        String   @id @default(cuid())
+  recipeId  String   @map("recipe_id")
+  order     Int
+  label     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  recipe      Recipe             @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredients RecipeIngredient[]
 
   @@index([recipeId])
 }
