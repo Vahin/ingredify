@@ -1,4 +1,4 @@
-import { NutritionStats } from '@/entities/nutrition';
+import { NutritionStats } from '../nutrition-stats/nutrition-stats';
 import { type Recipe } from '@/entities/recipe';
 import { RecipeHeroImage } from '../recipe-hero-image/recipe-hero-image';
 import { RecipeAuthor } from '../recipe-author/recipe-author';

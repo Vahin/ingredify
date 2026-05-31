@@ -1,7 +1,7 @@
 import { getRecipe } from '@/entities/recipe';
 import { RecipeDetailsContent } from '../recipe-details-content/recipe-details-content';
 import { RecipeLayout } from '../recipe-layout/recipe-layout';
-import { EquipmentCard } from '@/entities/equipment';
+import { EquipmentCard } from '../equipment-card/equipment-card';
 import { IngredientSidebar } from '@/features/ingredient-sidebar';
 
 type RecipeDetailsProps = {

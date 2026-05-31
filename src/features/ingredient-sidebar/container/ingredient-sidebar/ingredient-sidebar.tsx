@@ -4,7 +4,7 @@ import type { RecipeIngredientGroupView } from '@/entities/recipe/model/types/re
 import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
 import { useRecipeOutputQuantity } from '../../model/lib/use-recipe-output-quantity';
 import { IngredientSidebarHeader } from '../../ui/ingredient-sidebar-header/ingredient-sidebar-header';
-import { IngredientSidebarList } from '@/entities/ingredient-sidebar-list';
+import { IngredientSidebarList } from '../../ui/ingredient-sidebar-list/ingredient-sidebar-list';
 import { IngredientSidebarLayout } from '../../ui/ingredient-sidebar-layout/ingredient-sidebar-layout';
 
 type IngredientSidebarProps = {
