@@ -11,7 +11,7 @@ import type {
 import type { MeasurementUnitView } from '../model/types/measurement-unit';
 import type {
   Recipe,
-  RecipeIngredientSection,
+  RecipeIngredientGroupView,
 } from '../model/types/recipe';
 
 const recipeInclude = {
@@ -81,17 +81,17 @@ function mapRecipeRowToDto(row: RecipeRow): Recipe {
   const outputQuantity = Number(row.outputQuantity);
   const outputUnit = mapUnit(row.outputUnit);
 
-  const ingredientSections: RecipeIngredientSection[] = row.ingredientGroups
+  const ingredientGroups: RecipeIngredientGroupView[] = row.ingredientGroups
     .map((group) => ({
       id: group.id,
       label: group.label,
-      output: {
+      baseOutput: {
         quantity: Number(group.outputQuantity),
         unit: mapUnit(group.outputUnit),
       },
       lines: group.ingredients.map(mapIngredientLineToDto),
     }))
-    .filter((section) => section.lines.length > 0);
+    .filter((group) => group.lines.length > 0);
 
   return {
     author: row.author.name,
@@ -109,7 +109,7 @@ function mapRecipeRowToDto(row: RecipeRow): Recipe {
       fat: formatMacroGrams(row.nutrition?.fat ?? 0),
       carbs: formatMacroGrams(row.nutrition?.carbs ?? 0),
     },
-    ingredientSections,
+    ingredientGroups,
     equipment: row.equipment.map((eq) => eq.label),
     steps: row.steps.map((step) => ({
       text: step.text,

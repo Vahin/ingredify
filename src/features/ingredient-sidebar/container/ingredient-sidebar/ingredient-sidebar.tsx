@@ -1,19 +1,19 @@
 'use client';
 
-import type { RecipeIngredientSection } from '@/entities/recipe/model/types/recipe';
+import type { RecipeIngredientGroupView } from '@/entities/recipe/model/types/recipe';
 import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
 import { useRecipeOutputQuantity } from '../../model/lib/use-recipe-output-quantity';
 import { IngredientSidebarHeader } from '../../ui/ingredient-sidebar-header/ingredient-sidebar-header';
-import { IngredientSidebarList } from '../../ui/ingredient-sidebar-list/ingredient-sidebar-list';
+import { IngredientSidebarList } from '@/entities/ingredient-sidebar-list';
 import { IngredientSidebarLayout } from '../../ui/ingredient-sidebar-layout/ingredient-sidebar-layout';
 
 type IngredientSidebarProps = {
-  sections: RecipeIngredientSection[];
+  groups: RecipeIngredientGroupView[];
   output: RecipeOutput;
 };
 
 export const IngredientSidebar = ({
-  sections,
+  groups,
   output,
 }: IngredientSidebarProps) => {
   const {
@@ -21,8 +21,8 @@ export const IngredientSidebar = ({
     setOutputQuantity,
     increaseOutputQuantity,
     decreaseOutputQuantity,
-    scaledSections,
-  } = useRecipeOutputQuantity(output, sections);
+    scaledGroups,
+  } = useRecipeOutputQuantity(output, groups);
 
   return (
     <IngredientSidebarLayout
@@ -37,7 +37,7 @@ export const IngredientSidebar = ({
           }}
         />
       }
-      list={<IngredientSidebarList sections={scaledSections} />}
+      list={<IngredientSidebarList groups={scaledGroups} />}
     />
   );
 };

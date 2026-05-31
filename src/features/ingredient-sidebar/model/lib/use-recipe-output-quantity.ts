@@ -1,15 +1,15 @@
 import { useCallback, useMemo, useState } from 'react';
-import type { RecipeIngredientSection } from '@/entities/recipe/model/types/recipe';
+import type { RecipeIngredientGroupView } from '@/entities/recipe/model/types/recipe';
 import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
 import {
   clampOutputQuantity,
   getInitialSelectedOutputQuantity,
 } from './output-quantity';
-import { scaleIngredientSections } from './scale-ingredient-sections';
+import { scaleIngredientGroups } from './scale-ingredient-groups';
 
 export function useRecipeOutputQuantity(
   output: RecipeOutput,
-  sections: RecipeIngredientSection[],
+  groups: RecipeIngredientGroupView[],
 ) {
   const [selectedOutputQuantity, setSelectedOutputQuantity] = useState(
     () => getInitialSelectedOutputQuantity(output),
@@ -34,9 +34,9 @@ export function useRecipeOutputQuantity(
     );
   }, [output]);
 
-  const scaledSections = useMemo(
-    () => scaleIngredientSections(sections, selectedOutputQuantity, output),
-    [sections, selectedOutputQuantity, output],
+  const scaledGroups = useMemo(
+    () => scaleIngredientGroups(groups, selectedOutputQuantity, output),
+    [groups, selectedOutputQuantity, output],
   );
 
   return {
@@ -44,6 +44,6 @@ export function useRecipeOutputQuantity(
     setOutputQuantity,
     increaseOutputQuantity,
     decreaseOutputQuantity,
-    scaledSections,
+    scaledGroups,
   };
 }

@@ -17,7 +17,7 @@ export async function RecipeDetails({ recipeId }: RecipeDetailsProps) {
       sidebar={
         <>
           <IngredientSidebar
-            sections={recipe.ingredientSections}
+            groups={recipe.ingredientGroups}
             output={recipe.output}
           />
           <EquipmentCard recipe={recipe} />

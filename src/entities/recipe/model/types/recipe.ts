@@ -2,10 +2,10 @@ import type { RecipeIngredientLine } from '@/entities/ingredient/model/types/rec
 import type { PhysicalOutput } from './physical-output';
 import type { RecipeOutput } from './recipe-output';
 
-export type RecipeIngredientSection = {
+export type RecipeIngredientGroupView = {
   id: string;
   label: string | null;
-  output: PhysicalOutput;
+  baseOutput: PhysicalOutput;
   lines: RecipeIngredientLine[];
 };
 
@@ -21,7 +21,7 @@ export type Recipe = {
   title: string;
   description: string;
   image: string;
-  ingredientSections: RecipeIngredientSection[];
+  ingredientGroups: RecipeIngredientGroupView[];
   equipment: string[];
   steps: {
     text: string;

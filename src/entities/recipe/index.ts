@@ -1,4 +1,4 @@
-export { type Recipe, type RecipeIngredientSection } from './model/types/recipe';
+export { type Recipe, type RecipeIngredientGroupView } from './model/types/recipe';
 export { type RecipeOutput } from './model/types/recipe-output';
 export { type PhysicalOutput } from './model/types/physical-output';
 export { type MeasurementUnitView } from './model/types/measurement-unit';
