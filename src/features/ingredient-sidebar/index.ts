@@ -1,1 +1,1 @@
-export { IngredientSidebar } from './container/ingredient-sidebar/ingredient-sidebar';
+export { IngredientSidebar } from './ui/ingredient-sidebar/ingredient-sidebar';

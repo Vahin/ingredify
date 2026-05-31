@@ -3,9 +3,10 @@
 import type { RecipeIngredientGroupView } from '@/entities/recipe/model/types/recipe';
 import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
 import { useRecipeOutputQuantity } from '../../model/lib/use-recipe-output-quantity';
-import { IngredientSidebarHeader } from '../../ui/ingredient-sidebar-header/ingredient-sidebar-header';
-import { IngredientSidebarList } from '../../ui/ingredient-sidebar-list/ingredient-sidebar-list';
-import { IngredientSidebarLayout } from '../../ui/ingredient-sidebar-layout/ingredient-sidebar-layout';
+import { IngredientSidebarHeader } from '../ingredient-sidebar-header/ingredient-sidebar-header';
+
+import { IngredientSidebarLayout } from '../ingredient-sidebar-layout/ingredient-sidebar-layout';
+import { IngredientSidebarList } from '@/entities/ingredient';
 
 type IngredientSidebarProps = {
   groups: RecipeIngredientGroupView[];

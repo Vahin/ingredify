@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import type { RecipeIngredientLine } from '@/entities/ingredient/model/types/recipe-ingredient-line';
-import { IngredientSticker } from '@/entities/ingredient';
+import type { RecipeIngredientLine } from '../../model/types/recipe-ingredient-line';
+import { IngredientSticker } from '../ingredient-sticker/ingredient-sticker';
 
 const IngredientName = ({
   name,
@@ -41,18 +41,11 @@ const IngredientAmount = ({
   );
 };
 
-export const IngredientRow = ({
-  line,
-}: {
-  line: RecipeIngredientLine;
-}) => {
+export const IngredientRow = ({ line }: { line: RecipeIngredientLine }) => {
   return (
     <div className='grid grid-cols-[32px_minmax(0,1fr)_auto] items-center gap-3 rounded-[10px] p-2.5 transition-colors hover:bg-muted'>
       <IngredientSticker src={line.sticker} />
-      <IngredientName
-        name={line.name}
-        linkedRecipeId={line.linkedRecipeId}
-      />
+      <IngredientName name={line.name} linkedRecipeId={line.linkedRecipeId} />
       <IngredientAmount
         amountValue={line.amountValue}
         unitLabel={line.unit.label}
