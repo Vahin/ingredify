@@ -1,10 +1,11 @@
 import type { RecipeIngredientLine } from '@/entities/ingredient/model/types/recipe-ingredient-line';
+import type { PhysicalOutput } from './physical-output';
 import type { RecipeOutput } from './recipe-output';
 
 export type RecipeIngredientSection = {
   id: string;
   label: string | null;
-  output: RecipeOutput;
+  output: PhysicalOutput;
   lines: RecipeIngredientLine[];
 };
 

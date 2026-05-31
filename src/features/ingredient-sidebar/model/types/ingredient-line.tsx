@@ -1,4 +1,4 @@
-import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
+import type { PhysicalOutput } from '@/entities/recipe/model/types/physical-output';
 
 export type IngredientLine = {
   id: string;
@@ -6,7 +6,7 @@ export type IngredientLine = {
   sticker: string;
   amountNumeric: number;
   amountValue: string;
-  amountUnitLabel: string;
+  unit: PhysicalOutput['unit'];
   /** Id рецепта приготовления, если ингредиент составной */
   linkedRecipeId?: string;
 };
@@ -14,6 +14,6 @@ export type IngredientLine = {
 export type IngredientSection = {
   id: string;
   label: string | null;
-  output: RecipeOutput;
+  output: PhysicalOutput;
   lines: IngredientLine[];
 };

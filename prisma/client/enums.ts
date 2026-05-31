@@ -9,7 +9,12 @@
 * 🟢 You can import this file directly.
 */
 
+export const MeasurementUnitKind = {
+  mass: 'mass',
+  volume: 'volume',
+  count: 'count',
+  informal: 'informal',
+  serving: 'serving'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type MeasurementUnitKind = (typeof MeasurementUnitKind)[keyof typeof MeasurementUnitKind]

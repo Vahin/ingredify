@@ -1212,6 +1212,7 @@ export const RecipeScalarFieldEnum = {
   authorId: 'authorId',
   outputQuantity: 'outputQuantity',
   outputUnitId: 'outputUnitId',
+  servings: 'servings',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1249,6 +1250,8 @@ export const MeasurementUnitScalarFieldEnum = {
   id: 'id',
   name: 'name',
   shortName: 'shortName',
+  kind: 'kind',
+  roundToInteger: 'roundToInteger',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1407,6 +1410,27 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MeasurementUnitKind'
+ */
+export type EnumMeasurementUnitKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MeasurementUnitKind'>
+    
+
+
+/**
+ * Reference to a field of type 'MeasurementUnitKind[]'
+ */
+export type ListEnumMeasurementUnitKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MeasurementUnitKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

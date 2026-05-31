@@ -28,6 +28,8 @@ export type MeasurementUnitMinAggregateOutputType = {
   id: string | null
   name: string | null
   shortName: string | null
+  kind: $Enums.MeasurementUnitKind | null
+  roundToInteger: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -36,6 +38,8 @@ export type MeasurementUnitMaxAggregateOutputType = {
   id: string | null
   name: string | null
   shortName: string | null
+  kind: $Enums.MeasurementUnitKind | null
+  roundToInteger: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +48,8 @@ export type MeasurementUnitCountAggregateOutputType = {
   id: number
   name: number
   shortName: number
+  kind: number
+  roundToInteger: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -54,6 +60,8 @@ export type MeasurementUnitMinAggregateInputType = {
   id?: true
   name?: true
   shortName?: true
+  kind?: true
+  roundToInteger?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -62,6 +70,8 @@ export type MeasurementUnitMaxAggregateInputType = {
   id?: true
   name?: true
   shortName?: true
+  kind?: true
+  roundToInteger?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -70,6 +80,8 @@ export type MeasurementUnitCountAggregateInputType = {
   id?: true
   name?: true
   shortName?: true
+  kind?: true
+  roundToInteger?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -151,6 +163,8 @@ export type MeasurementUnitGroupByOutputType = {
   id: string
   name: string
   shortName: string
+  kind: $Enums.MeasurementUnitKind
+  roundToInteger: boolean
   createdAt: Date
   updatedAt: Date
   _count: MeasurementUnitCountAggregateOutputType | null
@@ -180,6 +194,8 @@ export type MeasurementUnitWhereInput = {
   id?: Prisma.StringFilter<"MeasurementUnit"> | string
   name?: Prisma.StringFilter<"MeasurementUnit"> | string
   shortName?: Prisma.StringFilter<"MeasurementUnit"> | string
+  kind?: Prisma.EnumMeasurementUnitKindFilter<"MeasurementUnit"> | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFilter<"MeasurementUnit"> | boolean
   createdAt?: Prisma.DateTimeFilter<"MeasurementUnit"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MeasurementUnit"> | Date | string
   ingredients?: Prisma.RecipeIngredientListRelationFilter
@@ -191,6 +207,8 @@ export type MeasurementUnitOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   shortName?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  roundToInteger?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   ingredients?: Prisma.RecipeIngredientOrderByRelationAggregateInput
@@ -205,6 +223,8 @@ export type MeasurementUnitWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.MeasurementUnitWhereInput[]
   NOT?: Prisma.MeasurementUnitWhereInput | Prisma.MeasurementUnitWhereInput[]
   name?: Prisma.StringFilter<"MeasurementUnit"> | string
+  kind?: Prisma.EnumMeasurementUnitKindFilter<"MeasurementUnit"> | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFilter<"MeasurementUnit"> | boolean
   createdAt?: Prisma.DateTimeFilter<"MeasurementUnit"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MeasurementUnit"> | Date | string
   ingredients?: Prisma.RecipeIngredientListRelationFilter
@@ -216,6 +236,8 @@ export type MeasurementUnitOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   shortName?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  roundToInteger?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.MeasurementUnitCountOrderByAggregateInput
@@ -230,6 +252,8 @@ export type MeasurementUnitScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"MeasurementUnit"> | string
   name?: Prisma.StringWithAggregatesFilter<"MeasurementUnit"> | string
   shortName?: Prisma.StringWithAggregatesFilter<"MeasurementUnit"> | string
+  kind?: Prisma.EnumMeasurementUnitKindWithAggregatesFilter<"MeasurementUnit"> | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolWithAggregatesFilter<"MeasurementUnit"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"MeasurementUnit"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"MeasurementUnit"> | Date | string
 }
@@ -238,6 +262,8 @@ export type MeasurementUnitCreateInput = {
   id?: string
   name: string
   shortName: string
+  kind: $Enums.MeasurementUnitKind
+  roundToInteger?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   ingredients?: Prisma.RecipeIngredientCreateNestedManyWithoutUnitInput
@@ -249,6 +275,8 @@ export type MeasurementUnitUncheckedCreateInput = {
   id?: string
   name: string
   shortName: string
+  kind: $Enums.MeasurementUnitKind
+  roundToInteger?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   ingredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutUnitInput
@@ -260,6 +288,8 @@ export type MeasurementUnitUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumMeasurementUnitKindFieldUpdateOperationsInput | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.RecipeIngredientUpdateManyWithoutUnitNestedInput
@@ -271,6 +301,8 @@ export type MeasurementUnitUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumMeasurementUnitKindFieldUpdateOperationsInput | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutUnitNestedInput
@@ -282,6 +314,8 @@ export type MeasurementUnitCreateManyInput = {
   id?: string
   name: string
   shortName: string
+  kind: $Enums.MeasurementUnitKind
+  roundToInteger?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -290,6 +324,8 @@ export type MeasurementUnitUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumMeasurementUnitKindFieldUpdateOperationsInput | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -298,6 +334,8 @@ export type MeasurementUnitUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumMeasurementUnitKindFieldUpdateOperationsInput | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -311,6 +349,8 @@ export type MeasurementUnitCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   shortName?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  roundToInteger?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -319,6 +359,8 @@ export type MeasurementUnitMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   shortName?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  roundToInteger?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -327,6 +369,8 @@ export type MeasurementUnitMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   shortName?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  roundToInteger?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -343,6 +387,14 @@ export type MeasurementUnitUpdateOneRequiredWithoutRecipeOutputsNestedInput = {
   upsert?: Prisma.MeasurementUnitUpsertWithoutRecipeOutputsInput
   connect?: Prisma.MeasurementUnitWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.MeasurementUnitUpdateToOneWithWhereWithoutRecipeOutputsInput, Prisma.MeasurementUnitUpdateWithoutRecipeOutputsInput>, Prisma.MeasurementUnitUncheckedUpdateWithoutRecipeOutputsInput>
+}
+
+export type EnumMeasurementUnitKindFieldUpdateOperationsInput = {
+  set?: $Enums.MeasurementUnitKind
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type MeasurementUnitCreateNestedOneWithoutIngredientsInput = {
@@ -377,6 +429,8 @@ export type MeasurementUnitCreateWithoutRecipeOutputsInput = {
   id?: string
   name: string
   shortName: string
+  kind: $Enums.MeasurementUnitKind
+  roundToInteger?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   ingredients?: Prisma.RecipeIngredientCreateNestedManyWithoutUnitInput
@@ -387,6 +441,8 @@ export type MeasurementUnitUncheckedCreateWithoutRecipeOutputsInput = {
   id?: string
   name: string
   shortName: string
+  kind: $Enums.MeasurementUnitKind
+  roundToInteger?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   ingredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutUnitInput
@@ -413,6 +469,8 @@ export type MeasurementUnitUpdateWithoutRecipeOutputsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumMeasurementUnitKindFieldUpdateOperationsInput | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.RecipeIngredientUpdateManyWithoutUnitNestedInput
@@ -423,6 +481,8 @@ export type MeasurementUnitUncheckedUpdateWithoutRecipeOutputsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumMeasurementUnitKindFieldUpdateOperationsInput | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutUnitNestedInput
@@ -433,6 +493,8 @@ export type MeasurementUnitCreateWithoutIngredientsInput = {
   id?: string
   name: string
   shortName: string
+  kind: $Enums.MeasurementUnitKind
+  roundToInteger?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   recipeOutputs?: Prisma.RecipeCreateNestedManyWithoutOutputUnitInput
@@ -443,6 +505,8 @@ export type MeasurementUnitUncheckedCreateWithoutIngredientsInput = {
   id?: string
   name: string
   shortName: string
+  kind: $Enums.MeasurementUnitKind
+  roundToInteger?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   recipeOutputs?: Prisma.RecipeUncheckedCreateNestedManyWithoutOutputUnitInput
@@ -469,6 +533,8 @@ export type MeasurementUnitUpdateWithoutIngredientsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumMeasurementUnitKindFieldUpdateOperationsInput | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipeOutputs?: Prisma.RecipeUpdateManyWithoutOutputUnitNestedInput
@@ -479,6 +545,8 @@ export type MeasurementUnitUncheckedUpdateWithoutIngredientsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumMeasurementUnitKindFieldUpdateOperationsInput | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipeOutputs?: Prisma.RecipeUncheckedUpdateManyWithoutOutputUnitNestedInput
@@ -489,6 +557,8 @@ export type MeasurementUnitCreateWithoutIngredientGroupOutputsInput = {
   id?: string
   name: string
   shortName: string
+  kind: $Enums.MeasurementUnitKind
+  roundToInteger?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   ingredients?: Prisma.RecipeIngredientCreateNestedManyWithoutUnitInput
@@ -499,6 +569,8 @@ export type MeasurementUnitUncheckedCreateWithoutIngredientGroupOutputsInput = {
   id?: string
   name: string
   shortName: string
+  kind: $Enums.MeasurementUnitKind
+  roundToInteger?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   ingredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutUnitInput
@@ -525,6 +597,8 @@ export type MeasurementUnitUpdateWithoutIngredientGroupOutputsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumMeasurementUnitKindFieldUpdateOperationsInput | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.RecipeIngredientUpdateManyWithoutUnitNestedInput
@@ -535,6 +609,8 @@ export type MeasurementUnitUncheckedUpdateWithoutIngredientGroupOutputsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumMeasurementUnitKindFieldUpdateOperationsInput | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutUnitNestedInput
@@ -594,6 +670,8 @@ export type MeasurementUnitSelect<ExtArgs extends runtime.Types.Extensions.Inter
   id?: boolean
   name?: boolean
   shortName?: boolean
+  kind?: boolean
+  roundToInteger?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   ingredients?: boolean | Prisma.MeasurementUnit$ingredientsArgs<ExtArgs>
@@ -606,6 +684,8 @@ export type MeasurementUnitSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   name?: boolean
   shortName?: boolean
+  kind?: boolean
+  roundToInteger?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["measurementUnit"]>
@@ -614,6 +694,8 @@ export type MeasurementUnitSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   name?: boolean
   shortName?: boolean
+  kind?: boolean
+  roundToInteger?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["measurementUnit"]>
@@ -622,11 +704,13 @@ export type MeasurementUnitSelectScalar = {
   id?: boolean
   name?: boolean
   shortName?: boolean
+  kind?: boolean
+  roundToInteger?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MeasurementUnitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "shortName" | "createdAt" | "updatedAt", ExtArgs["result"]["measurementUnit"]>
+export type MeasurementUnitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "shortName" | "kind" | "roundToInteger" | "createdAt" | "updatedAt", ExtArgs["result"]["measurementUnit"]>
 export type MeasurementUnitInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ingredients?: boolean | Prisma.MeasurementUnit$ingredientsArgs<ExtArgs>
   recipeOutputs?: boolean | Prisma.MeasurementUnit$recipeOutputsArgs<ExtArgs>
@@ -647,6 +731,8 @@ export type $MeasurementUnitPayload<ExtArgs extends runtime.Types.Extensions.Int
     id: string
     name: string
     shortName: string
+    kind: $Enums.MeasurementUnitKind
+    roundToInteger: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["measurementUnit"]>
@@ -1078,6 +1164,8 @@ export interface MeasurementUnitFieldRefs {
   readonly id: Prisma.FieldRef<"MeasurementUnit", 'String'>
   readonly name: Prisma.FieldRef<"MeasurementUnit", 'String'>
   readonly shortName: Prisma.FieldRef<"MeasurementUnit", 'String'>
+  readonly kind: Prisma.FieldRef<"MeasurementUnit", 'MeasurementUnitKind'>
+  readonly roundToInteger: Prisma.FieldRef<"MeasurementUnit", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"MeasurementUnit", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"MeasurementUnit", 'DateTime'>
 }

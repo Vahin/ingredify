@@ -1,23 +1,13 @@
-/** Единицы, для которых количество показываем целым (граммы, миллилитры и т.п.) */
-const INTEGER_ROUNDABLE_UNIT_SHORT_NAMES = new Set(['г', 'мл']);
-
 export type FormatAmountValueOptions = {
-  unitShortName?: string;
+  roundToInteger?: boolean;
 };
-
-function shouldRoundToInteger(unitShortName: string | undefined): boolean {
-  return (
-    unitShortName !== undefined &&
-    INTEGER_ROUNDABLE_UNIT_SHORT_NAMES.has(unitShortName)
-  );
-}
 
 /** Форматирование числовой части количества для UI */
 export function formatAmountValue(
   quantity: number,
   options?: FormatAmountValueOptions,
 ): string {
-  if (shouldRoundToInteger(options?.unitShortName)) {
+  if (options?.roundToInteger) {
     return String(Math.round(quantity));
   }
 

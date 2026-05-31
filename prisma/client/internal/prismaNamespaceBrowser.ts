@@ -99,6 +99,7 @@ export const RecipeScalarFieldEnum = {
   authorId: 'authorId',
   outputQuantity: 'outputQuantity',
   outputUnitId: 'outputUnitId',
+  servings: 'servings',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -136,6 +137,8 @@ export const MeasurementUnitScalarFieldEnum = {
   id: 'id',
   name: 'name',
   shortName: 'shortName',
+  kind: 'kind',
+  roundToInteger: 'roundToInteger',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

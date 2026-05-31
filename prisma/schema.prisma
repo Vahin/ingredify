@@ -9,6 +9,14 @@ datasource db {
   provider = "postgresql"
 }
 
+enum MeasurementUnitKind {
+  mass
+  volume
+  count
+  informal
+  serving
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -28,6 +36,7 @@ model Recipe {
   authorId        String   @map("author_id")
   outputQuantity  Decimal  @map("output_quantity") @db.Decimal(10, 2)
   outputUnitId    String   @map("output_unit_id")
+  servings        Int?     @map("servings")
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
@@ -72,11 +81,13 @@ model Ingredient {
 }
 
 model MeasurementUnit {
-  id        String   @id @default(cuid())
-  name      String
-  shortName String   @unique @map("short_name")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id                String              @id @default(cuid())
+  name              String
+  shortName         String              @unique @map("short_name")
+  kind              MeasurementUnitKind
+  roundToInteger    Boolean             @default(false) @map("round_to_integer")
+  createdAt         DateTime            @default(now()) @map("created_at")
+  updatedAt         DateTime            @updatedAt @map("updated_at")
 
   ingredients            RecipeIngredient[]
   recipeOutputs          Recipe[]

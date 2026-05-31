@@ -2,25 +2,14 @@ import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "./client/client";
+import { MEASUREMENT_UNITS } from "../src/entities/recipe/model/constants/measurement-units";
+import type { RecipePhysicalOutputUnitShortName } from "../src/entities/recipe/model/constants/measurement-units";
 
 const DEMO_USER_ID = "demo_user_ingredify";
 const DEMO_USER_EMAIL = "demo@ingredify.local";
 
 /** Данные стартового рецепта */
 const DEMO_AUTHOR_NAME = "Алена Кравцова";
-
-/** Стартовые единицы измерения */
-const MEASUREMENT_UNITS = [
-  { shortName: "г", name: "Грамм" },
-  { shortName: "кг", name: "Килограмм" },
-  { shortName: "мл", name: "Миллилитр" },
-  { shortName: "л", name: "Литр" },
-  { shortName: "шт", name: "Штука" },
-  { shortName: "ч. л.", name: "Чайная ложка" },
-  { shortName: "ст. л.", name: "Столовая ложка" },
-  { shortName: "щепотка", name: "Щепотка" },
-  { shortName: "порц.", name: "Порция" },
-] as const;
 
 type SeedIngredient = {
   name: string;
@@ -35,13 +24,26 @@ type SeedGroupedIngredient = SeedIngredient & {
 
 type SeedRecipeOutput = {
   quantity: number;
-  unitShortName: (typeof MEASUREMENT_UNITS)[number]["shortName"];
+  unitShortName: RecipePhysicalOutputUnitShortName;
+  servings?: number;
 };
 
 /** Описание группы ингредиентов в seed-данных; null — без названия в UI */
 type SeedIngredientGroupDef = {
   label: string | null;
 };
+
+/** Поля выхода рецепта для Prisma create */
+function recipeOutputFields(
+  output: SeedRecipeOutput,
+  units: Map<string, string>,
+) {
+  return {
+    outputQuantity: output.quantity,
+    outputUnitId: units.get(output.unitShortName)!,
+    servings: output.servings ?? null,
+  };
+}
 
 /** Группы ингредиентов с базовым выходом, скопированным из рецепта */
 function buildIngredientGroupCreates(
@@ -225,7 +227,7 @@ const pastaAlfredoHomemadeIngredients: SeedGroupedIngredient[] = [
 
 const cherryCobbler = {
   title: "Вишневый коблер с миндальной крошкой",
-  output: { quantity: 6, unitShortName: "порц." as const },
+  output: { quantity: 1800, unitShortName: "г" as const, servings: 6 },
   description:
     "Теплый домашний десерт с сочной вишневой начинкой, нежным миндалем и золотистой хрустящей шапкой. Хорош для воскресного ужина и отлично держит форму после остывания.",
   image: "/recipes/ingredify-cherry-cobbler-hero.png",
@@ -316,7 +318,7 @@ const brownButter = {
 
 const pastaAlfredo = {
   title: "Паста Альфредо с пармезаном",
-  output: { quantity: 4, unitShortName: "порц." as const },
+  output: { quantity: 1200, unitShortName: "г" as const, servings: 4 },
   description:
     "Кремовая паста с бархатным сливочным соусом, пармезаном и лёгким чесночным ароматом. Готовится быстро, а соус получается гладким за счёт крахмалистой воды от пасты.",
   image: "/recipes/pasta-alfredo-hero.png",
@@ -364,7 +366,7 @@ const pastaAlfredo = {
 
 const pastaAlfredoHomemade = {
   title: "Паста Альфредо с домашней феттучине",
-  output: { quantity: 4, unitShortName: "порц." as const },
+  output: { quantity: 1200, unitShortName: "г" as const, servings: 4 },
   description:
     "Домашняя феттучине и сливочный соус Альфредо в одном рецепте. Ингредиенты разделены по этапам, чтобы удобно готовить тесто и соус отдельно.",
   image: "/recipes/pasta-alfredo-hero.png",
@@ -411,8 +413,17 @@ async function upsertUnits(prisma: PrismaClient) {
   for (const unit of MEASUREMENT_UNITS) {
     const row = await prisma.measurementUnit.upsert({
       where: { shortName: unit.shortName },
-      update: { name: unit.name },
-      create: unit,
+      update: {
+        name: unit.name,
+        kind: unit.kind,
+        roundToInteger: unit.roundToInteger,
+      },
+      create: {
+        shortName: unit.shortName,
+        name: unit.name,
+        kind: unit.kind,
+        roundToInteger: unit.roundToInteger,
+      },
     });
     units.set(unit.shortName, row.id);
   }
@@ -477,8 +488,7 @@ async function main() {
         title: brownButter.title,
         description: brownButter.description,
         image: brownButter.image,
-        outputQuantity: brownButter.output.quantity,
-        outputUnitId: units.get(brownButter.output.unitShortName)!,
+        ...recipeOutputFields(brownButter.output, units),
         nutrition: { create: brownButter.nutrition },
         ingredientGroups: {
           create: buildIngredientGroupCreates(
@@ -549,8 +559,7 @@ async function main() {
         title: cherryCobbler.title,
         description: cherryCobbler.description,
         image: cherryCobbler.image,
-        outputQuantity: cherryCobbler.output.quantity,
-        outputUnitId: units.get(cherryCobbler.output.unitShortName)!,
+        ...recipeOutputFields(cherryCobbler.output, units),
         nutrition: { create: cherryCobbler.nutrition },
         ingredientGroups: {
           create: buildIngredientGroupCreates(
@@ -609,8 +618,7 @@ async function main() {
         title: pastaAlfredo.title,
         description: pastaAlfredo.description,
         image: pastaAlfredo.image,
-        outputQuantity: pastaAlfredo.output.quantity,
-        outputUnitId: units.get(pastaAlfredo.output.unitShortName)!,
+        ...recipeOutputFields(pastaAlfredo.output, units),
         nutrition: { create: pastaAlfredo.nutrition },
         ingredientGroups: {
           create: buildIngredientGroupCreates(
@@ -668,8 +676,7 @@ async function main() {
         title: pastaAlfredoHomemade.title,
         description: pastaAlfredoHomemade.description,
         image: pastaAlfredoHomemade.image,
-        outputQuantity: pastaAlfredoHomemade.output.quantity,
-        outputUnitId: units.get(pastaAlfredoHomemade.output.unitShortName)!,
+        ...recipeOutputFields(pastaAlfredoHomemade.output, units),
         nutrition: { create: pastaAlfredoHomemade.nutrition },
         ingredientGroups: {
           create: buildIngredientGroupCreates(

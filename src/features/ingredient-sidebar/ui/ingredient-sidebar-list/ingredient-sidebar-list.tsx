@@ -28,15 +28,15 @@ const IngredientName = ({
 
 const IngredientAmount = ({
   amountValue,
-  amountUnitLabel,
+  unitLabel,
 }: {
   amountValue: string;
-  amountUnitLabel: string;
+  unitLabel: string;
 }) => {
   return (
     <span className='whitespace-nowrap font-mono text-xs tabular-nums text-secondary'>
       <span>{amountValue}</span>
-      <span className='ml-1'>{amountUnitLabel}</span>
+      <span className='ml-1'>{unitLabel}</span>
     </span>
   );
 };
@@ -51,7 +51,7 @@ const IngredientRow = ({ ingredient }: { ingredient: IngredientLine }) => {
       />
       <IngredientAmount
         amountValue={ingredient.amountValue}
-        amountUnitLabel={ingredient.amountUnitLabel}
+        unitLabel={ingredient.unit.label}
       />
     </div>
   );

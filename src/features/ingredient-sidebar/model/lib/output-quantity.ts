@@ -1,44 +1,43 @@
-import { isPortionOutput } from '@/entities/recipe/lib/is-portion-output';
+import { hasRecipeServings } from '@/entities/recipe/lib/has-recipe-servings';
 import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
 
 const MIN_OUTPUT_QUANTITY = 1;
-const MAX_PORTION_OUTPUT = 99;
-const MAX_OTHER_OUTPUT = 9999;
+const MAX_SERVINGS = 99;
+const MAX_PHYSICAL_OUTPUT = 9999;
 
-/** Базовое количество выхода рецепта для расчёта коэффициента масштабирования */
-export function getBaseOutputQuantity(output: RecipeOutput): number {
-  const quantity = output.quantity;
-
-  if (isPortionOutput(output)) {
-    return Math.max(MIN_OUTPUT_QUANTITY, Math.round(quantity));
+/** База для расчёта коэффициента масштабирования (порции или физический выход) */
+export function getScalingBase(output: RecipeOutput): number {
+  if (hasRecipeServings(output)) {
+    return Math.max(MIN_OUTPUT_QUANTITY, Math.round(output.servings!));
   }
 
-  return Math.max(MIN_OUTPUT_QUANTITY, quantity);
+  return Math.max(MIN_OUTPUT_QUANTITY, output.quantity);
+}
+
+/** Нужно ли округлять выбранное значение до целого */
+function shouldRoundSelectedOutput(output: RecipeOutput): boolean {
+  return hasRecipeServings(output) || output.unit.roundToInteger;
 }
 
 /** Начальное выбранное количество (для state) */
 export function getInitialSelectedOutputQuantity(output: RecipeOutput): number {
   return normalizeOutputQuantity(
-    getBaseOutputQuantity(output),
-    output.unitShortName,
+    getScalingBase(output),
+    shouldRoundSelectedOutput(output),
   );
 }
 
 /** Верхняя граница выхода в UI */
 export function getMaxOutputQuantity(output: RecipeOutput): number {
-  return isPortionOutput(output) ? MAX_PORTION_OUTPUT : MAX_OTHER_OUTPUT;
+  return hasRecipeServings(output) ? MAX_SERVINGS : MAX_PHYSICAL_OUTPUT;
 }
 
-/** Нормализация значения под единицу измерения */
+/** Нормализация значения под правила единицы измерения */
 export function normalizeOutputQuantity(
   value: number,
-  unitShortName: string,
+  roundToInteger: boolean,
 ): number {
-  if (
-    unitShortName === 'г' ||
-    unitShortName === 'мл' ||
-    unitShortName === 'порц.'
-  ) {
+  if (roundToInteger) {
     return Math.round(value);
   }
 
@@ -54,7 +53,7 @@ export function clampOutputQuantity(
   const max = getMaxOutputQuantity(output);
   const clamped = Math.min(max, Math.max(min, value));
 
-  return normalizeOutputQuantity(clamped, output.unitShortName);
+  return normalizeOutputQuantity(clamped, shouldRoundSelectedOutput(output));
 }
 
 /** Парсинг ручного ввода; null — невалидное значение */

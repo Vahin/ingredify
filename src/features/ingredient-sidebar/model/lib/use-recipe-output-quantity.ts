@@ -35,8 +35,8 @@ export function useRecipeOutputQuantity(
   }, [output]);
 
   const scaledSections = useMemo(
-    () => scaleIngredientSections(sections, selectedOutputQuantity),
-    [sections, selectedOutputQuantity],
+    () => scaleIngredientSections(sections, selectedOutputQuantity, output),
+    [sections, selectedOutputQuantity, output],
   );
 
   return {

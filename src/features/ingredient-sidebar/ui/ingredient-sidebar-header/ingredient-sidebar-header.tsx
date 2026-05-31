@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { isPortionOutput } from '@/entities/recipe/lib/is-portion-output';
+import { hasRecipeServings } from '@/entities/recipe/lib/has-recipe-servings';
 import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
 import { IconOld } from '@/shared/ui/icon';
 import {
@@ -44,7 +44,7 @@ export const IngredientSidebarHeader = ({
   quantityControl,
 }: IngredientSidebarHeaderProps) => {
   const { value, output, onChange, onDecrease, onIncrease } = quantityControl;
-  const portionRecipe = isPortionOutput(output);
+  const portionRecipe = hasRecipeServings(output);
   const [inputDraft, setInputDraft] = useState(String(value));
   const [isEditing, setIsEditing] = useState(false);
 
@@ -72,11 +72,11 @@ export const IngredientSidebarHeader = ({
   const maxQuantity = getMaxOutputQuantity(output);
   const unitLabel = portionRecipe
     ? getPortionLabel(value)
-    : output.unitShortName;
+    : output.unit.label;
 
   const quantityAriaLabel = portionRecipe
     ? 'Количество порций'
-    : `Количество выхода, ${output.unitShortName}`;
+    : `Количество выхода, ${output.unit.label}`;
 
   return (
     <div className='mb-4 flex flex-col items-start gap-2'>

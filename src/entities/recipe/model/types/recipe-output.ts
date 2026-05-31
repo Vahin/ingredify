@@ -1,6 +1,6 @@
-/** Выход рецепта: порции для блюда или вес/объём для заготовки */
-export type RecipeOutput = {
-  quantity: number;
-  unitShortName: string;
-  unitLabel: string;
+import type { PhysicalOutput } from './physical-output';
+
+/** Выход рецепта: физический + опциональные порции */
+export type RecipeOutput = PhysicalOutput & {
+  servings: number | null;
 };

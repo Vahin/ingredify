@@ -2,12 +2,17 @@ import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import type { Prisma } from '@prisma';
 import { prisma } from '@/shared/lib/prisma';
+import type { RecipeIngredientLine } from '@/entities/ingredient/model/types/recipe-ingredient-line';
 import { formatAmountValue } from '../lib/format-amount-value';
+import type {
+  MeasurementUnitKind,
+  MeasurementUnitShortName,
+} from '../model/constants/measurement-units';
+import type { MeasurementUnitView } from '../model/types/measurement-unit';
 import type {
   Recipe,
   RecipeIngredientSection,
 } from '../model/types/recipe';
-import type { RecipeIngredientLine } from '@/entities/ingredient/model/types/recipe-ingredient-line';
 
 const recipeInclude = {
   author: true,
@@ -33,6 +38,18 @@ const recipeInclude = {
 
 type RecipeRow = Prisma.RecipeGetPayload<{ include: typeof recipeInclude }>;
 
+type UnitRow = RecipeRow['outputUnit'];
+
+/** Преобразование единицы измерения БД в DTO */
+function mapUnit(row: UnitRow): MeasurementUnitView {
+  return {
+    shortName: row.shortName as MeasurementUnitShortName,
+    label: row.shortName,
+    kind: row.kind as MeasurementUnitKind,
+    roundToInteger: row.roundToInteger,
+  };
+}
+
 /** Округление макронутриентов для карточек КБЖУ в UI */
 function formatMacroGrams(value: Prisma.Decimal | number): number {
   const n = typeof value === 'number' ? value : Number(value);
@@ -43,6 +60,7 @@ function formatMacroGrams(value: Prisma.Decimal | number): number {
 function mapIngredientLineToDto(
   line: RecipeRow['ingredientGroups'][number]['ingredients'][number],
 ): RecipeIngredientLine {
+  const unit = mapUnit(line.unit);
   const amountNumeric = Number(line.quantity);
 
   return {
@@ -51,9 +69,9 @@ function mapIngredientLineToDto(
     sticker: line.ingredient.sticker,
     amountNumeric,
     amountValue: formatAmountValue(amountNumeric, {
-      unitShortName: line.unit.shortName,
+      roundToInteger: unit.roundToInteger,
     }),
-    amountUnitLabel: line.unit.shortName,
+    unit,
     ...(line.ingredient.recipe ? { linkedRecipeId: line.ingredient.recipe.id } : {}),
   };
 }
@@ -61,6 +79,7 @@ function mapIngredientLineToDto(
 /** Преобразование строк БД в DTO для UI */
 function mapRecipeRowToDto(row: RecipeRow): Recipe {
   const outputQuantity = Number(row.outputQuantity);
+  const outputUnit = mapUnit(row.outputUnit);
 
   const ingredientSections: RecipeIngredientSection[] = row.ingredientGroups
     .map((group) => ({
@@ -68,8 +87,7 @@ function mapRecipeRowToDto(row: RecipeRow): Recipe {
       label: group.label,
       output: {
         quantity: Number(group.outputQuantity),
-        unitShortName: group.outputUnit.shortName,
-        unitLabel: group.outputUnit.shortName,
+        unit: mapUnit(group.outputUnit),
       },
       lines: group.ingredients.map(mapIngredientLineToDto),
     }))
@@ -82,8 +100,8 @@ function mapRecipeRowToDto(row: RecipeRow): Recipe {
     image: row.image,
     output: {
       quantity: outputQuantity,
-      unitShortName: row.outputUnit.shortName,
-      unitLabel: row.outputUnit.shortName,
+      unit: outputUnit,
+      servings: row.servings,
     },
     nutrition: {
       calories: row.nutrition?.calories ?? 0,

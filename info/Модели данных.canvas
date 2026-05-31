@@ -13,7 +13,7 @@
 		{
 			"id": "recipe",
 			"type": "text",
-			"text": "## Recipe\n\nОсновная сущность рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| title | String |  |\n| description | String |  |\n| image | String |  |\n| authorId | String | FK -> User |\n| outputQuantity | Decimal | Decimal(10, 2) |\n| outputUnitId | String | FK -> MeasurementUnit |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- author: `User`\n- outputUnit: `MeasurementUnit`\n- nutrition: `RecipeNutrition?`\n- ingredientGroups: `RecipeIngredientGroup[]`\n- equipment: `RecipeEquipment[]`\n- steps: `RecipeStep[]`\n- comments: `RecipeComment[]`\n- preparedIngredient: `Ingredient?`",
+			"text": "## Recipe\n\nОсновная сущность рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| title | String |  |\n| description | String |  |\n| image | String |  |\n| authorId | String | FK -> User |\n| outputQuantity | Decimal | Decimal(10, 2), физический выход |\n| outputUnitId | String | FK -> MeasurementUnit (mass/volume) |\n| servings | Int? | опционально, базовое число порций |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- author: `User`\n- outputUnit: `MeasurementUnit`\n- nutrition: `RecipeNutrition?`\n- ingredientGroups: `RecipeIngredientGroup[]`\n- equipment: `RecipeEquipment[]`\n- steps: `RecipeStep[]`\n- comments: `RecipeComment[]`\n- preparedIngredient: `Ingredient?`",
 			"x": -80,
 			"y": -140,
 			"width": 560,
@@ -83,11 +83,11 @@
 		{
 			"id": "measurement-unit",
 			"type": "text",
-			"text": "## MeasurementUnit\n\nЕдиница измерения для ингредиентов и выхода рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| name | String |  |\n| shortName | String | unique, `short_name` |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- ingredients: `RecipeIngredient[]`\n- recipeOutputs: `Recipe[]`\n- ingredientGroupOutputs: `RecipeIngredientGroup[]`",
+			"text": "## MeasurementUnit\n\nЕдиница измерения для ингредиентов и выхода рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| name | String |  |\n| shortName | String | unique, `short_name` |\n| kind | MeasurementUnitKind | mass / volume / count / informal / serving |\n| roundToInteger | Boolean | `round_to_integer` |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- ingredients: `RecipeIngredient[]`\n- recipeOutputs: `Recipe[]`\n- ingredientGroupOutputs: `RecipeIngredientGroup[]`",
 			"x": -360,
 			"y": -1050,
 			"width": 560,
-			"height": 420,
+			"height": 460,
 			"color": "3"
 		},
 		{

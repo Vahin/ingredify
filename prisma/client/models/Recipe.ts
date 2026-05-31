@@ -28,10 +28,12 @@ export type AggregateRecipe = {
 
 export type RecipeAvgAggregateOutputType = {
   outputQuantity: runtime.Decimal | null
+  servings: number | null
 }
 
 export type RecipeSumAggregateOutputType = {
   outputQuantity: runtime.Decimal | null
+  servings: number | null
 }
 
 export type RecipeMinAggregateOutputType = {
@@ -42,6 +44,7 @@ export type RecipeMinAggregateOutputType = {
   authorId: string | null
   outputQuantity: runtime.Decimal | null
   outputUnitId: string | null
+  servings: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,6 +57,7 @@ export type RecipeMaxAggregateOutputType = {
   authorId: string | null
   outputQuantity: runtime.Decimal | null
   outputUnitId: string | null
+  servings: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,6 +70,7 @@ export type RecipeCountAggregateOutputType = {
   authorId: number
   outputQuantity: number
   outputUnitId: number
+  servings: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -74,10 +79,12 @@ export type RecipeCountAggregateOutputType = {
 
 export type RecipeAvgAggregateInputType = {
   outputQuantity?: true
+  servings?: true
 }
 
 export type RecipeSumAggregateInputType = {
   outputQuantity?: true
+  servings?: true
 }
 
 export type RecipeMinAggregateInputType = {
@@ -88,6 +95,7 @@ export type RecipeMinAggregateInputType = {
   authorId?: true
   outputQuantity?: true
   outputUnitId?: true
+  servings?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +108,7 @@ export type RecipeMaxAggregateInputType = {
   authorId?: true
   outputQuantity?: true
   outputUnitId?: true
+  servings?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -112,6 +121,7 @@ export type RecipeCountAggregateInputType = {
   authorId?: true
   outputQuantity?: true
   outputUnitId?: true
+  servings?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -211,6 +221,7 @@ export type RecipeGroupByOutputType = {
   authorId: string
   outputQuantity: runtime.Decimal
   outputUnitId: string
+  servings: number | null
   createdAt: Date
   updatedAt: Date
   _count: RecipeCountAggregateOutputType | null
@@ -246,6 +257,7 @@ export type RecipeWhereInput = {
   authorId?: Prisma.StringFilter<"Recipe"> | string
   outputQuantity?: Prisma.DecimalFilter<"Recipe"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFilter<"Recipe"> | string
+  servings?: Prisma.IntNullableFilter<"Recipe"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Recipe"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Recipe"> | Date | string
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -266,6 +278,7 @@ export type RecipeOrderByWithRelationInput = {
   authorId?: Prisma.SortOrder
   outputQuantity?: Prisma.SortOrder
   outputUnitId?: Prisma.SortOrder
+  servings?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   author?: Prisma.UserOrderByWithRelationInput
@@ -289,6 +302,7 @@ export type RecipeWhereUniqueInput = Prisma.AtLeast<{
   authorId?: Prisma.StringFilter<"Recipe"> | string
   outputQuantity?: Prisma.DecimalFilter<"Recipe"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFilter<"Recipe"> | string
+  servings?: Prisma.IntNullableFilter<"Recipe"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Recipe"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Recipe"> | Date | string
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -309,6 +323,7 @@ export type RecipeOrderByWithAggregationInput = {
   authorId?: Prisma.SortOrder
   outputQuantity?: Prisma.SortOrder
   outputUnitId?: Prisma.SortOrder
+  servings?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.RecipeCountOrderByAggregateInput
@@ -329,6 +344,7 @@ export type RecipeScalarWhereWithAggregatesInput = {
   authorId?: Prisma.StringWithAggregatesFilter<"Recipe"> | string
   outputQuantity?: Prisma.DecimalWithAggregatesFilter<"Recipe"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringWithAggregatesFilter<"Recipe"> | string
+  servings?: Prisma.IntNullableWithAggregatesFilter<"Recipe"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Recipe"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Recipe"> | Date | string
 }
@@ -339,6 +355,7 @@ export type RecipeCreateInput = {
   description: string
   image: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutRecipesInput
@@ -359,6 +376,7 @@ export type RecipeUncheckedCreateInput = {
   authorId: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId: string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedCreateNestedOneWithoutRecipeInput
@@ -375,6 +393,7 @@ export type RecipeUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
@@ -395,6 +414,7 @@ export type RecipeUncheckedUpdateInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedUpdateOneWithoutRecipeNestedInput
@@ -413,6 +433,7 @@ export type RecipeCreateManyInput = {
   authorId: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId: string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -423,6 +444,7 @@ export type RecipeUpdateManyMutationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -435,6 +457,7 @@ export type RecipeUncheckedUpdateManyInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -457,12 +480,14 @@ export type RecipeCountOrderByAggregateInput = {
   authorId?: Prisma.SortOrder
   outputQuantity?: Prisma.SortOrder
   outputUnitId?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type RecipeAvgOrderByAggregateInput = {
   outputQuantity?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
 }
 
 export type RecipeMaxOrderByAggregateInput = {
@@ -473,6 +498,7 @@ export type RecipeMaxOrderByAggregateInput = {
   authorId?: Prisma.SortOrder
   outputQuantity?: Prisma.SortOrder
   outputUnitId?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -485,12 +511,14 @@ export type RecipeMinOrderByAggregateInput = {
   authorId?: Prisma.SortOrder
   outputQuantity?: Prisma.SortOrder
   outputUnitId?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type RecipeSumOrderByAggregateInput = {
   outputQuantity?: Prisma.SortOrder
+  servings?: Prisma.SortOrder
 }
 
 export type RecipeScalarRelationFilter = {
@@ -551,6 +579,14 @@ export type DecimalFieldUpdateOperationsInput = {
   decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
   multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type RecipeCreateNestedOneWithoutNutritionInput = {
@@ -687,6 +723,7 @@ export type RecipeCreateWithoutAuthorInput = {
   description: string
   image: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   outputUnit: Prisma.MeasurementUnitCreateNestedOneWithoutRecipeOutputsInput
@@ -705,6 +742,7 @@ export type RecipeUncheckedCreateWithoutAuthorInput = {
   image: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId: string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedCreateNestedOneWithoutRecipeInput
@@ -752,6 +790,7 @@ export type RecipeScalarWhereInput = {
   authorId?: Prisma.StringFilter<"Recipe"> | string
   outputQuantity?: Prisma.DecimalFilter<"Recipe"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFilter<"Recipe"> | string
+  servings?: Prisma.IntNullableFilter<"Recipe"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Recipe"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Recipe"> | Date | string
 }
@@ -762,6 +801,7 @@ export type RecipeCreateWithoutNutritionInput = {
   description: string
   image: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutRecipesInput
@@ -781,6 +821,7 @@ export type RecipeUncheckedCreateWithoutNutritionInput = {
   authorId: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId: string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   ingredientGroups?: Prisma.RecipeIngredientGroupUncheckedCreateNestedManyWithoutRecipeInput
@@ -812,6 +853,7 @@ export type RecipeUpdateWithoutNutritionInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
@@ -831,6 +873,7 @@ export type RecipeUncheckedUpdateWithoutNutritionInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredientGroups?: Prisma.RecipeIngredientGroupUncheckedUpdateManyWithoutRecipeNestedInput
@@ -846,6 +889,7 @@ export type RecipeCreateWithoutPreparedIngredientInput = {
   description: string
   image: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutRecipesInput
@@ -865,6 +909,7 @@ export type RecipeUncheckedCreateWithoutPreparedIngredientInput = {
   authorId: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId: string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedCreateNestedOneWithoutRecipeInput
@@ -896,6 +941,7 @@ export type RecipeUpdateWithoutPreparedIngredientInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
@@ -915,6 +961,7 @@ export type RecipeUncheckedUpdateWithoutPreparedIngredientInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedUpdateOneWithoutRecipeNestedInput
@@ -930,6 +977,7 @@ export type RecipeCreateWithoutOutputUnitInput = {
   description: string
   image: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutRecipesInput
@@ -948,6 +996,7 @@ export type RecipeUncheckedCreateWithoutOutputUnitInput = {
   image: string
   authorId: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedCreateNestedOneWithoutRecipeInput
@@ -990,6 +1039,7 @@ export type RecipeCreateWithoutIngredientGroupsInput = {
   description: string
   image: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutRecipesInput
@@ -1009,6 +1059,7 @@ export type RecipeUncheckedCreateWithoutIngredientGroupsInput = {
   authorId: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId: string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedCreateNestedOneWithoutRecipeInput
@@ -1040,6 +1091,7 @@ export type RecipeUpdateWithoutIngredientGroupsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
@@ -1059,6 +1111,7 @@ export type RecipeUncheckedUpdateWithoutIngredientGroupsInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedUpdateOneWithoutRecipeNestedInput
@@ -1074,6 +1127,7 @@ export type RecipeCreateWithoutEquipmentInput = {
   description: string
   image: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutRecipesInput
@@ -1093,6 +1147,7 @@ export type RecipeUncheckedCreateWithoutEquipmentInput = {
   authorId: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId: string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedCreateNestedOneWithoutRecipeInput
@@ -1124,6 +1179,7 @@ export type RecipeUpdateWithoutEquipmentInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
@@ -1143,6 +1199,7 @@ export type RecipeUncheckedUpdateWithoutEquipmentInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedUpdateOneWithoutRecipeNestedInput
@@ -1158,6 +1215,7 @@ export type RecipeCreateWithoutStepsInput = {
   description: string
   image: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutRecipesInput
@@ -1177,6 +1235,7 @@ export type RecipeUncheckedCreateWithoutStepsInput = {
   authorId: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId: string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedCreateNestedOneWithoutRecipeInput
@@ -1208,6 +1267,7 @@ export type RecipeUpdateWithoutStepsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
@@ -1227,6 +1287,7 @@ export type RecipeUncheckedUpdateWithoutStepsInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedUpdateOneWithoutRecipeNestedInput
@@ -1242,6 +1303,7 @@ export type RecipeCreateWithoutCommentsInput = {
   description: string
   image: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutRecipesInput
@@ -1261,6 +1323,7 @@ export type RecipeUncheckedCreateWithoutCommentsInput = {
   authorId: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId: string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedCreateNestedOneWithoutRecipeInput
@@ -1292,6 +1355,7 @@ export type RecipeUpdateWithoutCommentsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
@@ -1311,6 +1375,7 @@ export type RecipeUncheckedUpdateWithoutCommentsInput = {
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedUpdateOneWithoutRecipeNestedInput
@@ -1327,6 +1392,7 @@ export type RecipeCreateManyAuthorInput = {
   image: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId: string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1337,6 +1403,7 @@ export type RecipeUpdateWithoutAuthorInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   outputUnit?: Prisma.MeasurementUnitUpdateOneRequiredWithoutRecipeOutputsNestedInput
@@ -1355,6 +1422,7 @@ export type RecipeUncheckedUpdateWithoutAuthorInput = {
   image?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedUpdateOneWithoutRecipeNestedInput
@@ -1372,6 +1440,7 @@ export type RecipeUncheckedUpdateManyWithoutAuthorInput = {
   image?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   outputUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1383,6 +1452,7 @@ export type RecipeCreateManyOutputUnitInput = {
   image: string
   authorId: string
   outputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1393,6 +1463,7 @@ export type RecipeUpdateWithoutOutputUnitInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutRecipesNestedInput
@@ -1411,6 +1482,7 @@ export type RecipeUncheckedUpdateWithoutOutputUnitInput = {
   image?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   nutrition?: Prisma.RecipeNutritionUncheckedUpdateOneWithoutRecipeNestedInput
@@ -1428,6 +1500,7 @@ export type RecipeUncheckedUpdateManyWithoutOutputUnitInput = {
   image?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   outputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  servings?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1498,6 +1571,7 @@ export type RecipeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   authorId?: boolean
   outputQuantity?: boolean
   outputUnitId?: boolean
+  servings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1519,6 +1593,7 @@ export type RecipeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   authorId?: boolean
   outputQuantity?: boolean
   outputUnitId?: boolean
+  servings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1533,6 +1608,7 @@ export type RecipeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   authorId?: boolean
   outputQuantity?: boolean
   outputUnitId?: boolean
+  servings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1547,11 +1623,12 @@ export type RecipeSelectScalar = {
   authorId?: boolean
   outputQuantity?: boolean
   outputUnitId?: boolean
+  servings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RecipeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "image" | "authorId" | "outputQuantity" | "outputUnitId" | "createdAt" | "updatedAt", ExtArgs["result"]["recipe"]>
+export type RecipeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "image" | "authorId" | "outputQuantity" | "outputUnitId" | "servings" | "createdAt" | "updatedAt", ExtArgs["result"]["recipe"]>
 export type RecipeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   outputUnit?: boolean | Prisma.MeasurementUnitDefaultArgs<ExtArgs>
@@ -1592,6 +1669,7 @@ export type $RecipePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     authorId: string
     outputQuantity: runtime.Decimal
     outputUnitId: string
+    servings: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["recipe"]>
@@ -2032,6 +2110,7 @@ export interface RecipeFieldRefs {
   readonly authorId: Prisma.FieldRef<"Recipe", 'String'>
   readonly outputQuantity: Prisma.FieldRef<"Recipe", 'Decimal'>
   readonly outputUnitId: Prisma.FieldRef<"Recipe", 'String'>
+  readonly servings: Prisma.FieldRef<"Recipe", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Recipe", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Recipe", 'DateTime'>
 }
