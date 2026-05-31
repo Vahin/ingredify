@@ -91,3 +91,23 @@ export type RecipeStep = Prisma.RecipeStepModel
  * 
  */
 export type RecipeComment = Prisma.RecipeCommentModel
+/**
+ * Model Cart
+ * 
+ */
+export type Cart = Prisma.CartModel
+/**
+ * Model CartItem
+ * 
+ */
+export type CartItem = Prisma.CartItemModel
+/**
+ * Model CartRecipeSync
+ * 
+ */
+export type CartRecipeSync = Prisma.CartRecipeSyncModel
+/**
+ * Model CartRecipeLineSync
+ * 
+ */
+export type CartRecipeLineSync = Prisma.CartRecipeLineSyncModel

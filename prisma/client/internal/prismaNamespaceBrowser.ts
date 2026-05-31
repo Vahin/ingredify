@@ -60,7 +60,11 @@ export const ModelName = {
   RecipeIngredientGroup: 'RecipeIngredientGroup',
   RecipeEquipment: 'RecipeEquipment',
   RecipeStep: 'RecipeStep',
-  RecipeComment: 'RecipeComment'
+  RecipeComment: 'RecipeComment',
+  Cart: 'Cart',
+  CartItem: 'CartItem',
+  CartRecipeSync: 'CartRecipeSync',
+  CartRecipeLineSync: 'CartRecipeLineSync'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -212,6 +216,57 @@ export const RecipeCommentScalarFieldEnum = {
 } as const
 
 export type RecipeCommentScalarFieldEnum = (typeof RecipeCommentScalarFieldEnum)[keyof typeof RecipeCommentScalarFieldEnum]
+
+
+export const CartScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CartScalarFieldEnum = (typeof CartScalarFieldEnum)[keyof typeof CartScalarFieldEnum]
+
+
+export const CartItemScalarFieldEnum = {
+  id: 'id',
+  cartId: 'cartId',
+  sourceRecipeId: 'sourceRecipeId',
+  recipeIngredientId: 'recipeIngredientId',
+  name: 'name',
+  sticker: 'sticker',
+  quantity: 'quantity',
+  unitId: 'unitId',
+  isSubRecipe: 'isSubRecipe',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CartItemScalarFieldEnum = (typeof CartItemScalarFieldEnum)[keyof typeof CartItemScalarFieldEnum]
+
+
+export const CartRecipeSyncScalarFieldEnum = {
+  id: 'id',
+  cartId: 'cartId',
+  recipeId: 'recipeId',
+  syncedOutputQuantity: 'syncedOutputQuantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CartRecipeSyncScalarFieldEnum = (typeof CartRecipeSyncScalarFieldEnum)[keyof typeof CartRecipeSyncScalarFieldEnum]
+
+
+export const CartRecipeLineSyncScalarFieldEnum = {
+  id: 'id',
+  syncId: 'syncId',
+  recipeIngredientId: 'recipeIngredientId',
+  syncedQuantity: 'syncedQuantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CartRecipeLineSyncScalarFieldEnum = (typeof CartRecipeLineSyncScalarFieldEnum)[keyof typeof CartRecipeLineSyncScalarFieldEnum]
 
 
 export const SortOrder = {

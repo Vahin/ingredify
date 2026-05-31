@@ -201,6 +201,7 @@ export type MeasurementUnitWhereInput = {
   ingredients?: Prisma.RecipeIngredientListRelationFilter
   recipeOutputs?: Prisma.RecipeListRelationFilter
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupListRelationFilter
+  cartItems?: Prisma.CartItemListRelationFilter
 }
 
 export type MeasurementUnitOrderByWithRelationInput = {
@@ -214,6 +215,7 @@ export type MeasurementUnitOrderByWithRelationInput = {
   ingredients?: Prisma.RecipeIngredientOrderByRelationAggregateInput
   recipeOutputs?: Prisma.RecipeOrderByRelationAggregateInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupOrderByRelationAggregateInput
+  cartItems?: Prisma.CartItemOrderByRelationAggregateInput
 }
 
 export type MeasurementUnitWhereUniqueInput = Prisma.AtLeast<{
@@ -230,6 +232,7 @@ export type MeasurementUnitWhereUniqueInput = Prisma.AtLeast<{
   ingredients?: Prisma.RecipeIngredientListRelationFilter
   recipeOutputs?: Prisma.RecipeListRelationFilter
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupListRelationFilter
+  cartItems?: Prisma.CartItemListRelationFilter
 }, "id" | "shortName">
 
 export type MeasurementUnitOrderByWithAggregationInput = {
@@ -269,6 +272,7 @@ export type MeasurementUnitCreateInput = {
   ingredients?: Prisma.RecipeIngredientCreateNestedManyWithoutUnitInput
   recipeOutputs?: Prisma.RecipeCreateNestedManyWithoutOutputUnitInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupCreateNestedManyWithoutOutputUnitInput
+  cartItems?: Prisma.CartItemCreateNestedManyWithoutUnitInput
 }
 
 export type MeasurementUnitUncheckedCreateInput = {
@@ -282,6 +286,7 @@ export type MeasurementUnitUncheckedCreateInput = {
   ingredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutUnitInput
   recipeOutputs?: Prisma.RecipeUncheckedCreateNestedManyWithoutOutputUnitInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupUncheckedCreateNestedManyWithoutOutputUnitInput
+  cartItems?: Prisma.CartItemUncheckedCreateNestedManyWithoutUnitInput
 }
 
 export type MeasurementUnitUpdateInput = {
@@ -295,6 +300,7 @@ export type MeasurementUnitUpdateInput = {
   ingredients?: Prisma.RecipeIngredientUpdateManyWithoutUnitNestedInput
   recipeOutputs?: Prisma.RecipeUpdateManyWithoutOutputUnitNestedInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupUpdateManyWithoutOutputUnitNestedInput
+  cartItems?: Prisma.CartItemUpdateManyWithoutUnitNestedInput
 }
 
 export type MeasurementUnitUncheckedUpdateInput = {
@@ -308,6 +314,7 @@ export type MeasurementUnitUncheckedUpdateInput = {
   ingredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutUnitNestedInput
   recipeOutputs?: Prisma.RecipeUncheckedUpdateManyWithoutOutputUnitNestedInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupUncheckedUpdateManyWithoutOutputUnitNestedInput
+  cartItems?: Prisma.CartItemUncheckedUpdateManyWithoutUnitNestedInput
 }
 
 export type MeasurementUnitCreateManyInput = {
@@ -425,6 +432,20 @@ export type MeasurementUnitUpdateOneRequiredWithoutIngredientGroupOutputsNestedI
   update?: Prisma.XOR<Prisma.XOR<Prisma.MeasurementUnitUpdateToOneWithWhereWithoutIngredientGroupOutputsInput, Prisma.MeasurementUnitUpdateWithoutIngredientGroupOutputsInput>, Prisma.MeasurementUnitUncheckedUpdateWithoutIngredientGroupOutputsInput>
 }
 
+export type MeasurementUnitCreateNestedOneWithoutCartItemsInput = {
+  create?: Prisma.XOR<Prisma.MeasurementUnitCreateWithoutCartItemsInput, Prisma.MeasurementUnitUncheckedCreateWithoutCartItemsInput>
+  connectOrCreate?: Prisma.MeasurementUnitCreateOrConnectWithoutCartItemsInput
+  connect?: Prisma.MeasurementUnitWhereUniqueInput
+}
+
+export type MeasurementUnitUpdateOneRequiredWithoutCartItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.MeasurementUnitCreateWithoutCartItemsInput, Prisma.MeasurementUnitUncheckedCreateWithoutCartItemsInput>
+  connectOrCreate?: Prisma.MeasurementUnitCreateOrConnectWithoutCartItemsInput
+  upsert?: Prisma.MeasurementUnitUpsertWithoutCartItemsInput
+  connect?: Prisma.MeasurementUnitWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MeasurementUnitUpdateToOneWithWhereWithoutCartItemsInput, Prisma.MeasurementUnitUpdateWithoutCartItemsInput>, Prisma.MeasurementUnitUncheckedUpdateWithoutCartItemsInput>
+}
+
 export type MeasurementUnitCreateWithoutRecipeOutputsInput = {
   id?: string
   name: string
@@ -435,6 +456,7 @@ export type MeasurementUnitCreateWithoutRecipeOutputsInput = {
   updatedAt?: Date | string
   ingredients?: Prisma.RecipeIngredientCreateNestedManyWithoutUnitInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupCreateNestedManyWithoutOutputUnitInput
+  cartItems?: Prisma.CartItemCreateNestedManyWithoutUnitInput
 }
 
 export type MeasurementUnitUncheckedCreateWithoutRecipeOutputsInput = {
@@ -447,6 +469,7 @@ export type MeasurementUnitUncheckedCreateWithoutRecipeOutputsInput = {
   updatedAt?: Date | string
   ingredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutUnitInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupUncheckedCreateNestedManyWithoutOutputUnitInput
+  cartItems?: Prisma.CartItemUncheckedCreateNestedManyWithoutUnitInput
 }
 
 export type MeasurementUnitCreateOrConnectWithoutRecipeOutputsInput = {
@@ -475,6 +498,7 @@ export type MeasurementUnitUpdateWithoutRecipeOutputsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.RecipeIngredientUpdateManyWithoutUnitNestedInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupUpdateManyWithoutOutputUnitNestedInput
+  cartItems?: Prisma.CartItemUpdateManyWithoutUnitNestedInput
 }
 
 export type MeasurementUnitUncheckedUpdateWithoutRecipeOutputsInput = {
@@ -487,6 +511,7 @@ export type MeasurementUnitUncheckedUpdateWithoutRecipeOutputsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutUnitNestedInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupUncheckedUpdateManyWithoutOutputUnitNestedInput
+  cartItems?: Prisma.CartItemUncheckedUpdateManyWithoutUnitNestedInput
 }
 
 export type MeasurementUnitCreateWithoutIngredientsInput = {
@@ -499,6 +524,7 @@ export type MeasurementUnitCreateWithoutIngredientsInput = {
   updatedAt?: Date | string
   recipeOutputs?: Prisma.RecipeCreateNestedManyWithoutOutputUnitInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupCreateNestedManyWithoutOutputUnitInput
+  cartItems?: Prisma.CartItemCreateNestedManyWithoutUnitInput
 }
 
 export type MeasurementUnitUncheckedCreateWithoutIngredientsInput = {
@@ -511,6 +537,7 @@ export type MeasurementUnitUncheckedCreateWithoutIngredientsInput = {
   updatedAt?: Date | string
   recipeOutputs?: Prisma.RecipeUncheckedCreateNestedManyWithoutOutputUnitInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupUncheckedCreateNestedManyWithoutOutputUnitInput
+  cartItems?: Prisma.CartItemUncheckedCreateNestedManyWithoutUnitInput
 }
 
 export type MeasurementUnitCreateOrConnectWithoutIngredientsInput = {
@@ -539,6 +566,7 @@ export type MeasurementUnitUpdateWithoutIngredientsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipeOutputs?: Prisma.RecipeUpdateManyWithoutOutputUnitNestedInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupUpdateManyWithoutOutputUnitNestedInput
+  cartItems?: Prisma.CartItemUpdateManyWithoutUnitNestedInput
 }
 
 export type MeasurementUnitUncheckedUpdateWithoutIngredientsInput = {
@@ -551,6 +579,7 @@ export type MeasurementUnitUncheckedUpdateWithoutIngredientsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipeOutputs?: Prisma.RecipeUncheckedUpdateManyWithoutOutputUnitNestedInput
   ingredientGroupOutputs?: Prisma.RecipeIngredientGroupUncheckedUpdateManyWithoutOutputUnitNestedInput
+  cartItems?: Prisma.CartItemUncheckedUpdateManyWithoutUnitNestedInput
 }
 
 export type MeasurementUnitCreateWithoutIngredientGroupOutputsInput = {
@@ -563,6 +592,7 @@ export type MeasurementUnitCreateWithoutIngredientGroupOutputsInput = {
   updatedAt?: Date | string
   ingredients?: Prisma.RecipeIngredientCreateNestedManyWithoutUnitInput
   recipeOutputs?: Prisma.RecipeCreateNestedManyWithoutOutputUnitInput
+  cartItems?: Prisma.CartItemCreateNestedManyWithoutUnitInput
 }
 
 export type MeasurementUnitUncheckedCreateWithoutIngredientGroupOutputsInput = {
@@ -575,6 +605,7 @@ export type MeasurementUnitUncheckedCreateWithoutIngredientGroupOutputsInput = {
   updatedAt?: Date | string
   ingredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutUnitInput
   recipeOutputs?: Prisma.RecipeUncheckedCreateNestedManyWithoutOutputUnitInput
+  cartItems?: Prisma.CartItemUncheckedCreateNestedManyWithoutUnitInput
 }
 
 export type MeasurementUnitCreateOrConnectWithoutIngredientGroupOutputsInput = {
@@ -603,6 +634,7 @@ export type MeasurementUnitUpdateWithoutIngredientGroupOutputsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.RecipeIngredientUpdateManyWithoutUnitNestedInput
   recipeOutputs?: Prisma.RecipeUpdateManyWithoutOutputUnitNestedInput
+  cartItems?: Prisma.CartItemUpdateManyWithoutUnitNestedInput
 }
 
 export type MeasurementUnitUncheckedUpdateWithoutIngredientGroupOutputsInput = {
@@ -615,6 +647,75 @@ export type MeasurementUnitUncheckedUpdateWithoutIngredientGroupOutputsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutUnitNestedInput
   recipeOutputs?: Prisma.RecipeUncheckedUpdateManyWithoutOutputUnitNestedInput
+  cartItems?: Prisma.CartItemUncheckedUpdateManyWithoutUnitNestedInput
+}
+
+export type MeasurementUnitCreateWithoutCartItemsInput = {
+  id?: string
+  name: string
+  shortName: string
+  kind: $Enums.MeasurementUnitKind
+  roundToInteger?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ingredients?: Prisma.RecipeIngredientCreateNestedManyWithoutUnitInput
+  recipeOutputs?: Prisma.RecipeCreateNestedManyWithoutOutputUnitInput
+  ingredientGroupOutputs?: Prisma.RecipeIngredientGroupCreateNestedManyWithoutOutputUnitInput
+}
+
+export type MeasurementUnitUncheckedCreateWithoutCartItemsInput = {
+  id?: string
+  name: string
+  shortName: string
+  kind: $Enums.MeasurementUnitKind
+  roundToInteger?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ingredients?: Prisma.RecipeIngredientUncheckedCreateNestedManyWithoutUnitInput
+  recipeOutputs?: Prisma.RecipeUncheckedCreateNestedManyWithoutOutputUnitInput
+  ingredientGroupOutputs?: Prisma.RecipeIngredientGroupUncheckedCreateNestedManyWithoutOutputUnitInput
+}
+
+export type MeasurementUnitCreateOrConnectWithoutCartItemsInput = {
+  where: Prisma.MeasurementUnitWhereUniqueInput
+  create: Prisma.XOR<Prisma.MeasurementUnitCreateWithoutCartItemsInput, Prisma.MeasurementUnitUncheckedCreateWithoutCartItemsInput>
+}
+
+export type MeasurementUnitUpsertWithoutCartItemsInput = {
+  update: Prisma.XOR<Prisma.MeasurementUnitUpdateWithoutCartItemsInput, Prisma.MeasurementUnitUncheckedUpdateWithoutCartItemsInput>
+  create: Prisma.XOR<Prisma.MeasurementUnitCreateWithoutCartItemsInput, Prisma.MeasurementUnitUncheckedCreateWithoutCartItemsInput>
+  where?: Prisma.MeasurementUnitWhereInput
+}
+
+export type MeasurementUnitUpdateToOneWithWhereWithoutCartItemsInput = {
+  where?: Prisma.MeasurementUnitWhereInput
+  data: Prisma.XOR<Prisma.MeasurementUnitUpdateWithoutCartItemsInput, Prisma.MeasurementUnitUncheckedUpdateWithoutCartItemsInput>
+}
+
+export type MeasurementUnitUpdateWithoutCartItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumMeasurementUnitKindFieldUpdateOperationsInput | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ingredients?: Prisma.RecipeIngredientUpdateManyWithoutUnitNestedInput
+  recipeOutputs?: Prisma.RecipeUpdateManyWithoutOutputUnitNestedInput
+  ingredientGroupOutputs?: Prisma.RecipeIngredientGroupUpdateManyWithoutOutputUnitNestedInput
+}
+
+export type MeasurementUnitUncheckedUpdateWithoutCartItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.EnumMeasurementUnitKindFieldUpdateOperationsInput | $Enums.MeasurementUnitKind
+  roundToInteger?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ingredients?: Prisma.RecipeIngredientUncheckedUpdateManyWithoutUnitNestedInput
+  recipeOutputs?: Prisma.RecipeUncheckedUpdateManyWithoutOutputUnitNestedInput
+  ingredientGroupOutputs?: Prisma.RecipeIngredientGroupUncheckedUpdateManyWithoutOutputUnitNestedInput
 }
 
 
@@ -626,12 +727,14 @@ export type MeasurementUnitCountOutputType = {
   ingredients: number
   recipeOutputs: number
   ingredientGroupOutputs: number
+  cartItems: number
 }
 
 export type MeasurementUnitCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ingredients?: boolean | MeasurementUnitCountOutputTypeCountIngredientsArgs
   recipeOutputs?: boolean | MeasurementUnitCountOutputTypeCountRecipeOutputsArgs
   ingredientGroupOutputs?: boolean | MeasurementUnitCountOutputTypeCountIngredientGroupOutputsArgs
+  cartItems?: boolean | MeasurementUnitCountOutputTypeCountCartItemsArgs
 }
 
 /**
@@ -665,6 +768,13 @@ export type MeasurementUnitCountOutputTypeCountIngredientGroupOutputsArgs<ExtArg
   where?: Prisma.RecipeIngredientGroupWhereInput
 }
 
+/**
+ * MeasurementUnitCountOutputType without action
+ */
+export type MeasurementUnitCountOutputTypeCountCartItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CartItemWhereInput
+}
+
 
 export type MeasurementUnitSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -677,6 +787,7 @@ export type MeasurementUnitSelect<ExtArgs extends runtime.Types.Extensions.Inter
   ingredients?: boolean | Prisma.MeasurementUnit$ingredientsArgs<ExtArgs>
   recipeOutputs?: boolean | Prisma.MeasurementUnit$recipeOutputsArgs<ExtArgs>
   ingredientGroupOutputs?: boolean | Prisma.MeasurementUnit$ingredientGroupOutputsArgs<ExtArgs>
+  cartItems?: boolean | Prisma.MeasurementUnit$cartItemsArgs<ExtArgs>
   _count?: boolean | Prisma.MeasurementUnitCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["measurementUnit"]>
 
@@ -715,6 +826,7 @@ export type MeasurementUnitInclude<ExtArgs extends runtime.Types.Extensions.Inte
   ingredients?: boolean | Prisma.MeasurementUnit$ingredientsArgs<ExtArgs>
   recipeOutputs?: boolean | Prisma.MeasurementUnit$recipeOutputsArgs<ExtArgs>
   ingredientGroupOutputs?: boolean | Prisma.MeasurementUnit$ingredientGroupOutputsArgs<ExtArgs>
+  cartItems?: boolean | Prisma.MeasurementUnit$cartItemsArgs<ExtArgs>
   _count?: boolean | Prisma.MeasurementUnitCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MeasurementUnitIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -726,6 +838,7 @@ export type $MeasurementUnitPayload<ExtArgs extends runtime.Types.Extensions.Int
     ingredients: Prisma.$RecipeIngredientPayload<ExtArgs>[]
     recipeOutputs: Prisma.$RecipePayload<ExtArgs>[]
     ingredientGroupOutputs: Prisma.$RecipeIngredientGroupPayload<ExtArgs>[]
+    cartItems: Prisma.$CartItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1132,6 +1245,7 @@ export interface Prisma__MeasurementUnitClient<T, Null = never, ExtArgs extends 
   ingredients<T extends Prisma.MeasurementUnit$ingredientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MeasurementUnit$ingredientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipeIngredientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recipeOutputs<T extends Prisma.MeasurementUnit$recipeOutputsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MeasurementUnit$recipeOutputsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ingredientGroupOutputs<T extends Prisma.MeasurementUnit$ingredientGroupOutputsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MeasurementUnit$ingredientGroupOutputsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipeIngredientGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cartItems<T extends Prisma.MeasurementUnit$cartItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MeasurementUnit$cartItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CartItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1630,6 +1744,30 @@ export type MeasurementUnit$ingredientGroupOutputsArgs<ExtArgs extends runtime.T
   take?: number
   skip?: number
   distinct?: Prisma.RecipeIngredientGroupScalarFieldEnum | Prisma.RecipeIngredientGroupScalarFieldEnum[]
+}
+
+/**
+ * MeasurementUnit.cartItems
+ */
+export type MeasurementUnit$cartItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CartItem
+   */
+  select?: Prisma.CartItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CartItem
+   */
+  omit?: Prisma.CartItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CartItemInclude<ExtArgs> | null
+  where?: Prisma.CartItemWhereInput
+  orderBy?: Prisma.CartItemOrderByWithRelationInput | Prisma.CartItemOrderByWithRelationInput[]
+  cursor?: Prisma.CartItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CartItemScalarFieldEnum | Prisma.CartItemScalarFieldEnum[]
 }
 
 /**

@@ -72,6 +72,7 @@ function mapIngredientLineToDto(
       roundToInteger: unit.roundToInteger,
     }),
     unit,
+    unitId: line.unitId,
     ...(line.ingredient.recipe ? { linkedRecipeId: line.ingredient.recipe.id } : {}),
   };
 }

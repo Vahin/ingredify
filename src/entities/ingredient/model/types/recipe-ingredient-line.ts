@@ -8,6 +8,7 @@ export type RecipeIngredientLine = {
   amountNumeric: number;
   amountValue: string;
   unit: MeasurementUnitView;
+  unitId: string;
   /** Id рецепта приготовления, если ингредиент составной */
   linkedRecipeId?: string;
 };

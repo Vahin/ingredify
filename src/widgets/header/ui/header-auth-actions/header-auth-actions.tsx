@@ -1,5 +1,6 @@
 import { getCurrentUser } from '@/entities/user';
 import { UserMenuButton } from '@/features/show-user-menu';
+import { CartHeaderLink } from '@/features/add-to-cart';
 import { getCurrentPathname } from '@/shared/lib/auth/current-pathname';
 import { buildLoginHref } from '@/shared/lib/auth/navigation';
 import { Button } from '@/shared/ui/button';
@@ -12,6 +13,7 @@ export const HeaderAuthActions = async () => {
 
   return (
     <div className='flex items-center justify-end gap-2'>
+      <CartHeaderLink />
       {user ? (
         <>
           <UserMenuButton user={user} />

@@ -393,7 +393,11 @@ export const ModelName = {
   RecipeIngredientGroup: 'RecipeIngredientGroup',
   RecipeEquipment: 'RecipeEquipment',
   RecipeStep: 'RecipeStep',
-  RecipeComment: 'RecipeComment'
+  RecipeComment: 'RecipeComment',
+  Cart: 'Cart',
+  CartItem: 'CartItem',
+  CartRecipeSync: 'CartRecipeSync',
+  CartRecipeLineSync: 'CartRecipeLineSync'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -409,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "recipe" | "recipeNutrition" | "ingredient" | "measurementUnit" | "recipeIngredient" | "recipeIngredientGroup" | "recipeEquipment" | "recipeStep" | "recipeComment"
+    modelProps: "user" | "recipe" | "recipeNutrition" | "ingredient" | "measurementUnit" | "recipeIngredient" | "recipeIngredientGroup" | "recipeEquipment" | "recipeStep" | "recipeComment" | "cart" | "cartItem" | "cartRecipeSync" | "cartRecipeLineSync"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1153,6 +1157,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Cart: {
+      payload: Prisma.$CartPayload<ExtArgs>
+      fields: Prisma.CartFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CartFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CartFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartPayload>
+        }
+        findFirst: {
+          args: Prisma.CartFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CartFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartPayload>
+        }
+        findMany: {
+          args: Prisma.CartFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartPayload>[]
+        }
+        create: {
+          args: Prisma.CartCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartPayload>
+        }
+        createMany: {
+          args: Prisma.CartCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CartCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartPayload>[]
+        }
+        delete: {
+          args: Prisma.CartDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartPayload>
+        }
+        update: {
+          args: Prisma.CartUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartPayload>
+        }
+        deleteMany: {
+          args: Prisma.CartDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CartUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CartUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartPayload>[]
+        }
+        upsert: {
+          args: Prisma.CartUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartPayload>
+        }
+        aggregate: {
+          args: Prisma.CartAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCart>
+        }
+        groupBy: {
+          args: Prisma.CartGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CartGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CartCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CartCountAggregateOutputType> | number
+        }
+      }
+    }
+    CartItem: {
+      payload: Prisma.$CartItemPayload<ExtArgs>
+      fields: Prisma.CartItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CartItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CartItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartItemPayload>
+        }
+        findFirst: {
+          args: Prisma.CartItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CartItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartItemPayload>
+        }
+        findMany: {
+          args: Prisma.CartItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartItemPayload>[]
+        }
+        create: {
+          args: Prisma.CartItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartItemPayload>
+        }
+        createMany: {
+          args: Prisma.CartItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CartItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartItemPayload>[]
+        }
+        delete: {
+          args: Prisma.CartItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartItemPayload>
+        }
+        update: {
+          args: Prisma.CartItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.CartItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CartItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CartItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.CartItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartItemPayload>
+        }
+        aggregate: {
+          args: Prisma.CartItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCartItem>
+        }
+        groupBy: {
+          args: Prisma.CartItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CartItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CartItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CartItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    CartRecipeSync: {
+      payload: Prisma.$CartRecipeSyncPayload<ExtArgs>
+      fields: Prisma.CartRecipeSyncFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CartRecipeSyncFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeSyncPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CartRecipeSyncFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeSyncPayload>
+        }
+        findFirst: {
+          args: Prisma.CartRecipeSyncFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeSyncPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CartRecipeSyncFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeSyncPayload>
+        }
+        findMany: {
+          args: Prisma.CartRecipeSyncFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeSyncPayload>[]
+        }
+        create: {
+          args: Prisma.CartRecipeSyncCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeSyncPayload>
+        }
+        createMany: {
+          args: Prisma.CartRecipeSyncCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CartRecipeSyncCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeSyncPayload>[]
+        }
+        delete: {
+          args: Prisma.CartRecipeSyncDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeSyncPayload>
+        }
+        update: {
+          args: Prisma.CartRecipeSyncUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeSyncPayload>
+        }
+        deleteMany: {
+          args: Prisma.CartRecipeSyncDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CartRecipeSyncUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CartRecipeSyncUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeSyncPayload>[]
+        }
+        upsert: {
+          args: Prisma.CartRecipeSyncUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeSyncPayload>
+        }
+        aggregate: {
+          args: Prisma.CartRecipeSyncAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCartRecipeSync>
+        }
+        groupBy: {
+          args: Prisma.CartRecipeSyncGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CartRecipeSyncGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CartRecipeSyncCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CartRecipeSyncCountAggregateOutputType> | number
+        }
+      }
+    }
+    CartRecipeLineSync: {
+      payload: Prisma.$CartRecipeLineSyncPayload<ExtArgs>
+      fields: Prisma.CartRecipeLineSyncFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CartRecipeLineSyncFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CartRecipeLineSyncFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>
+        }
+        findFirst: {
+          args: Prisma.CartRecipeLineSyncFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CartRecipeLineSyncFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>
+        }
+        findMany: {
+          args: Prisma.CartRecipeLineSyncFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>[]
+        }
+        create: {
+          args: Prisma.CartRecipeLineSyncCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>
+        }
+        createMany: {
+          args: Prisma.CartRecipeLineSyncCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CartRecipeLineSyncCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>[]
+        }
+        delete: {
+          args: Prisma.CartRecipeLineSyncDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>
+        }
+        update: {
+          args: Prisma.CartRecipeLineSyncUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>
+        }
+        deleteMany: {
+          args: Prisma.CartRecipeLineSyncDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CartRecipeLineSyncUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CartRecipeLineSyncUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>[]
+        }
+        upsert: {
+          args: Prisma.CartRecipeLineSyncUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>
+        }
+        aggregate: {
+          args: Prisma.CartRecipeLineSyncAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCartRecipeLineSync>
+        }
+        groupBy: {
+          args: Prisma.CartRecipeLineSyncGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CartRecipeLineSyncGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CartRecipeLineSyncCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CartRecipeLineSyncCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1325,6 +1625,57 @@ export const RecipeCommentScalarFieldEnum = {
 } as const
 
 export type RecipeCommentScalarFieldEnum = (typeof RecipeCommentScalarFieldEnum)[keyof typeof RecipeCommentScalarFieldEnum]
+
+
+export const CartScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CartScalarFieldEnum = (typeof CartScalarFieldEnum)[keyof typeof CartScalarFieldEnum]
+
+
+export const CartItemScalarFieldEnum = {
+  id: 'id',
+  cartId: 'cartId',
+  sourceRecipeId: 'sourceRecipeId',
+  recipeIngredientId: 'recipeIngredientId',
+  name: 'name',
+  sticker: 'sticker',
+  quantity: 'quantity',
+  unitId: 'unitId',
+  isSubRecipe: 'isSubRecipe',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CartItemScalarFieldEnum = (typeof CartItemScalarFieldEnum)[keyof typeof CartItemScalarFieldEnum]
+
+
+export const CartRecipeSyncScalarFieldEnum = {
+  id: 'id',
+  cartId: 'cartId',
+  recipeId: 'recipeId',
+  syncedOutputQuantity: 'syncedOutputQuantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CartRecipeSyncScalarFieldEnum = (typeof CartRecipeSyncScalarFieldEnum)[keyof typeof CartRecipeSyncScalarFieldEnum]
+
+
+export const CartRecipeLineSyncScalarFieldEnum = {
+  id: 'id',
+  syncId: 'syncId',
+  recipeIngredientId: 'recipeIngredientId',
+  syncedQuantity: 'syncedQuantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CartRecipeLineSyncScalarFieldEnum = (typeof CartRecipeLineSyncScalarFieldEnum)[keyof typeof CartRecipeLineSyncScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1567,6 +1918,10 @@ export type GlobalOmitConfig = {
   recipeEquipment?: Prisma.RecipeEquipmentOmit
   recipeStep?: Prisma.RecipeStepOmit
   recipeComment?: Prisma.RecipeCommentOmit
+  cart?: Prisma.CartOmit
+  cartItem?: Prisma.CartItemOmit
+  cartRecipeSync?: Prisma.CartRecipeSyncOmit
+  cartRecipeLineSync?: Prisma.CartRecipeLineSyncOmit
 }
 
 /* Types for Logging */

@@ -63,7 +63,7 @@
 		{
 			"id": "user",
 			"type": "text",
-			"text": "## User\n\nПользователь и автор рецептов.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| email | String | unique |\n| passwordHash | String | `password_hash` |\n| name | String |  |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipes: `Recipe[]`",
+			"text": "## User\n\nПользователь и автор рецептов.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| email | String | unique |\n| passwordHash | String | `password_hash` |\n| name | String |  |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipes: `Recipe[]`\n- cart: `Cart?`",
 			"x": -1000,
 			"y": 0,
 			"width": 500,
@@ -83,7 +83,7 @@
 		{
 			"id": "measurement-unit",
 			"type": "text",
-			"text": "## MeasurementUnit\n\nЕдиница измерения для ингредиентов и выхода рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| name | String |  |\n| shortName | String | unique, `short_name` |\n| kind | MeasurementUnitKind | mass / volume / count / informal / serving |\n| roundToInteger | Boolean | `round_to_integer` |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- ingredients: `RecipeIngredient[]`\n- recipeOutputs: `Recipe[]`\n- ingredientGroupOutputs: `RecipeIngredientGroup[]`",
+			"text": "## MeasurementUnit\n\nЕдиница измерения для ингредиентов и выхода рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| name | String |  |\n| shortName | String | unique, `short_name` |\n| kind | MeasurementUnitKind | mass / volume / count / informal / serving |\n| roundToInteger | Boolean | `round_to_integer` |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- ingredients: `RecipeIngredient[]`\n- recipeOutputs: `Recipe[]`\n- ingredientGroupOutputs: `RecipeIngredientGroup[]`\n- cartItems: `CartItem[]`",
 			"x": -360,
 			"y": -1050,
 			"width": 560,
@@ -109,6 +109,46 @@
 			"width": 560,
 			"height": 560,
 			"color": "6"
+		},
+		{
+			"id": "cart",
+			"type": "text",
+			"text": "## Cart\n\nКорзина пользователя (список покупок).\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| userId | String | unique, FK -> User |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- user: `User` (`Cascade`)\n- items: `CartItem[]`\n- recipeSyncs: `CartRecipeSync[]`",
+			"x": -1000,
+			"y": 520,
+			"width": 500,
+			"height": 420,
+			"color": "2"
+		},
+		{
+			"id": "cart-item",
+			"type": "text",
+			"text": "## CartItem\n\nПозиция в корзине.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| cartId | String | FK -> Cart |\n| sourceRecipeId | String? | рецепт-источник |\n| recipeIngredientId | String? | строка рецепта |\n| name | String |  |\n| sticker | String |  |\n| quantity | Decimal | Decimal(10, 2) |\n| unitId | String | FK -> MeasurementUnit |\n| isSubRecipe | Boolean | подрецепт без раскрытия |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- cart: `Cart` (`Cascade`)\n- unit: `MeasurementUnit` (`Restrict`)\n\nУникальность: `[cartId, sourceRecipeId, recipeIngredientId]`",
+			"x": -420,
+			"y": 520,
+			"width": 520,
+			"height": 620,
+			"color": "5"
+		},
+		{
+			"id": "cart-recipe-sync",
+			"type": "text",
+			"text": "## CartRecipeSync\n\nСнимок синхронизации рецепта с корзиной (для delta-добавления).\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| cartId | String | FK -> Cart |\n| recipeId | String |  |\n| syncedOutputQuantity | Decimal | Decimal(10, 2) |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- cart: `Cart` (`Cascade`)\n- lineSyncs: `CartRecipeLineSync[]`\n\nУникальность: `[cartId, recipeId]`",
+			"x": 180,
+			"y": 520,
+			"width": 520,
+			"height": 480,
+			"color": "5"
+		},
+		{
+			"id": "cart-recipe-line-sync",
+			"type": "text",
+			"text": "## CartRecipeLineSync\n\nСнимок количества строки ингредиента при последней синхронизации.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| syncId | String | FK -> CartRecipeSync |\n| recipeIngredientId | String |  |\n| syncedQuantity | Decimal | Decimal(10, 2) |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- sync: `CartRecipeSync` (`Cascade`)\n\nУникальность: `[syncId, recipeIngredientId]`",
+			"x": 780,
+			"y": 520,
+			"width": 520,
+			"height": 460,
+			"color": "5"
 		}
 	],
 	"edges": [
@@ -207,6 +247,46 @@
 			"toNode": "recipe-ingredient",
 			"toSide": "right",
 			"label": "1:N group / Cascade"
+		},
+		{
+			"id": "user-to-cart",
+			"fromNode": "user",
+			"fromSide": "bottom",
+			"toNode": "cart",
+			"toSide": "top",
+			"label": "1:1? / Cascade"
+		},
+		{
+			"id": "cart-to-cart-item",
+			"fromNode": "cart",
+			"fromSide": "right",
+			"toNode": "cart-item",
+			"toSide": "left",
+			"label": "1:N items / Cascade"
+		},
+		{
+			"id": "cart-to-recipe-sync",
+			"fromNode": "cart",
+			"fromSide": "right",
+			"toNode": "cart-recipe-sync",
+			"toSide": "left",
+			"label": "1:N recipeSyncs / Cascade"
+		},
+		{
+			"id": "unit-to-cart-item",
+			"fromNode": "measurement-unit",
+			"fromSide": "bottom",
+			"toNode": "cart-item",
+			"toSide": "top",
+			"label": "1:N / Restrict"
+		},
+		{
+			"id": "recipe-sync-to-line-sync",
+			"fromNode": "cart-recipe-sync",
+			"fromSide": "right",
+			"toNode": "cart-recipe-line-sync",
+			"toSide": "left",
+			"label": "1:N lineSyncs / Cascade"
 		}
 	]
 }

@@ -1,18 +1,34 @@
 import type { RecipeIngredientGroupView } from '@/entities/recipe';
 import { IngredientRow } from '../ingredient-row/ingredient-row';
 
+type IngredientSidebarGroupProps = {
+  group: RecipeIngredientGroupView;
+  isSelectionMode?: boolean;
+  selectedIds?: Set<string>;
+  onToggleLine?: (lineId: string) => void;
+};
+
 export const IngredientSidebarGroup = ({
   group,
-}: {
-  group: RecipeIngredientGroupView;
-}) => {
+  isSelectionMode = false,
+  selectedIds,
+  onToggleLine,
+}: IngredientSidebarGroupProps) => {
   const plainMode = group.label === null;
 
   if (plainMode) {
     return (
       <div className='flex flex-col gap-2'>
         {group.lines.map((line) => (
-          <IngredientRow line={line} key={line.id} />
+          <IngredientRow
+            isSelected={selectedIds?.has(line.id)}
+            isSelectionMode={isSelectionMode}
+            key={line.id}
+            line={line}
+            onToggleSelect={
+              onToggleLine ? () => onToggleLine(line.id) : undefined
+            }
+          />
         ))}
       </div>
     );
@@ -24,7 +40,15 @@ export const IngredientSidebarGroup = ({
         {group.label}
       </h3>
       {group.lines.map((line) => (
-        <IngredientRow line={line} key={line.id} />
+        <IngredientRow
+          isSelected={selectedIds?.has(line.id)}
+          isSelectionMode={isSelectionMode}
+          key={line.id}
+          line={line}
+          onToggleSelect={
+            onToggleLine ? () => onToggleLine(line.id) : undefined
+          }
+        />
       ))}
     </div>
   );

@@ -38,10 +38,12 @@ type IngredientSidebarHeaderProps = {
     onDecrease: () => void;
     onIncrease: () => void;
   };
+  menu?: React.ReactNode;
 };
 
 export const IngredientSidebarHeader = ({
   quantityControl,
+  menu,
 }: IngredientSidebarHeaderProps) => {
   const { value, output, onChange, onDecrease, onIncrease } = quantityControl;
   const portionRecipe = hasRecipeServings(output);
@@ -79,13 +81,16 @@ export const IngredientSidebarHeader = ({
     : `Количество выхода, ${output.unit.label}`;
 
   return (
-    <div className='mb-4 flex flex-col items-start gap-2'>
-      <h2
-        className='min-w-0 text-[22px] font-[850] leading-[1.15] text-foreground'
-        id='ingredients-title'
-      >
-        Ингредиенты
-      </h2>
+    <div className='mb-4 flex flex-col gap-2'>
+      <div className='flex w-full items-start justify-between gap-2'>
+        <h2
+          className='min-w-0 text-[22px] font-[850] leading-[1.15] text-foreground'
+          id='ingredients-title'
+        >
+          Ингредиенты
+        </h2>
+        {menu}
+      </div>
       <div className='flex items-center gap-2'>
         <div
           aria-label={quantityAriaLabel}
