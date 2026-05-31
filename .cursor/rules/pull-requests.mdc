@@ -1,0 +1,34 @@
+---
+description: Создание pull request через gh
+alwaysApply: true
+---
+
+# Pull Requests
+
+Для GitHub-задач используй `gh` через Shell.
+
+## Создание PR
+
+1. Параллельно выполни: `git status`, `git diff`, проверку tracking remote, `git log`, `git diff [base-branch]...HEAD`.
+2. Проанализируй все коммиты ветки (не только последний) и составь summary.
+3. Последовательно: создай ветку при необходимости → `git push -u origin HEAD` при необходимости → `gh pr create`.
+
+```bash
+git push -u origin HEAD
+
+gh pr create --title "заголовок PR" --body "$(cat <<'EOF'
+## Summary
+- ...
+
+## Test plan
+- [ ] ...
+
+EOF
+)"
+```
+
+## Ограничения
+
+- Не меняй git config.
+- Не используй TodoWrite или Task для создания PR.
+- Верни URL PR, когда готово.

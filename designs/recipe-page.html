@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ingredify — Вишневый коблер</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;850&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --background: #f9fafb; --foreground: #111827; --card: #fff; --muted: #f3f4f6;
+      --border: #e5e7eb; --accent: #22c55e; --accent-hover: #16a34a; --secondary: #6b7280;
+      --shadow-card: 0 12px 34px color-mix(in oklch, var(--foreground) 10%, transparent);
+      --shadow-step: 0 6px 20px color-mix(in oklch, var(--foreground) 8%, transparent);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Inter, system-ui, sans-serif; background: var(--background); color: var(--foreground); }
+    button, input { font: inherit; }
+    .header { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--border); background: color-mix(in oklch, var(--card) 95%, transparent); backdrop-filter: blur(14px); }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 190px 1fr auto; align-items: center; gap: 24px; padding: 16px 24px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 21px; font-weight: 800; }
+    .logo-mark { width: 36px; height: 36px; border-radius: 10px; background: var(--accent); color: #fff; display: grid; place-items: center; font-weight: 800; }
+    .search { position: relative; }
+    .search input { width: 100%; height: 44px; border: 0; border-radius: 999px; background: var(--muted); padding: 0 20px 0 48px; font-size: 14px; outline: 1px solid transparent; }
+    .search input:focus { background: var(--card); outline-color: color-mix(in oklch, var(--accent) 45%, transparent); }
+    .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--secondary); width: 18px; height: 18px; }
+    .auth-btns { display: flex; gap: 8px; }
+    .auth-btns button { height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); font-size: 14px; font-weight: 600; cursor: pointer; }
+    .auth-btns .primary { background: var(--accent); color: #fff; border-color: transparent; }
+    main { max-width: 1200px; margin: 0 auto; padding: 26px 24px; display: grid; gap: 24px; grid-template-columns: 1fr 296px; align-items: start; }
+    .content { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+    .hero { display: grid; gap: 22px; padding: 16px; border-radius: 16px; border: 1px solid var(--border); background: var(--card); box-shadow: var(--shadow-card); grid-template-columns: clamp(188px, 32%, 300px) 1fr; }
+    .hero-img { aspect-ratio: 4/3; border-radius: 12px; background: linear-gradient(145deg, #fecaca 0%, #f87171 40%, #7f1d1d 100%); }
+    .hero-body { display: flex; flex-direction: column; gap: 20px; justify-content: center; padding: 4px 0; }
+    .author { display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 34px; height: 34px; border-radius: 50%; background: color-mix(in oklch, var(--accent) 15%, transparent); color: var(--accent); display: grid; place-items: center; font-size: 12px; font-weight: 800; }
+    .author-name { font-size: 13px; font-weight: 800; }
+    .author-role { font-size: 12px; color: var(--secondary); margin-top: 4px; }
+    h1 { font-size: clamp(30px, 4vw, 38px); font-weight: 850; line-height: 1.05; }
+    .desc { font-size: 15px; line-height: 1.6; color: var(--secondary); max-width: 56ch; margin-top: 10px; }
+    .nutrition { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .nut-card { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: center; min-height: 64px; padding: 12px; border-radius: 12px; background: var(--muted); }
+    .nut-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--card); display: grid; place-items: center; font-size: 14px; }
+    .nut-val { font-family: ui-monospace, monospace; font-size: 17px; font-weight: 850; }
+    .nut-label { font-size: 10px; color: var(--secondary); margin-top: 4px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn-save { min-height: 42px; padding: 0 17px; border: 0; border-radius: 10px; background: var(--accent); color: #fff; font-weight: 700; font-size: 14px; box-shadow: 0 8px 18px color-mix(in oklch, var(--accent) 22%, transparent); cursor: pointer; }
+    .btn-muted { min-height: 42px; padding: 0 17px; border: 0; border-radius: 10px; background: var(--muted); font-weight: 700; font-size: 14px; cursor: pointer; }
+    .btn-like { min-height: 42px; padding: 0 17px; border: 0; border-radius: 10px; background: #fef2f2; color: #ef4444; font-weight: 700; font-size: 14px; cursor: pointer; }
+    h2 { font-size: 24px; font-weight: 850; line-height: 1.15; margin-bottom: 14px; }
+    .step { display: grid; grid-template-columns: 34px 1fr 104px; gap: 16px; align-items: center; min-height: 92px; padding: 14px; border-radius: 16px; border: 1px solid var(--border); background: var(--card); box-shadow: var(--shadow-step); margin-bottom: 14px; }
+    .step-num { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; font-family: ui-monospace, monospace; font-size: 13px; font-weight: 700; }
+    .step-text { font-size: 15px; line-height: 1.5; }
+    .step-img { height: 64px; border-radius: 12px; background: var(--muted); }
+    .comment { display: grid; grid-template-columns: 36px 1fr; gap: 12px; margin-top: 12px; }
+    .comment-avatar { width: 36px; height: 36px; border-radius: 50%; background: color-mix(in oklch, var(--accent) 15%, transparent); color: var(--accent); display: grid; place-items: center; font-size: 12px; font-weight: 800; }
+    .badge { display: inline-flex; height: 20px; align-items: center; padding: 0 8px; border-radius: 999px; background: color-mix(in oklch, var(--accent) 15%, transparent); color: var(--accent); font-size: 11px; font-weight: 700; margin-left: 8px; }
+    .comment-text { font-size: 14px; color: var(--secondary); line-height: 1.55; margin-top: 6px; }
+    .comment-input-row { display: grid; grid-template-columns: 1fr 44px; gap: 10px; margin-top: 18px; }
+    .comment-input { height: 44px; border: 0; border-radius: 999px; background: var(--muted); padding: 0 16px; font-size: 14px; width: 100%; }
+    .send-btn { width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--accent); color: #fff; font-size: 18px; cursor: pointer; }
+    .sidebar { display: flex; flex-direction: column; gap: 22px; position: sticky; top: 92px; }
+    .panel { padding: 18px; border-radius: 16px; border: 1px solid var(--border); background: var(--card); box-shadow: var(--shadow-card); }
+    .qty-control { display: flex; align-items: center; gap: 8px; margin: 12px 0 16px; }
+    .qty-pill { display: flex; align-items: center; gap: 3px; padding: 2px; border-radius: 999px; background: var(--muted); }
+    .qty-btn { width: 24px; height: 24px; border: 0; border-radius: 50%; background: var(--card); font-weight: 850; color: var(--secondary); cursor: pointer; box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--foreground) 7%, transparent); }
+    .qty-val { width: 48px; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 800; border: 0; background: transparent; }
+    .unit-label { font-size: 12px; font-weight: 800; letter-spacing: 0.14em; color: var(--secondary); }
+    .ingredient { display: grid; grid-template-columns: 32px 1fr auto; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; }
+    .ingredient:hover { background: var(--muted); }
+    .sticker { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #fecaca, #fca5a5); font-size: 16px; display: grid; place-items: center; }
+    .ing-name { font-size: 14px; font-weight: 600; }
+    .ing-amt { font-family: ui-monospace, monospace; font-size: 12px; color: var(--secondary); white-space: nowrap; }
+    .equipment ul { padding-left: 18px; font-size: 15px; line-height: 1.8; }
+    .panel h2 { font-size: 22px; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a class="logo" href="#"><span class="logo-mark">i</span> Ingredify</a>
+      <label class="search">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+        <input type="search" placeholder="Найти рецепт, ингредиент или кухню" />
+      </label>
+      <div class="auth-btns">
+        <button type="button">Войти</button>
+        <button type="button" class="primary">Регистрация</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="content">
+      <section class="hero" data-od-id="recipe-hero">
+        <div class="hero-img" role="img" aria-label="Вишневый коблер"></div>
+        <div class="hero-body">
+          <div class="author">
+            <div class="avatar">АК</div>
+            <div>
+              <div class="author-name">Алена Кравцова</div>
+              <div class="author-role">Автор рецепта</div>
+            </div>
+          </div>
+          <div>
+            <h1 id="recipe-title">Вишневый коблер с миндальной крошкой</h1>
+            <p class="desc">Теплый домашний десерт с сочной вишневой начинкой, нежным миндалем и золотистой хрустящей шапкой.</p>
+          </div>
+          <div class="nutrition">
+            <div class="nut-card"><span class="nut-icon">🔥</span><div><div class="nut-val">385</div><div class="nut-label">Калории</div></div></div>
+            <div class="nut-card"><span class="nut-icon" style="color:#22c55e">💪</span><div><div class="nut-val">6 г</div><div class="nut-label">Белки</div></div></div>
+            <div class="nut-card"><span class="nut-icon" style="color:#f59e0b">💧</span><div><div class="nut-val">15 г</div><div class="nut-label">Жиры</div></div></div>
+            <div class="nut-card"><span class="nut-icon" style="color:#8b5cf6">🌾</span><div><div class="nut-val">59 г</div><div class="nut-label">Углеводы</div></div></div>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn-save">☆ Сохранить</button>
+            <button type="button" class="btn-muted">💬 4</button>
+            <button type="button" class="btn-like">♥ 124</button>
+          </div>
+        </div>
+      </section>
+
+      <section data-od-id="cooking-steps">
+        <h2>Шаги приготовления</h2>
+        <article class="step">
+          <div class="step-num">1</div>
+          <p class="step-text">Смешайте вишню с сахаром, лимонным соком и крахмалом. Переложите начинку в форму.</p>
+          <div class="step-img"></div>
+        </article>
+        <article class="step">
+          <div class="step-num">2</div>
+          <p class="step-text">Соедините муку, миндальную крошку, разрыхлитель и сахар. Добавьте сливочное масло.</p>
+        </article>
+        <article class="step">
+          <div class="step-num">3</div>
+          <p class="step-text">Влейте молоко и быстро замесите тесто. Выложите ложками поверх начинки.</p>
+          <div class="step-img"></div>
+        </article>
+        <article class="step">
+          <div class="step-num">4</div>
+          <p class="step-text">Выпекайте при 190 °C 35–40 минут, пока верх не станет золотистым.</p>
+        </article>
+      </section>
+
+      <section class="panel" data-od-id="comments" id="comments">
+        <h2>Комментарии (4)</h2>
+        <article class="comment">
+          <div class="comment-avatar">АК</div>
+          <div>
+            <p><strong>Алена Кравцова</strong><span class="badge">автор рецепта</span></p>
+            <p class="comment-text">Для более насыщенного вкуса можно смешать свежую и замороженную вишню.</p>
+          </div>
+        </article>
+        <article class="comment">
+          <div class="comment-avatar">МС</div>
+          <div>
+            <p><strong>Марина Соколова</strong></p>
+            <p class="comment-text">Готовила вчера к чаю — миндальная крошка даёт приятную текстуру.</p>
+          </div>
+        </article>
+        <div class="comment-input-row">
+          <input class="comment-input" type="text" placeholder="Написать комментарий..." />
+          <button type="button" class="send-btn" aria-label="Отправить">→</button>
+        </div>
+      </section>
+    </div>
+
+    <aside class="sidebar" aria-label="Ингредиенты и инвентарь">
+      <section class="panel" data-od-id="ingredients">
+        <h2 id="ingredients-title">Ингредиенты</h2>
+        <div class="qty-control">
+          <div class="qty-pill" aria-label="Количество порций">
+            <button type="button" class="qty-btn">−</button>
+            <input class="qty-val" type="text" value="6" readonly />
+            <button type="button" class="qty-btn">+</button>
+          </div>
+          <span class="unit-label">Порций</span>
+        </div>
+        <div class="ingredient"><span class="sticker">🍒</span><span class="ing-name">Вишня без косточек</span><span class="ing-amt">500 г</span></div>
+        <div class="ingredient"><span class="sticker">🧂</span><span class="ing-name">Сахар</span><span class="ing-amt">120 г</span></div>
+        <div class="ingredient"><span class="sticker">🌾</span><span class="ing-name">Пшеничная мука</span><span class="ing-amt">145 г</span></div>
+        <div class="ingredient"><span class="sticker">🥜</span><span class="ing-name">Миндальная крошка</span><span class="ing-amt">35 г</span></div>
+        <div class="ingredient"><span class="sticker">🧈</span><span class="ing-name">Сливочное масло</span><span class="ing-amt">85 г</span></div>
+        <div class="ingredient"><span class="sticker">🥛</span><span class="ing-name">Молоко</span><span class="ing-amt">120 мл</span></div>
+      </section>
+      <section class="panel equipment" data-od-id="equipment">
+        <h2>Инвентарь</h2>
+        <ul>
+          <li>Форма для запекания 22–24 см</li>
+          <li>Миска для теста</li>
+          <li>Силиконовая лопатка</li>
+          <li>Духовка</li>
+        </ul>
+      </section>
+    </aside>
+  </main>
+</body>
+</html>
