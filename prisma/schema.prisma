@@ -35,7 +35,6 @@ model Recipe {
   outputUnit          MeasurementUnit    @relation(fields: [outputUnitId], references: [id], onDelete: Restrict)
   nutrition           RecipeNutrition?
   ingredientGroups    RecipeIngredientGroup[]
-  ingredients         RecipeIngredient[]
   equipment           RecipeEquipment[]
   steps               RecipeStep[]
   comments            RecipeComment[]
@@ -79,14 +78,14 @@ model MeasurementUnit {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  ingredients   RecipeIngredient[]
-  recipeOutputs Recipe[]
+  ingredients            RecipeIngredient[]
+  recipeOutputs          Recipe[]
+  ingredientGroupOutputs RecipeIngredientGroup[]
 }
 
 model RecipeIngredient {
   id           String   @id @default(cuid())
-  recipeId     String   @map("recipe_id")
-  groupId      String?  @map("group_id")
+  groupId      String   @map("group_id")
   ingredientId String   @map("ingredient_id")
   unitId       String   @map("unit_id")
   order        Int
@@ -94,29 +93,31 @@ model RecipeIngredient {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  recipe     Recipe                 @relation(fields: [recipeId], references: [id], onDelete: Cascade)
-  group      RecipeIngredientGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  group      RecipeIngredientGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
   ingredient Ingredient             @relation(fields: [ingredientId], references: [id], onDelete: Restrict)
   unit       MeasurementUnit        @relation(fields: [unitId], references: [id], onDelete: Restrict)
 
-  @@index([recipeId])
   @@index([groupId])
   @@index([ingredientId])
   @@index([unitId])
 }
 
 model RecipeIngredientGroup {
-  id        String   @id @default(cuid())
-  recipeId  String   @map("recipe_id")
-  order     Int
-  label     String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id             String   @id @default(cuid())
+  recipeId       String   @map("recipe_id")
+  order          Int
+  label          String?
+  outputQuantity Decimal  @map("output_quantity") @db.Decimal(10, 2)
+  outputUnitId   String   @map("output_unit_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
 
-  recipe      Recipe             @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipe      Recipe            @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  outputUnit  MeasurementUnit   @relation(fields: [outputUnitId], references: [id], onDelete: Restrict)
   ingredients RecipeIngredient[]
 
   @@index([recipeId])
+  @@index([outputUnitId])
 }
 
 model RecipeEquipment {

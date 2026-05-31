@@ -2,8 +2,9 @@ import type { RecipeIngredientLine } from '@/entities/ingredient/model/types/rec
 import type { RecipeOutput } from './recipe-output';
 
 export type RecipeIngredientSection = {
-  id: string | null;
+  id: string;
   label: string | null;
+  output: RecipeOutput;
   lines: RecipeIngredientLine[];
 };
 

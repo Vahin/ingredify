@@ -13,7 +13,7 @@
 		{
 			"id": "recipe",
 			"type": "text",
-			"text": "## Recipe\n\nОсновная сущность рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| title | String |  |\n| description | String |  |\n| image | String |  |\n| authorId | String | FK -> User |\n| outputQuantity | Decimal | Decimal(10, 2) |\n| outputUnitId | String | FK -> MeasurementUnit |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- author: `User`\n- outputUnit: `MeasurementUnit`\n- nutrition: `RecipeNutrition?`\n- ingredientGroups: `RecipeIngredientGroup[]`\n- ingredients: `RecipeIngredient[]` через `RecipeIngredient.recipeId`\n- equipment: `RecipeEquipment[]`\n- steps: `RecipeStep[]`\n- comments: `RecipeComment[]`\n- preparedIngredient: `Ingredient?`",
+			"text": "## Recipe\n\nОсновная сущность рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| title | String |  |\n| description | String |  |\n| image | String |  |\n| authorId | String | FK -> User |\n| outputQuantity | Decimal | Decimal(10, 2) |\n| outputUnitId | String | FK -> MeasurementUnit |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- author: `User`\n- outputUnit: `MeasurementUnit`\n- nutrition: `RecipeNutrition?`\n- ingredientGroups: `RecipeIngredientGroup[]`\n- equipment: `RecipeEquipment[]`\n- steps: `RecipeStep[]`\n- comments: `RecipeComment[]`\n- preparedIngredient: `Ingredient?`",
 			"x": -80,
 			"y": -140,
 			"width": 560,
@@ -73,7 +73,7 @@
 		{
 			"id": "recipe-ingredient",
 			"type": "text",
-			"text": "## RecipeIngredient\n\nСтрока ингредиента внутри рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| recipeId | String | FK -> Recipe.id, `Cascade` |\n| groupId | String? | FK -> RecipeIngredientGroup |\n| ingredientId | String | FK -> Ingredient |\n| unitId | String | FK -> MeasurementUnit |\n| order | Int | порядок в списке |\n| quantity | Decimal | Decimal(10, 2) |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipe: `Recipe` через `recipeId` (`Cascade`)\n- group: `RecipeIngredientGroup?` (`SetNull`)\n- ingredient: `Ingredient` (`Restrict`)\n- unit: `MeasurementUnit` (`Restrict`)",
+			"text": "## RecipeIngredient\n\nСтрока ингредиента внутри группы рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| groupId | String | FK -> RecipeIngredientGroup |\n| ingredientId | String | FK -> Ingredient |\n| unitId | String | FK -> MeasurementUnit |\n| order | Int | порядок в списке |\n| quantity | Decimal | Decimal(10, 2) |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- group: `RecipeIngredientGroup` (`Cascade`)\n- ingredient: `Ingredient` (`Restrict`)\n- unit: `MeasurementUnit` (`Restrict`)",
 			"x": 1100,
 			"y": -200,
 			"width": 560,
@@ -83,7 +83,7 @@
 		{
 			"id": "measurement-unit",
 			"type": "text",
-			"text": "## MeasurementUnit\n\nЕдиница измерения для ингредиентов и выхода рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| name | String |  |\n| shortName | String | unique, `short_name` |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- ingredients: `RecipeIngredient[]`\n- recipeOutputs: `Recipe[]`",
+			"text": "## MeasurementUnit\n\nЕдиница измерения для ингредиентов и выхода рецепта.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| name | String |  |\n| shortName | String | unique, `short_name` |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- ingredients: `RecipeIngredient[]`\n- recipeOutputs: `Recipe[]`\n- ingredientGroupOutputs: `RecipeIngredientGroup[]`",
 			"x": -360,
 			"y": -1050,
 			"width": 560,
@@ -103,7 +103,7 @@
 		{
 			"id": "recipe-ingredient-group",
 			"type": "text",
-			"text": "## RecipeIngredientGroup\n\nГруппа ингредиентов внутри рецепта (например, «Паста» и «Соус»).\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| recipeId | String | FK -> Recipe.id, `Cascade` |\n| order | Int | порядок групп в карточке |\n| label | String | название группы |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipe: `Recipe` через `recipeId` (`Cascade`)\n- ingredients: `RecipeIngredient[]` (`SetNull` при удалении группы)",
+			"text": "## RecipeIngredientGroup\n\nГруппа ингредиентов внутри рецепта (например, «Паста» и «Соус»). Может быть без названия.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| recipeId | String | FK -> Recipe.id, `Cascade` |\n| order | Int | порядок групп в карточке |\n| label | String? | название группы |\n| outputQuantity | Decimal | Decimal(10, 2), базовый выход группы |\n| outputUnitId | String | FK -> MeasurementUnit |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- recipe: `Recipe` через `recipeId` (`Cascade`)\n- outputUnit: `MeasurementUnit` (`Restrict`)\n- ingredients: `RecipeIngredient[]` (`Cascade` при удалении группы)",
 			"x": 1780,
 			"y": -220,
 			"width": 560,
@@ -185,14 +185,6 @@
 			"label": "1:N / Cascade"
 		},
 		{
-			"id": "recipe-to-recipe-ingredient",
-			"fromNode": "recipe",
-			"fromSide": "right",
-			"toNode": "recipe-ingredient",
-			"toSide": "left",
-			"label": "Recipe.ingredients 1:N RecipeIngredient.recipe / Cascade"
-		},
-		{
 			"id": "recipe-to-ingredient-group",
 			"fromNode": "recipe",
 			"fromSide": "right",
@@ -201,12 +193,20 @@
 			"label": "1:N ingredientGroups / Cascade"
 		},
 		{
+			"id": "unit-to-ingredient-group",
+			"fromNode": "measurement-unit",
+			"fromSide": "right",
+			"toNode": "recipe-ingredient-group",
+			"toSide": "top",
+			"label": "1:N outputUnit / Restrict"
+		},
+		{
 			"id": "ingredient-group-to-recipe-ingredient",
 			"fromNode": "recipe-ingredient-group",
 			"fromSide": "left",
 			"toNode": "recipe-ingredient",
 			"toSide": "right",
-			"label": "1:N group / SetNull"
+			"label": "1:N group / Cascade"
 		}
 	]
 }

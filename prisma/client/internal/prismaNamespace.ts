@@ -1258,7 +1258,6 @@ export type MeasurementUnitScalarFieldEnum = (typeof MeasurementUnitScalarFieldE
 
 export const RecipeIngredientScalarFieldEnum = {
   id: 'id',
-  recipeId: 'recipeId',
   groupId: 'groupId',
   ingredientId: 'ingredientId',
   unitId: 'unitId',
@@ -1276,6 +1275,8 @@ export const RecipeIngredientGroupScalarFieldEnum = {
   recipeId: 'recipeId',
   order: 'order',
   label: 'label',
+  outputQuantity: 'outputQuantity',
+  outputUnitId: 'outputUnitId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

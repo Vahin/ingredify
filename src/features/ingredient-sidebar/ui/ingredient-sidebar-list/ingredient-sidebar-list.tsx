@@ -77,7 +77,7 @@ export const IngredientSidebarList = ({
   return (
     <div className='flex flex-col gap-4'>
       {sections.map((section) => (
-        <div className='flex flex-col gap-2' key={section.id ?? 'ungrouped'}>
+        <div className='flex flex-col gap-2' key={section.id}>
           {section.label ? (
             <h3 className='px-2.5 text-xs font-extrabold tracking-[0.14em] text-secondary'>
               {section.label}

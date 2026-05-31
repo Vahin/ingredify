@@ -6,6 +6,7 @@ import type {
   Recipe,
   RecipeIngredientSection,
 } from '../model/types/recipe';
+import type { RecipeIngredientLine } from '@/entities/ingredient/model/types/recipe-ingredient-line';
 
 const recipeInclude = {
   author: true,
@@ -13,12 +14,15 @@ const recipeInclude = {
   nutrition: true,
   ingredientGroups: {
     orderBy: { order: 'asc' as const },
-  },
-  ingredients: {
-    orderBy: { order: 'asc' as const },
     include: {
-      ingredient: { include: { recipe: { select: { id: true } } } },
-      unit: true,
+      outputUnit: true,
+      ingredients: {
+        orderBy: { order: 'asc' as const },
+        include: {
+          ingredient: { include: { recipe: { select: { id: true } } } },
+          unit: true,
+        },
+      },
     },
   },
   equipment: { orderBy: { order: 'asc' as const } },
@@ -34,70 +38,41 @@ function formatMacroGrams(value: Prisma.Decimal | number): number {
   return Math.round(n * 10) / 10;
 }
 
+/** Преобразование строки ингредиента БД в DTO */
+function mapIngredientLineToDto(
+  line: RecipeRow['ingredientGroups'][number]['ingredients'][number],
+): RecipeIngredientLine {
+  const amountNumeric = Number(line.quantity);
+
+  return {
+    id: line.id,
+    name: line.ingredient.name,
+    sticker: line.ingredient.sticker,
+    amountNumeric,
+    amountValue: formatAmountValue(amountNumeric, {
+      unitShortName: line.unit.shortName,
+    }),
+    amountUnitLabel: line.unit.shortName,
+    ...(line.ingredient.recipe ? { linkedRecipeId: line.ingredient.recipe.id } : {}),
+  };
+}
+
 /** Преобразование строк БД в DTO для UI */
 function mapRecipeRowToDto(row: RecipeRow): Recipe {
   const outputQuantity = Number(row.outputQuantity);
-  const ingredientLines = row.ingredients.map((line) => {
-    const amountNumeric = Number(line.quantity);
 
-    return {
-      id: line.id,
-      name: line.ingredient.name,
-      sticker: line.ingredient.sticker,
-      amountNumeric,
-      amountValue: formatAmountValue(amountNumeric, {
-        unitShortName: line.unit.shortName,
-      }),
-      amountUnitLabel: line.unit.shortName,
-      ...(line.ingredient.recipe ? { linkedRecipeId: line.ingredient.recipe.id } : {}),
-    };
-  });
-
-  const linesById = new Map(
-    ingredientLines.map((line) => [line.id, line] as const),
-  );
-  const linesWithoutGroupIds = row.ingredients
-    .filter((line) => line.groupId === null)
-    .map((line) => line.id);
-  const sectionWithoutGroup: RecipeIngredientSection | null =
-    linesWithoutGroupIds.length > 0
-      ? {
-          id: null,
-          label: null,
-          lines: linesWithoutGroupIds
-            .map((id) => linesById.get(id))
-            .filter((line) => line !== undefined),
-        }
-      : null;
-
-  const groupedSections: RecipeIngredientSection[] = row.ingredientGroups
-    .map((group) => {
-      const groupLineIds = row.ingredients
-        .filter((line) => line.groupId === group.id)
-        .map((line) => line.id);
-
-      return {
-        id: group.id,
-        label: group.label,
-        lines: groupLineIds
-          .map((id) => linesById.get(id))
-          .filter((line) => line !== undefined),
-      };
-    })
+  const ingredientSections: RecipeIngredientSection[] = row.ingredientGroups
+    .map((group) => ({
+      id: group.id,
+      label: group.label,
+      output: {
+        quantity: Number(group.outputQuantity),
+        unitShortName: group.outputUnit.shortName,
+        unitLabel: group.outputUnit.shortName,
+      },
+      lines: group.ingredients.map(mapIngredientLineToDto),
+    }))
     .filter((section) => section.lines.length > 0);
-
-  const ingredientSections: RecipeIngredientSection[] =
-    groupedSections.length === 0
-      ? [
-          {
-            id: null,
-            label: null,
-            lines: ingredientLines,
-          },
-        ]
-      : sectionWithoutGroup
-        ? [sectionWithoutGroup, ...groupedSections]
-        : groupedSections;
 
   return {
     author: row.author.name,

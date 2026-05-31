@@ -33,6 +33,30 @@ type SeedGroupedIngredient = SeedIngredient & {
   groupLabel: "Паста" | "Соус";
 };
 
+type SeedRecipeOutput = {
+  quantity: number;
+  unitShortName: (typeof MEASUREMENT_UNITS)[number]["shortName"];
+};
+
+/** Описание группы ингредиентов в seed-данных; null — без названия в UI */
+type SeedIngredientGroupDef = {
+  label: string | null;
+};
+
+/** Группы ингредиентов с базовым выходом, скопированным из рецепта */
+function buildIngredientGroupCreates(
+  output: SeedRecipeOutput,
+  groups: readonly SeedIngredientGroupDef[],
+  units: Map<string, string>,
+) {
+  return groups.map((group, order) => ({
+    order,
+    label: group.label,
+    outputQuantity: output.quantity,
+    outputUnitId: units.get(output.unitShortName)!,
+  }));
+}
+
 const cherryCobblerIngredients: SeedIngredient[] = [
   {
     name: "Вишня без косточек",
@@ -256,6 +280,7 @@ const cherryCobbler = {
       text: "Спасибо за точные пропорции. После 10 минут отдыха начинка загустела как надо, коблер легко раскладывается ложкой.",
     },
   ],
+  ingredientGroups: [{ label: null }],
 } as const;
 
 const brownButter = {
@@ -286,6 +311,7 @@ const brownButter = {
       text: "Не пережарьте: масло должно пахнуть фундуком, а не горечью. Из 100 г получается около 85 г готового продукта.",
     },
   ],
+  ingredientGroups: [{ label: null }],
 } as const;
 
 const pastaAlfredo = {
@@ -333,6 +359,7 @@ const pastaAlfredo = {
       text: "Получилось очень сливочно. В конце добавил ещё немного перца и пару ложек воды от пасты — соус отлично обволакивает феттучине.",
     },
   ],
+  ingredientGroups: [{ label: null }],
 } as const;
 
 const pastaAlfredoHomemade = {
@@ -375,7 +402,7 @@ const pastaAlfredoHomemade = {
       text: "Если тесто кажется сухим, добавьте чайную ложку воды. Готовые полоски феттучине слегка подпылите мукой.",
     },
   ],
-  ingredientGroups: ["Паста", "Соус"] as const,
+  ingredientGroups: [{ label: "Паста" }, { label: "Соус" }],
 } as const;
 
 async function upsertUnits(prisma: PrismaClient) {
@@ -453,6 +480,13 @@ async function main() {
         outputQuantity: brownButter.output.quantity,
         outputUnitId: units.get(brownButter.output.unitShortName)!,
         nutrition: { create: brownButter.nutrition },
+        ingredientGroups: {
+          create: buildIngredientGroupCreates(
+            brownButter.output,
+            brownButter.ingredientGroups,
+            units,
+          ),
+        },
         equipment: {
           create: brownButter.equipment.map((label, i) => ({
             order: i,
@@ -474,7 +508,12 @@ async function main() {
           })),
         },
       },
+      include: {
+        ingredientGroups: true,
+      },
     });
+
+    const butterGroupId = butterRecipe.ingredientGroups[0]!.id;
 
     const butterBaseCatalog = await Promise.all(
       brownButterIngredients.map((ing) => upsertIngredient(prisma, ing)),
@@ -482,7 +521,7 @@ async function main() {
 
     await prisma.recipeIngredient.createMany({
       data: brownButterIngredients.map((ing, i) => ({
-        recipeId: butterRecipe.id,
+        groupId: butterGroupId,
         ingredientId: butterBaseCatalog[i]!.id,
         unitId: units.get(ing.unitShortName)!,
         order: i,
@@ -513,6 +552,13 @@ async function main() {
         outputQuantity: cherryCobbler.output.quantity,
         outputUnitId: units.get(cherryCobbler.output.unitShortName)!,
         nutrition: { create: cherryCobbler.nutrition },
+        ingredientGroups: {
+          create: buildIngredientGroupCreates(
+            cherryCobbler.output,
+            cherryCobbler.ingredientGroups,
+            units,
+          ),
+        },
         equipment: {
           create: cherryCobbler.equipment.map((label, i) => ({
             order: i,
@@ -536,11 +582,16 @@ async function main() {
           })),
         },
       },
+      include: {
+        ingredientGroups: true,
+      },
     });
+
+    const cobblerGroupId = cobblerRecipe.ingredientGroups[0]!.id;
 
     await prisma.recipeIngredient.createMany({
       data: cherryCobblerIngredients.map((ing, i) => ({
-        recipeId: cobblerRecipe.id,
+        groupId: cobblerGroupId,
         ingredientId: catalogIngredients[i]!.id,
         unitId: units.get(ing.unitShortName)!,
         order: i,
@@ -561,6 +612,13 @@ async function main() {
         outputQuantity: pastaAlfredo.output.quantity,
         outputUnitId: units.get(pastaAlfredo.output.unitShortName)!,
         nutrition: { create: pastaAlfredo.nutrition },
+        ingredientGroups: {
+          create: buildIngredientGroupCreates(
+            pastaAlfredo.output,
+            pastaAlfredo.ingredientGroups,
+            units,
+          ),
+        },
         equipment: {
           create: pastaAlfredo.equipment.map((label, i) => ({
             order: i,
@@ -583,11 +641,16 @@ async function main() {
           })),
         },
       },
+      include: {
+        ingredientGroups: true,
+      },
     });
+
+    const alfredoGroupId = alfredoRecipe.ingredientGroups[0]!.id;
 
     await prisma.recipeIngredient.createMany({
       data: pastaAlfredoIngredients.map((ing, i) => ({
-        recipeId: alfredoRecipe.id,
+        groupId: alfredoGroupId,
         ingredientId: pastaCatalogIngredients[i]!.id,
         unitId: units.get(ing.unitShortName)!,
         order: i,
@@ -609,10 +672,11 @@ async function main() {
         outputUnitId: units.get(pastaAlfredoHomemade.output.unitShortName)!,
         nutrition: { create: pastaAlfredoHomemade.nutrition },
         ingredientGroups: {
-          create: pastaAlfredoHomemade.ingredientGroups.map((label, i) => ({
-            order: i,
-            label,
-          })),
+          create: buildIngredientGroupCreates(
+            pastaAlfredoHomemade.output,
+            pastaAlfredoHomemade.ingredientGroups,
+            units,
+          ),
         },
         equipment: {
           create: pastaAlfredoHomemade.equipment.map((label, i) => ({
@@ -647,7 +711,6 @@ async function main() {
 
     await prisma.recipeIngredient.createMany({
       data: pastaAlfredoHomemadeIngredients.map((ing, i) => ({
-        recipeId: homemadeAlfredoRecipe.id,
         groupId: groupIdByLabel.get(ing.groupLabel)!,
         ingredientId: pastaAlfredoHomemadeCatalogIngredients[i]!.id,
         unitId: units.get(ing.unitShortName)!,

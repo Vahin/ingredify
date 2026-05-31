@@ -1,3 +1,5 @@
+import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
+
 export type IngredientLine = {
   id: string;
   name: string;
@@ -10,7 +12,8 @@ export type IngredientLine = {
 };
 
 export type IngredientSection = {
-  id: string | null;
+  id: string;
   label: string | null;
+  output: RecipeOutput;
   lines: IngredientLine[];
 };

@@ -24,7 +24,6 @@ export const IngredientSidebarInteractive = ({
   sections,
   output,
 }: IngredientSidebarInteractiveProps) => {
-  const baseOutputQuantity = getBaseOutputQuantity(output);
   const [selectedOutputQuantity, setSelectedOutputQuantity] = useState(
     getInitialSelectedOutputQuantity(output),
   );
@@ -37,9 +36,10 @@ export const IngredientSidebarInteractive = ({
   );
 
   const scaledSections = useMemo<IngredientSection[]>(() => {
-    const factor = selectedOutputQuantity / baseOutputQuantity;
-
     return sections.map((section) => {
+      const sectionBaseOutputQuantity = getBaseOutputQuantity(section.output);
+      const factor = selectedOutputQuantity / sectionBaseOutputQuantity;
+
       const lines = section.lines.map((line) => {
         const scaled = line.amountNumeric * factor;
 
@@ -54,10 +54,11 @@ export const IngredientSidebarInteractive = ({
       return {
         id: section.id,
         label: section.label,
+        output: section.output,
         lines,
       };
     });
-  }, [baseOutputQuantity, sections, selectedOutputQuantity]);
+  }, [sections, selectedOutputQuantity]);
 
   const maxOutputQuantity = getMaxOutputQuantity(output);
 
