@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import type { Prisma } from '@prisma';
 import { prisma } from '@/shared/lib/prisma';
@@ -105,7 +106,8 @@ function mapRecipeRowToDto(row: RecipeRow): Recipe {
   };
 }
 
-export const getRecipe = async (recipeId: string): Promise<Recipe> => {
+/** Загрузка рецепта для UI (кеш на один server-запрос, дедупликация по recipeId) */
+export const getRecipe = cache(async (recipeId: string): Promise<Recipe> => {
   const row = await prisma.recipe.findUnique({
     where: { id: recipeId },
     include: recipeInclude,
@@ -116,4 +118,4 @@ export const getRecipe = async (recipeId: string): Promise<Recipe> => {
   }
 
   return mapRecipeRowToDto(row);
-};
+});
