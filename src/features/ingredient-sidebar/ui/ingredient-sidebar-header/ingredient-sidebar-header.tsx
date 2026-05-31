@@ -8,7 +8,7 @@ import {
   clampOutputQuantity,
   getMaxOutputQuantity,
   parseOutputQuantityInput,
-} from '../../lib/output-quantity';
+} from '../../model/lib/output-quantity';
 
 const getPortionLabel = (count: number) => {
   const mod100 = count % 100;
