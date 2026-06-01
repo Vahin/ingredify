@@ -70,12 +70,15 @@ export const IngredientRow = ({
   return (
     <div
       className={cn(
-        'grid items-center gap-3 rounded-[10px] p-2.5 transition-colors',
+        'grid items-center gap-3 rounded-[10px] border border-border border-l-[3px] border-l-transparent bg-card py-2.5 pr-3 pl-3.5 shadow-sm transition-colors',
         showLeadingSlot
           ? 'grid-cols-[28px_32px_minmax(0,1fr)_auto]'
           : 'grid-cols-[32px_minmax(0,1fr)_auto]',
-        interactive && 'cursor-pointer hover:bg-muted',
-        isSelected && 'bg-muted/80',
+        isSelectionMode && 'border-l-accent',
+        isSelected && 'bg-accent/6',
+        isInCart && !isSelectionMode && 'border-l-accent-hover',
+        interactive && 'cursor-pointer',
+        interactive && !isSelected && 'hover:bg-muted',
       )}
       data-ingredient-row-id={line.id}
       onClick={interactive ? onToggleSelect : undefined}
@@ -103,9 +106,9 @@ export const IngredientRow = ({
         ) : (
           <span
             aria-label='В корзине'
-            className='flex size-4 items-center justify-center text-primary'
+            className='flex size-4 items-center justify-center text-accent'
           >
-            <CheckIcon />
+            <CheckIcon className='size-3.5' strokeWidth={2.5} />
           </span>
         )
       ) : null}

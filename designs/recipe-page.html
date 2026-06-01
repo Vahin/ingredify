@@ -4,75 +4,462 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ingredify — Вишневый коблер</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;850&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-tokens.css" />
   <style>
-    :root {
-      --background: #f9fafb; --foreground: #111827; --card: #fff; --muted: #f3f4f6;
-      --border: #e5e7eb; --accent: #22c55e; --accent-hover: #16a34a; --secondary: #6b7280;
-      --shadow-card: 0 12px 34px color-mix(in oklch, var(--foreground) 10%, transparent);
-      --shadow-step: 0 6px 20px color-mix(in oklch, var(--foreground) 8%, transparent);
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in oklch, var(--card) 95%, transparent);
+      backdrop-filter: blur(14px);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Inter, system-ui, sans-serif; background: var(--background); color: var(--foreground); }
-    button, input { font: inherit; }
-    .header { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--border); background: color-mix(in oklch, var(--card) 95%, transparent); backdrop-filter: blur(14px); }
-    .header-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 190px 1fr auto; align-items: center; gap: 24px; padding: 16px 24px; }
-    .logo { display: flex; align-items: center; gap: 10px; font-size: 21px; font-weight: 800; }
-    .logo-mark { width: 36px; height: 36px; border-radius: 10px; background: var(--accent); color: #fff; display: grid; place-items: center; font-weight: 800; }
-    .search { position: relative; }
-    .search input { width: 100%; height: 44px; border: 0; border-radius: 999px; background: var(--muted); padding: 0 20px 0 48px; font-size: 14px; outline: 1px solid transparent; }
-    .search input:focus { background: var(--card); outline-color: color-mix(in oklch, var(--accent) 45%, transparent); }
-    .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--secondary); width: 18px; height: 18px; }
-    .auth-btns { display: flex; gap: 8px; }
-    .auth-btns button { height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); font-size: 14px; font-weight: 600; cursor: pointer; }
-    .auth-btns .primary { background: var(--accent); color: #fff; border-color: transparent; }
-    main { max-width: 1200px; margin: 0 auto; padding: 26px 24px; display: grid; gap: 24px; grid-template-columns: 1fr 296px; align-items: start; }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+    }
+    @media (min-width: 768px) {
+      .header-inner {
+        grid-template-columns: 190px minmax(280px, 1fr) auto;
+        gap: 24px;
+        padding: 16px 24px;
+      }
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 19px;
+      font-weight: 800;
+    }
+    @media (min-width: 768px) {
+      .logo { font-size: 21px; }
+    }
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 21px;
+      font-weight: 800;
+    }
+    .search {
+      position: relative;
+      order: 3;
+      grid-column: 1 / -1;
+      min-width: 0;
+    }
+    @media (min-width: 768px) {
+      .search { order: 0; grid-column: auto; }
+    }
+    .search input {
+      width: 100%;
+      height: 44px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--muted);
+      padding: 0 20px 0 48px;
+      font-size: 14px;
+      outline: 1px solid transparent;
+    }
+    .search input:focus {
+      background: var(--card);
+      outline-color: color-mix(in oklch, var(--accent) 45%, transparent);
+    }
+    .search input::placeholder { color: var(--secondary); }
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--secondary);
+      width: 18px;
+      height: 18px;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .cart-link {
+      position: relative;
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--secondary);
+    }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 16px;
+      display: grid;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (min-width: 768px) {
+      main { padding: 26px 24px; }
+    }
+    @media (min-width: 1024px) {
+      main { grid-template-columns: minmax(0, 1fr) 296px; }
+    }
     .content { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
-    .hero { display: grid; gap: 22px; padding: 16px; border-radius: 16px; border: 1px solid var(--border); background: var(--card); box-shadow: var(--shadow-card); grid-template-columns: clamp(188px, 32%, 300px) 1fr; }
-    .hero-img { aspect-ratio: 4/3; border-radius: 12px; background: linear-gradient(145deg, #fecaca 0%, #f87171 40%, #7f1d1d 100%); }
-    .hero-body { display: flex; flex-direction: column; gap: 20px; justify-content: center; padding: 4px 0; }
+    .hero {
+      display: grid;
+      gap: 18px;
+      padding: 16px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: var(--shadow-card);
+    }
+    @media (min-width: 768px) {
+      .hero {
+        gap: 22px;
+        grid-template-columns: clamp(188px, 32%, 300px) 1fr;
+        align-items: start;
+      }
+    }
+    .hero-img-wrap {
+      position: relative;
+      margin: 0 auto;
+      width: min(240px, 100%);
+      aspect-ratio: 9 / 18;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background: var(--muted);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+    }
+    @media (min-width: 768px) {
+      .hero-img-wrap { width: 100%; margin: 0; }
+    }
+    .hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-body {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      justify-content: center;
+      padding: 4px 0;
+      min-width: 0;
+    }
     .author { display: flex; align-items: center; gap: 10px; }
-    .avatar { width: 34px; height: 34px; border-radius: 50%; background: color-mix(in oklch, var(--accent) 15%, transparent); color: var(--accent); display: grid; place-items: center; font-size: 12px; font-weight: 800; }
-    .author-name { font-size: 13px; font-weight: 800; }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: color-mix(in oklch, var(--accent) 15%, transparent);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .author-name { font-size: 13px; font-weight: 800; line-height: 1; }
     .author-role { font-size: 12px; color: var(--secondary); margin-top: 4px; }
-    h1 { font-size: clamp(30px, 4vw, 38px); font-weight: 850; line-height: 1.05; }
-    .desc { font-size: 15px; line-height: 1.6; color: var(--secondary); max-width: 56ch; margin-top: 10px; }
-    .nutrition { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .nut-card { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: center; min-height: 64px; padding: 12px; border-radius: 12px; background: var(--muted); }
-    .nut-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--card); display: grid; place-items: center; font-size: 14px; }
-    .nut-val { font-family: ui-monospace, monospace; font-size: 17px; font-weight: 850; }
+    h1 {
+      font-size: clamp(30px, 4vw, 38px);
+      font-weight: 850;
+      line-height: 1.05;
+    }
+    .desc {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--secondary);
+      max-width: 56ch;
+      margin-top: 10px;
+    }
+    .nutrition {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 440px) {
+      .nutrition { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 768px) {
+      .nutrition { grid-template-columns: repeat(4, 1fr); }
+    }
+    .nut-card {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 10px;
+      align-items: center;
+      min-height: 64px;
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--muted);
+    }
+    .nut-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--card);
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+    .nut-icon::before {
+      content: '';
+      width: 20px;
+      height: 20px;
+      background: currentColor;
+      mask-position: center;
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      -webkit-mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+    }
+    .nut-icon.calories { color: #f97316; }
+    .nut-icon.calories::before {
+      mask-image: url(icons/nutrition/fire.svg);
+      -webkit-mask-image: url(icons/nutrition/fire.svg);
+    }
+    .nut-icon.protein { color: var(--accent); }
+    .nut-icon.protein::before {
+      mask-image: url(icons/nutrition/biceps.svg);
+      -webkit-mask-image: url(icons/nutrition/biceps.svg);
+    }
+    .nut-icon.fat { color: #f59e0b; }
+    .nut-icon.fat::before {
+      mask-image: url(icons/nutrition/drop.svg);
+      -webkit-mask-image: url(icons/nutrition/drop.svg);
+    }
+    .nut-icon.carbs { color: #8b5cf6; }
+    .nut-icon.carbs::before {
+      mask-image: url(icons/nutrition/wheat.svg);
+      -webkit-mask-image: url(icons/nutrition/wheat.svg);
+    }
+    .nut-val {
+      font-family: ui-monospace, monospace;
+      font-size: 17px;
+      font-weight: 850;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
     .nut-label { font-size: 10px; color: var(--secondary); margin-top: 4px; }
     .actions { display: flex; flex-wrap: wrap; gap: 10px; }
-    .btn-save { min-height: 42px; padding: 0 17px; border: 0; border-radius: 10px; background: var(--accent); color: #fff; font-weight: 700; font-size: 14px; box-shadow: 0 8px 18px color-mix(in oklch, var(--accent) 22%, transparent); cursor: pointer; }
-    .btn-muted { min-height: 42px; padding: 0 17px; border: 0; border-radius: 10px; background: var(--muted); font-weight: 700; font-size: 14px; cursor: pointer; }
-    .btn-like { min-height: 42px; padding: 0 17px; border: 0; border-radius: 10px; background: #fef2f2; color: #ef4444; font-weight: 700; font-size: 14px; cursor: pointer; }
-    h2 { font-size: 24px; font-weight: 850; line-height: 1.15; margin-bottom: 14px; }
-    .step { display: grid; grid-template-columns: 34px 1fr 104px; gap: 16px; align-items: center; min-height: 92px; padding: 14px; border-radius: 16px; border: 1px solid var(--border); background: var(--card); box-shadow: var(--shadow-step); margin-bottom: 14px; }
-    .step-num { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; font-family: ui-monospace, monospace; font-size: 13px; font-weight: 700; }
-    .step-text { font-size: 15px; line-height: 1.5; }
-    .step-img { height: 64px; border-radius: 12px; background: var(--muted); }
+    h2 {
+      font-size: 24px;
+      font-weight: 850;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .steps { display: flex; flex-direction: column; gap: 14px; }
+    .step {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 16px;
+      align-items: center;
+      min-height: 72px;
+      padding: 14px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: var(--shadow-step);
+    }
+    .step.has-image {
+      min-height: 92px;
+    }
+    @media (min-width: 640px) {
+      .step.has-image { grid-template-columns: 34px 1fr 104px; }
+    }
+    .step-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-family: ui-monospace, monospace;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .step-text { font-size: 15px; line-height: 1.5; min-width: 0; }
+    .step-img {
+      grid-column: 2;
+      height: 64px;
+      width: min(180px, 100%);
+      border-radius: 12px;
+      background: var(--muted);
+      box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--foreground) 8%, transparent);
+      overflow: hidden;
+    }
+    @media (min-width: 640px) {
+      .step.has-image .step-img { grid-column: auto; width: 104px; }
+    }
+    .step-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .panel { padding: 18px; }
     .comment { display: grid; grid-template-columns: 36px 1fr; gap: 12px; margin-top: 12px; }
-    .comment-avatar { width: 36px; height: 36px; border-radius: 50%; background: color-mix(in oklch, var(--accent) 15%, transparent); color: var(--accent); display: grid; place-items: center; font-size: 12px; font-weight: 800; }
-    .badge { display: inline-flex; height: 20px; align-items: center; padding: 0 8px; border-radius: 999px; background: color-mix(in oklch, var(--accent) 15%, transparent); color: var(--accent); font-size: 11px; font-weight: 700; margin-left: 8px; }
-    .comment-text { font-size: 14px; color: var(--secondary); line-height: 1.55; margin-top: 6px; }
-    .comment-input-row { display: grid; grid-template-columns: 1fr 44px; gap: 10px; margin-top: 18px; }
-    .comment-input { height: 44px; border: 0; border-radius: 999px; background: var(--muted); padding: 0 16px; font-size: 14px; width: 100%; }
-    .send-btn { width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--accent); color: #fff; font-size: 18px; cursor: pointer; }
-    .sidebar { display: flex; flex-direction: column; gap: 22px; position: sticky; top: 92px; }
-    .panel { padding: 18px; border-radius: 16px; border: 1px solid var(--border); background: var(--card); box-shadow: var(--shadow-card); }
-    .qty-control { display: flex; align-items: center; gap: 8px; margin: 12px 0 16px; }
-    .qty-pill { display: flex; align-items: center; gap: 3px; padding: 2px; border-radius: 999px; background: var(--muted); }
-    .qty-btn { width: 24px; height: 24px; border: 0; border-radius: 50%; background: var(--card); font-weight: 850; color: var(--secondary); cursor: pointer; box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--foreground) 7%, transparent); }
-    .qty-val { width: 48px; text-align: center; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 800; border: 0; background: transparent; }
-    .unit-label { font-size: 12px; font-weight: 800; letter-spacing: 0.14em; color: var(--secondary); }
-    .ingredient { display: grid; grid-template-columns: 32px 1fr auto; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; }
-    .ingredient:hover { background: var(--muted); }
-    .sticker { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #fecaca, #fca5a5); font-size: 16px; display: grid; place-items: center; }
-    .ing-name { font-size: 14px; font-weight: 600; }
-    .ing-amt { font-family: ui-monospace, monospace; font-size: 12px; color: var(--secondary); white-space: nowrap; }
-    .equipment ul { padding-left: 18px; font-size: 15px; line-height: 1.8; }
+    .comment-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: color-mix(in oklch, var(--accent) 15%, transparent);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .comment-name {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .badge {
+      display: inline-flex;
+      height: 20px;
+      align-items: center;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: color-mix(in oklch, var(--accent) 15%, transparent);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .comment-text {
+      font-size: 14px;
+      color: var(--secondary);
+      line-height: 1.55;
+      margin-top: 6px;
+    }
+    .comment-input-row {
+      display: grid;
+      grid-template-columns: 1fr 44px;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .sidebar {
+      display: grid;
+      gap: 22px;
+      min-width: 0;
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .sidebar { grid-template-columns: minmax(0, 1fr) minmax(260px, 0.78fr); }
+    }
+    @media (min-width: 1024px) {
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        position: sticky;
+        top: 92px;
+      }
+    }
+    .qty-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .qty-pill {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 28px;
+      padding: 2px;
+      border-radius: 999px;
+      background: var(--muted);
+      overflow: hidden;
+    }
+    .qty-btn {
+      width: 24px;
+      height: 24px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--card);
+      font-weight: 850;
+      color: var(--secondary);
+      font-size: 14px;
+      line-height: 1;
+      box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--foreground) 7%, transparent);
+    }
+    .qty-val {
+      width: 48px;
+      text-align: center;
+      font-family: ui-monospace, monospace;
+      font-size: 12px;
+      font-weight: 800;
+      border: 0;
+      background: transparent;
+      color: var(--foreground);
+    }
+    .unit-label {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: var(--secondary);
+    }
+    .qty-row { margin-bottom: 8px; }
+    .ingredient {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px 10px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      border-left: 3px solid transparent;
+      background: var(--card);
+      box-shadow: 0 1px 2px color-mix(in oklch, var(--foreground) 4%, transparent);
+    }
+    .ingredient + .ingredient { margin-top: 8px; }
+    .ing-name { font-size: 14px; font-weight: 600; min-width: 0; }
+    .ing-amt {
+      font-family: ui-monospace, monospace;
+      font-size: 12px;
+      color: var(--secondary);
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .ing-amt span + span { margin-left: 4px; }
     .panel h2 { font-size: 22px; margin-bottom: 16px; }
+    .equipment ul {
+      display: grid;
+      gap: 8px;
+      padding-left: 18px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .panel-header h2 { margin-bottom: 0; }
   </style>
 </head>
 <body>
@@ -80,12 +467,15 @@
     <div class="header-inner">
       <a class="logo" href="#"><span class="logo-mark">i</span> Ingredify</a>
       <label class="search">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
         <input type="search" placeholder="Найти рецепт, ингредиент или кухню" />
       </label>
-      <div class="auth-btns">
-        <button type="button">Войти</button>
-        <button type="button" class="primary">Регистрация</button>
+      <div class="header-actions">
+        <a class="cart-link" href="#" aria-label="Открыть корзину">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        </a>
+        <button type="button" class="btn-ghost">Войти</button>
+        <button type="button" class="btn-primary">Регистрация</button>
       </div>
     </div>
   </header>
@@ -93,7 +483,13 @@
   <main>
     <div class="content">
       <section class="hero" data-od-id="recipe-hero">
-        <div class="hero-img" role="img" aria-label="Вишневый коблер"></div>
+        <div class="hero-img-wrap">
+          <img
+            class="hero-img"
+            src="recipes/ingredify-cherry-cobbler-hero.png"
+            alt="Теплый вишневый коблер в керамической форме"
+          />
+        </div>
         <div class="hero-body">
           <div class="author">
             <div class="avatar">АК</div>
@@ -104,16 +500,28 @@
           </div>
           <div>
             <h1 id="recipe-title">Вишневый коблер с миндальной крошкой</h1>
-            <p class="desc">Теплый домашний десерт с сочной вишневой начинкой, нежным миндалем и золотистой хрустящей шапкой.</p>
+            <p class="desc">Теплый домашний десерт с сочной вишневой начинкой, нежным миндалем и золотистой хрустящей шапкой. Хорош для воскресного ужина и отлично держит форму после остывания.</p>
           </div>
           <div class="nutrition">
-            <div class="nut-card"><span class="nut-icon">🔥</span><div><div class="nut-val">385</div><div class="nut-label">Калории</div></div></div>
-            <div class="nut-card"><span class="nut-icon" style="color:#22c55e">💪</span><div><div class="nut-val">6 г</div><div class="nut-label">Белки</div></div></div>
-            <div class="nut-card"><span class="nut-icon" style="color:#f59e0b">💧</span><div><div class="nut-val">15 г</div><div class="nut-label">Жиры</div></div></div>
-            <div class="nut-card"><span class="nut-icon" style="color:#8b5cf6">🌾</span><div><div class="nut-val">59 г</div><div class="nut-label">Углеводы</div></div></div>
+            <div class="nut-card">
+              <span class="nut-icon calories" aria-hidden="true"></span>
+              <div><div class="nut-val">385</div><div class="nut-label">Калории</div></div>
+            </div>
+            <div class="nut-card">
+              <span class="nut-icon protein" aria-hidden="true"></span>
+              <div><div class="nut-val">6 г</div><div class="nut-label">Белки</div></div>
+            </div>
+            <div class="nut-card">
+              <span class="nut-icon fat" aria-hidden="true"></span>
+              <div><div class="nut-val">15 г</div><div class="nut-label">Жиры</div></div>
+            </div>
+            <div class="nut-card">
+              <span class="nut-icon carbs" aria-hidden="true"></span>
+              <div><div class="nut-val">59 г</div><div class="nut-label">Углеводы</div></div>
+            </div>
           </div>
           <div class="actions">
-            <button type="button" class="btn-save">☆ Сохранить</button>
+            <button type="button" class="btn-accent">☆ Сохранить</button>
             <button type="button" class="btn-muted">💬 4</button>
             <button type="button" class="btn-like">♥ 124</button>
           </div>
@@ -122,68 +530,87 @@
 
       <section data-od-id="cooking-steps">
         <h2>Шаги приготовления</h2>
-        <article class="step">
-          <div class="step-num">1</div>
-          <p class="step-text">Смешайте вишню с сахаром, лимонным соком и крахмалом. Переложите начинку в форму.</p>
-          <div class="step-img"></div>
-        </article>
-        <article class="step">
-          <div class="step-num">2</div>
-          <p class="step-text">Соедините муку, миндальную крошку, разрыхлитель и сахар. Добавьте сливочное масло.</p>
-        </article>
-        <article class="step">
-          <div class="step-num">3</div>
-          <p class="step-text">Влейте молоко и быстро замесите тесто. Выложите ложками поверх начинки.</p>
-          <div class="step-img"></div>
-        </article>
-        <article class="step">
-          <div class="step-num">4</div>
-          <p class="step-text">Выпекайте при 190 °C 35–40 минут, пока верх не станет золотистым.</p>
-        </article>
+        <div class="steps">
+          <article class="step has-image">
+            <div class="step-num">1</div>
+            <p class="step-text">Смешайте вишню с сахаром, лимонным соком и крахмалом. Переложите начинку в форму и распределите ровным слоем.</p>
+            <div class="step-img"><img src="recipes/step-01-prepared-ingredients.png" alt="" /></div>
+          </article>
+          <article class="step">
+            <div class="step-num">2</div>
+            <p class="step-text">В отдельной миске соедините муку, миндальную крошку, разрыхлитель, соль и сахар. Добавьте сливочное масло (можно заранее приготовить коричневое по ссылке в ингредиентах) и разотрите в крупную крошку.</p>
+          </article>
+          <article class="step has-image">
+            <div class="step-num">3</div>
+            <p class="step-text">Влейте молоко и быстро замесите мягкое тесто. Выложите его ложками поверх начинки, оставляя небольшие просветы.</p>
+            <div class="step-img"><img src="recipes/step-03-milk-into-flour.png" alt="" /></div>
+          </article>
+          <article class="step">
+            <div class="step-num">4</div>
+            <p class="step-text">Выпекайте при 190 °C 35–40 минут, пока начинка не начнет пузыриться, а верх не станет золотистым. Дайте коблеру постоять 10 минут.</p>
+          </article>
+        </div>
       </section>
 
-      <section class="panel" data-od-id="comments" id="comments">
+      <section class="card panel" data-od-id="comments" id="comments">
         <h2>Комментарии (4)</h2>
         <article class="comment">
           <div class="comment-avatar">АК</div>
           <div>
-            <p><strong>Алена Кравцова</strong><span class="badge">автор рецепта</span></p>
-            <p class="comment-text">Для более насыщенного вкуса можно смешать свежую и замороженную вишню.</p>
+            <p class="comment-name">Алена Кравцова<span class="badge">автор рецепта</span></p>
+            <p class="comment-text">Для более насыщенного вкуса можно смешать свежую и замороженную вишню. Если начинка получилась очень сочной, добавьте еще половину ложки крахмала.</p>
           </div>
         </article>
         <article class="comment">
           <div class="comment-avatar">МС</div>
           <div>
-            <p><strong>Марина Соколова</strong></p>
-            <p class="comment-text">Готовила вчера к чаю — миндальная крошка даёт приятную текстуру.</p>
+            <p class="comment-name">Марина Соколова</p>
+            <p class="comment-text">Готовила вчера к чаю, получилось очень нежно. Миндальная крошка правда дает приятную текстуру, а не просто сладкую корочку.</p>
+          </div>
+        </article>
+        <article class="comment">
+          <div class="comment-avatar">ИВ</div>
+          <div>
+            <p class="comment-name">Илья Воронов</p>
+            <p class="comment-text">Уменьшил сахар до 90 г и добавил немного корицы в тесто. Вишня осталась яркой, десерт не стал приторным.</p>
+          </div>
+        </article>
+        <article class="comment">
+          <div class="comment-avatar">НР</div>
+          <div>
+            <p class="comment-name">Надя Романова</p>
+            <p class="comment-text">Спасибо за точные пропорции. После 10 минут отдыха начинка загустела как надо, коблер легко раскладывается ложкой.</p>
           </div>
         </article>
         <div class="comment-input-row">
-          <input class="comment-input" type="text" placeholder="Написать комментарий..." />
-          <button type="button" class="send-btn" aria-label="Отправить">→</button>
+          <input class="input-pill" type="text" placeholder="Написать комментарий..." />
+          <button type="button" class="send-btn" aria-label="Отправить комментарий">→</button>
         </div>
       </section>
     </div>
 
     <aside class="sidebar" aria-label="Ингредиенты и инвентарь">
-      <section class="panel" data-od-id="ingredients">
-        <h2 id="ingredients-title">Ингредиенты</h2>
-        <div class="qty-control">
+      <section class="card panel" data-od-id="ingredients">
+        <div class="panel-header">
+          <h2 id="ingredients-title">Ингредиенты</h2>
+        </div>
+        <div class="qty-row">
           <div class="qty-pill" aria-label="Количество порций">
-            <button type="button" class="qty-btn">−</button>
+            <button type="button" class="qty-btn" aria-label="Уменьшить">−</button>
             <input class="qty-val" type="text" value="6" readonly />
-            <button type="button" class="qty-btn">+</button>
+            <button type="button" class="qty-btn" aria-label="Увеличить">+</button>
           </div>
           <span class="unit-label">Порций</span>
         </div>
-        <div class="ingredient"><span class="sticker">🍒</span><span class="ing-name">Вишня без косточек</span><span class="ing-amt">500 г</span></div>
-        <div class="ingredient"><span class="sticker">🧂</span><span class="ing-name">Сахар</span><span class="ing-amt">120 г</span></div>
-        <div class="ingredient"><span class="sticker">🌾</span><span class="ing-name">Пшеничная мука</span><span class="ing-amt">145 г</span></div>
-        <div class="ingredient"><span class="sticker">🥜</span><span class="ing-name">Миндальная крошка</span><span class="ing-amt">35 г</span></div>
-        <div class="ingredient"><span class="sticker">🧈</span><span class="ing-name">Сливочное масло</span><span class="ing-amt">85 г</span></div>
-        <div class="ingredient"><span class="sticker">🥛</span><span class="ing-name">Молоко</span><span class="ing-amt">120 мл</span></div>
+        <div class="ingredient"><img class="sticker" src="ingredients/cherry.png" alt="" /><span class="ing-name">Вишня без косточек</span><span class="ing-amt"><span>500</span><span>г</span></span></div>
+        <div class="ingredient"><img class="sticker" src="ingredients/sugar.png" alt="" /><span class="ing-name">Сахар</span><span class="ing-amt"><span>120</span><span>г</span></span></div>
+        <div class="ingredient"><img class="sticker" src="ingredients/flour.png" alt="" /><span class="ing-name">Пшеничная мука</span><span class="ing-amt"><span>145</span><span>г</span></span></div>
+        <div class="ingredient"><img class="sticker" src="ingredients/almond-crumb.png" alt="" /><span class="ing-name">Миндальная крошка</span><span class="ing-amt"><span>35</span><span>г</span></span></div>
+        <div class="ingredient"><img class="sticker" src="ingredients/butter.png" alt="" /><span class="ing-name">Сливочное масло</span><span class="ing-amt"><span>85</span><span>г</span></span></div>
+        <div class="ingredient"><img class="sticker" src="ingredients/milk.png" alt="" /><span class="ing-name">Молоко</span><span class="ing-amt"><span>120</span><span>мл</span></span></div>
+        <div class="ingredient"><img class="sticker" src="ingredients/baking-powder.png" alt="" /><span class="ing-name">Разрыхлитель</span><span class="ing-amt"><span>1</span><span>ч. л.</span></span></div>
       </section>
-      <section class="panel equipment" data-od-id="equipment">
+      <section class="card panel" data-od-id="equipment">
         <h2>Инвентарь</h2>
         <ul>
           <li>Форма для запекания 22–24 см</li>

@@ -13,7 +13,7 @@ export const CommentsCard = ({ recipe }: { recipe: Recipe }) => {
         className='mb-3.5 text-2xl font-[850] leading-[1.15] text-foreground'
         id='comments-title'
       >
-        Комментарии (12)
+        Комментарии ({recipe.comments.length})
       </h2>
 
       {recipe.comments.map((comment) => (

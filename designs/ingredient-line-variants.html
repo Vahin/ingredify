@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ingredify — варианты «Ингредиент лайн»</title>
+    <link rel="stylesheet" href="shared-tokens.css" />
+    <style>
+      .page-header {
+        padding: 40px 24px 28px;
+        max-width: 920px;
+        margin: 0 auto;
+      }
+
+      .page-header h1 {
+        font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 8px;
+      }
+
+      .page-header p {
+        color: var(--secondary);
+        font-size: 0.9rem;
+        max-width: 58ch;
+        line-height: 1.55;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 18px;
+        margin-top: 16px;
+        font-size: 0.78rem;
+        color: var(--muted-foreground);
+      }
+
+      .legend span::before {
+        content: '';
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        margin-right: 6px;
+        vertical-align: middle;
+      }
+
+      .legend .l-default::before {
+        background: var(--border);
+      }
+      .legend .l-select::before {
+        background: var(--accent);
+      }
+      .legend .l-cart::before {
+        background: var(--success, var(--accent-hover));
+      }
+
+      main {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 0 24px 64px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .variant {
+        padding: 20px;
+        border-radius: var(--radius-xl);
+        background: var(--card);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-card);
+      }
+
+      .variant-head {
+        margin-bottom: 18px;
+      }
+
+      .variant-tag {
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 4px;
+      }
+
+      .variant-head h2 {
+        font-size: 1.05rem;
+        font-weight: 650;
+        margin-bottom: 4px;
+      }
+
+      .variant-head p {
+        font-size: 0.82rem;
+        color: var(--secondary);
+      }
+
+      .states {
+        display: grid;
+        gap: 14px;
+      }
+
+      @media (min-width: 680px) {
+        .states {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .state-block {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .state-label {
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--muted-foreground);
+      }
+
+      /* ——— Общие части строки ——— */
+      .line {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 44px;
+      }
+
+      .sticker {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+        flex-shrink: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+        outline: none;
+      }
+
+      .name {
+        flex: 1;
+        min-width: 0;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--foreground);
+      }
+
+      .qty {
+        font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+        font-size: 0.75rem;
+        font-variant-numeric: tabular-nums;
+        color: var(--secondary);
+        white-space: nowrap;
+      }
+
+      .qty .unit {
+        margin-left: 0.25em;
+      }
+
+      .cb {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        flex-shrink: 0;
+        border-radius: 4px;
+        border: 1.5px solid var(--border);
+        background: var(--card);
+        position: relative;
+      }
+
+      .cb:checked {
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+
+      .cb:checked::after {
+        content: '';
+        position: absolute;
+        left: 4px;
+        top: 1px;
+        width: 5px;
+        height: 9px;
+        border: solid var(--accent-foreground, #fff);
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+
+      .cb-round {
+        border-radius: 50%;
+      }
+
+      .cart-mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        color: var(--accent);
+      }
+
+      .cart-mark svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      /* ═══ 01 — Пилюля на muted (основа: вариант 02) ═══ */
+      .v01 .line {
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: var(--muted);
+      }
+
+      .v01 .line--select {
+        outline: 2px solid color-mix(in oklch, var(--accent) 35%, transparent);
+        outline-offset: 0;
+      }
+
+      .v01 .line--select.is-on {
+        background: color-mix(in oklch, var(--accent) 8%, var(--muted));
+      }
+
+      .v01 .line--cart {
+        background: color-mix(in oklch, var(--accent) 6%, var(--card));
+        border: 1px solid color-mix(in oklch, var(--accent) 25%, var(--border));
+      }
+
+      /* ═══ 02 — Пилюля контурная, бейдж количества (вариант 02) ═══ */
+      .v02 .line {
+        padding: 8px 10px 8px 8px;
+        border-radius: 999px;
+        background: var(--card);
+        border: 1px solid var(--border);
+      }
+
+      .v02 .qty {
+        font-weight: 600;
+        font-size: 0.7rem;
+        color: var(--accent-foreground);
+        background: var(--accent);
+        padding: 4px 9px;
+        border-radius: 999px;
+      }
+
+      .v02 .line--select {
+        border-color: color-mix(in oklch, var(--accent) 50%, var(--border));
+        box-shadow: 0 0 0 2px color-mix(in oklch, var(--accent) 12%, transparent);
+      }
+
+      .v02 .line--select.is-on .qty {
+        background: var(--accent-hover);
+      }
+
+      .v02 .line--cart .qty {
+        background: var(--secondary);
+      }
+
+      /* ═══ 03 — Карточка с полосой (основа: вариант 07) ═══ */
+      .v03 .line {
+        padding: 10px 12px 10px 14px;
+        border-radius: var(--radius);
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-left: 3px solid transparent;
+        box-shadow: 0 1px 2px color-mix(in oklch, var(--foreground) 4%, transparent);
+      }
+
+      .v03 .line--select {
+        border-left-color: var(--accent);
+      }
+
+      .v03 .line--select.is-on {
+        background: color-mix(in oklch, var(--accent) 6%, var(--card));
+      }
+
+      .v03 .line--cart {
+        border-left-color: var(--accent-hover);
+      }
+
+      /* ═══ 04 — Скруглённая карточка + полоса (гибрид 02 + 07) ═══ */
+      .v04 .line {
+        padding: 8px 14px 8px 10px;
+        border-radius: 14px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-left: 4px solid transparent;
+      }
+
+      .v04 .line--select {
+        border-left-color: var(--accent);
+        background: var(--muted);
+      }
+
+      .v04 .line--select.is-on {
+        box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--accent) 20%, transparent);
+      }
+
+      .v04 .line--cart {
+        border-left-color: var(--accent);
+        background: color-mix(in oklch, var(--accent) 5%, var(--muted));
+      }
+    </style>
+  </head>
+  <body>
+    <header class="page-header">
+      <h1>Варианты «Ингредиент лайн»</h1>
+      <p>
+        Четыре адаптации под токены Ingredify: две на основе пилюли (эксперимент 02) и две —
+        карточки с акцентной полосой (эксперимент 07). В каждом: без выбора, с чекбоксом и «в
+        корзине».
+      </p>
+      <div class="legend">
+        <span class="l-default">Без выбора</span>
+        <span class="l-select">С чекбоксом</span>
+        <span class="l-cart">В корзине</span>
+      </div>
+    </header>
+
+    <main>
+      <article class="variant v01">
+        <div class="variant-head">
+          <span class="variant-tag">На основе пилюли</span>
+          <h2>01 — Muted-пилюля</h2>
+          <p>Фон <code>--muted</code>, количество моноширинным текстом как в приложении.</p>
+        </div>
+        <div class="states">
+          <div class="state-block">
+            <span class="state-label">Без выбора</span>
+            <div class="line">
+              <img class="sticker" src="ingredients/cherry.png" alt="" />
+              <span class="name">Вишня без косточек</span>
+              <span class="qty"><span>500</span><span class="unit">г</span></span>
+            </div>
+          </div>
+          <div class="state-block">
+            <span class="state-label">С чекбоксом</span>
+            <div class="line line--select is-on">
+              <input class="cb" type="checkbox" checked aria-label="Выбрано" />
+              <img class="sticker" src="ingredients/sugar.png" alt="" />
+              <span class="name">Сахар</span>
+              <span class="qty"><span>120</span><span class="unit">г</span></span>
+            </div>
+          </div>
+          <div class="state-block">
+            <span class="state-label">В корзине</span>
+            <div class="line line--cart">
+              <span class="cart-mark" aria-label="В корзине">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M3 8.5L6.2 11.5L13 4.5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <img class="sticker" src="ingredients/flour.png" alt="" />
+              <span class="name">Пшеничная мука</span>
+              <span class="qty"><span>145</span><span class="unit">г</span></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="variant v02">
+        <div class="variant-head">
+          <span class="variant-tag">На основе пилюли</span>
+          <h2>02 — Пилюля с бейджем количества</h2>
+          <p>Белая пилюля с границей; количество в зелёном бейдже <code>--accent</code>.</p>
+        </div>
+        <div class="states">
+          <div class="state-block">
+            <span class="state-label">Без выбора</span>
+            <div class="line">
+              <img class="sticker" src="ingredients/butter.png" alt="" />
+              <span class="name">Сливочное масло</span>
+              <span class="qty"><span>85</span><span class="unit">г</span></span>
+            </div>
+          </div>
+          <div class="state-block">
+            <span class="state-label">С чекбоксом</span>
+            <div class="line line--select">
+              <input class="cb cb-round" type="checkbox" aria-label="Выбрать" />
+              <img class="sticker" src="ingredients/milk.png" alt="" />
+              <span class="name">Молоко</span>
+              <span class="qty"><span>120</span><span class="unit">мл</span></span>
+            </div>
+          </div>
+          <div class="state-block">
+            <span class="state-label">В корзине</span>
+            <div class="line line--cart">
+              <span class="cart-mark" aria-label="В корзине">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M2 3h1.2l1.4 7.2a1 1 0 001 .8h5.2a1 1 0 001-.86L12.3 5H4.6M6 13.5a.75.75 0 100-1.5.75.75 0 000 1.5zm5 0a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <img class="sticker" src="ingredients/almond-crumb.png" alt="" />
+              <span class="name">Миндальная крошка</span>
+              <span class="qty"><span>35</span><span class="unit">г</span></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="variant v03">
+        <div class="variant-head">
+          <span class="variant-tag">На основе карточки с полосой</span>
+          <h2>03 — Карточка с полосой</h2>
+          <p>Левая грань: <code>--accent</code> при выборе, <code>--accent-hover</code> в корзине.</p>
+        </div>
+        <div class="states">
+          <div class="state-block">
+            <span class="state-label">Без выбора</span>
+            <div class="line">
+              <img class="sticker" src="ingredients/cherry.png" alt="" />
+              <span class="name">Вишня без косточек</span>
+              <span class="qty"><span>500</span><span class="unit">г</span></span>
+            </div>
+          </div>
+          <div class="state-block">
+            <span class="state-label">С чекбоксом</span>
+            <div class="line line--select is-on">
+              <input class="cb" type="checkbox" checked aria-label="Выбрано" />
+              <img class="sticker" src="ingredients/baking-powder.png" alt="" />
+              <span class="name">Разрыхлитель</span>
+              <span class="qty"><span>1</span><span class="unit">ч. л.</span></span>
+            </div>
+          </div>
+          <div class="state-block">
+            <span class="state-label">В корзине</span>
+            <div class="line line--cart">
+              <span class="cart-mark" aria-label="В корзине">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M3 8.5L6.2 11.5L13 4.5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <img class="sticker" src="ingredients/milk.png" alt="" />
+              <span class="name">Молоко</span>
+              <span class="qty"><span>120</span><span class="unit">мл</span></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="variant v04">
+        <div class="variant-head">
+          <span class="variant-tag">Гибрид пилюли и полосы</span>
+          <h2>04 — Скруглённая карточка</h2>
+          <p>Сильное скругление пилюли + левая полоса; в корзине — галочка слева.</p>
+        </div>
+        <div class="states">
+          <div class="state-block">
+            <span class="state-label">Без выбора</span>
+            <div class="line">
+              <img class="sticker" src="ingredients/flour.png" alt="" />
+              <span class="name">Пшеничная мука</span>
+              <span class="qty"><span>145</span><span class="unit">г</span></span>
+            </div>
+          </div>
+          <div class="state-block">
+            <span class="state-label">С чекбоксом</span>
+            <div class="line line--select is-on">
+              <input class="cb" type="checkbox" checked aria-label="Выбрано" />
+              <img class="sticker" src="ingredients/sugar.png" alt="" />
+              <span class="name">Сахар</span>
+              <span class="qty"><span>120</span><span class="unit">г</span></span>
+            </div>
+          </div>
+          <div class="state-block">
+            <span class="state-label">В корзине</span>
+            <div class="line line--cart">
+              <span class="cart-mark" aria-label="В корзине">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M3 8.5L6.2 11.5L13 4.5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <img class="sticker" src="ingredients/butter.png" alt="" />
+              <span class="name">Сливочное масло</span>
+              <span class="qty"><span>85</span><span class="unit">г</span></span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </main>
+  </body>
+</html>
