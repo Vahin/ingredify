@@ -13,15 +13,10 @@ export type CartItemView = {
   isSubRecipe: boolean;
 };
 
-export type CartRecipeLineSyncView = {
-  recipeIngredientId: string;
-  syncedQuantity: number;
-};
-
 export type CartRecipeSyncView = {
   recipeId: string;
+  recipeTitle: string | null;
   syncedOutputQuantity: number;
-  lineSyncs: CartRecipeLineSyncView[];
 };
 
 export type SessionCart = {
@@ -40,17 +35,25 @@ export type AddableCartLine = {
   isSubRecipe: boolean;
 };
 
-export type CartDeltaChange = {
-  recipeIngredientId: string;
-  name: string;
-  delta: number;
-  amountValue: string;
-  unitLabel: string;
+export type AddRecipeLinesResult = {
+  cart: SessionCart;
+  addedLines: AddableCartLine[];
+  skippedCount: number;
 };
 
-export type ApplyCartDeltaResult = {
+export type UpdateRecipeCartQuantitiesResult = {
   cart: SessionCart;
-  changes: CartDeltaChange[];
-  addedCount: number;
-  isAlreadySynced: boolean;
+  updatedCount: number;
+};
+
+export type MergedCartItemView = {
+  mergeKey: string;
+  name: string;
+  sticker: string;
+  quantity: number;
+  amountValue: string;
+  unit: MeasurementUnitView;
+  unitId: string;
+  isSubRecipe: boolean;
+  sourceItemIds: string[];
 };

@@ -1,11 +1,12 @@
 'use client';
 
-import { CartItemRow } from '@/entities/cart';
 import { useCart } from '@/features/add-to-cart';
-import { Button } from '@/shared/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { CartByRecipeTab } from '../cart-by-recipe-tab/cart-by-recipe-tab';
+import { CartMergedTab } from '../cart-merged-tab/cart-merged-tab';
 
 export const CartPage = () => {
-  const { cart, removeItem } = useCart();
+  const { cart, removeItem, removeItems } = useCart();
 
   if (cart.items.length === 0) {
     return (
@@ -19,23 +20,23 @@ export const CartPage = () => {
   }
 
   return (
-    <div className='flex flex-col gap-3'>
-      {cart.items.map((item) => (
-        <CartItemRow
-          actions={
-            <Button
-              onClick={() => void removeItem(item.id)}
-              size='xs'
-              type='button'
-              variant='ghost'
-            >
-              Удалить
-            </Button>
-          }
-          item={item}
-          key={item.id}
+    <Tabs defaultValue='by-recipe'>
+      <TabsList>
+        <TabsTrigger value='by-recipe'>По рецептам</TabsTrigger>
+        <TabsTrigger value='merged'>Общий список</TabsTrigger>
+      </TabsList>
+      <TabsContent value='by-recipe'>
+        <CartByRecipeTab
+          cart={cart}
+          onRemoveItem={(itemId) => void removeItem(itemId)}
         />
-      ))}
-    </div>
+      </TabsContent>
+      <TabsContent value='merged'>
+        <CartMergedTab
+          items={cart.items}
+          onRemoveMerged={(itemIds) => void removeItems(itemIds)}
+        />
+      </TabsContent>
+    </Tabs>
   );
 };

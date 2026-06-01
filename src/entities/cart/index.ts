@@ -1,19 +1,27 @@
 export type {
   AddableCartLine,
-  ApplyCartDeltaResult,
-  CartDeltaChange,
+  AddRecipeLinesResult,
   CartItemView,
-  CartRecipeLineSyncView,
   CartRecipeSyncView,
+  MergedCartItemView,
   SessionCart,
+  UpdateRecipeCartQuantitiesResult,
 } from './model/types/cart';
+export { addRecipeLines } from './lib/add-recipe-lines';
+export { emptyCart } from './lib/empty-cart';
+export { getRecipeCartLineIds } from './lib/get-recipe-cart-line-ids';
 export {
-  applyCartDelta,
-  emptyCart,
+  getCartItemMergeKey,
+  mergeCartItems,
+} from './lib/merge-cart-items';
+export {
+  removeCartItemFromSession,
+  removeCartItemsFromSession,
+} from './lib/remove-cart-item';
+export {
   getSyncedOutputQuantity,
-  hasOutputQuantityChanged,
-  clearLineSyncForRemovedItem,
-} from './lib/apply-cart-delta';
+  updateRecipeCartQuantities,
+} from './lib/update-recipe-cart-quantities';
 export {
   readSessionCart,
   writeSessionCart,

@@ -396,8 +396,7 @@ export const ModelName = {
   RecipeComment: 'RecipeComment',
   Cart: 'Cart',
   CartItem: 'CartItem',
-  CartRecipeSync: 'CartRecipeSync',
-  CartRecipeLineSync: 'CartRecipeLineSync'
+  CartRecipeSync: 'CartRecipeSync'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -413,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "recipe" | "recipeNutrition" | "ingredient" | "measurementUnit" | "recipeIngredient" | "recipeIngredientGroup" | "recipeEquipment" | "recipeStep" | "recipeComment" | "cart" | "cartItem" | "cartRecipeSync" | "cartRecipeLineSync"
+    modelProps: "user" | "recipe" | "recipeNutrition" | "ingredient" | "measurementUnit" | "recipeIngredient" | "recipeIngredientGroup" | "recipeEquipment" | "recipeStep" | "recipeComment" | "cart" | "cartItem" | "cartRecipeSync"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1379,80 +1378,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    CartRecipeLineSync: {
-      payload: Prisma.$CartRecipeLineSyncPayload<ExtArgs>
-      fields: Prisma.CartRecipeLineSyncFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.CartRecipeLineSyncFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.CartRecipeLineSyncFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>
-        }
-        findFirst: {
-          args: Prisma.CartRecipeLineSyncFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.CartRecipeLineSyncFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>
-        }
-        findMany: {
-          args: Prisma.CartRecipeLineSyncFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>[]
-        }
-        create: {
-          args: Prisma.CartRecipeLineSyncCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>
-        }
-        createMany: {
-          args: Prisma.CartRecipeLineSyncCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.CartRecipeLineSyncCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>[]
-        }
-        delete: {
-          args: Prisma.CartRecipeLineSyncDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>
-        }
-        update: {
-          args: Prisma.CartRecipeLineSyncUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>
-        }
-        deleteMany: {
-          args: Prisma.CartRecipeLineSyncDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.CartRecipeLineSyncUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.CartRecipeLineSyncUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>[]
-        }
-        upsert: {
-          args: Prisma.CartRecipeLineSyncUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CartRecipeLineSyncPayload>
-        }
-        aggregate: {
-          args: Prisma.CartRecipeLineSyncAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateCartRecipeLineSync>
-        }
-        groupBy: {
-          args: Prisma.CartRecipeLineSyncGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.CartRecipeLineSyncGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.CartRecipeLineSyncCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.CartRecipeLineSyncCountAggregateOutputType> | number
-        }
-      }
-    }
   }
 } & {
   other: {
@@ -1658,24 +1583,13 @@ export const CartRecipeSyncScalarFieldEnum = {
   id: 'id',
   cartId: 'cartId',
   recipeId: 'recipeId',
+  recipeTitle: 'recipeTitle',
   syncedOutputQuantity: 'syncedOutputQuantity',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type CartRecipeSyncScalarFieldEnum = (typeof CartRecipeSyncScalarFieldEnum)[keyof typeof CartRecipeSyncScalarFieldEnum]
-
-
-export const CartRecipeLineSyncScalarFieldEnum = {
-  id: 'id',
-  syncId: 'syncId',
-  recipeIngredientId: 'recipeIngredientId',
-  syncedQuantity: 'syncedQuantity',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CartRecipeLineSyncScalarFieldEnum = (typeof CartRecipeLineSyncScalarFieldEnum)[keyof typeof CartRecipeLineSyncScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1921,7 +1835,6 @@ export type GlobalOmitConfig = {
   cart?: Prisma.CartOmit
   cartItem?: Prisma.CartItemOmit
   cartRecipeSync?: Prisma.CartRecipeSyncOmit
-  cartRecipeLineSync?: Prisma.CartRecipeLineSyncOmit
 }
 
 /* Types for Logging */

@@ -5,12 +5,12 @@ import type {
   MeasurementUnitShortName,
 } from '@/entities/recipe/model/constants/measurement-units';
 import type { MeasurementUnitView } from '@/entities/recipe/model/types/measurement-unit';
-import type { CartItemView, CartRecipeSyncView, SessionCart } from '../model/types/cart';
+import type { CartItemView, SessionCart } from '../model/types/cart';
 
 type CartWithRelations = Prisma.CartGetPayload<{
   include: {
     items: { include: { unit: true } };
-    recipeSyncs: { include: { lineSyncs: true } };
+    recipeSyncs: true;
   };
 }>;
 
@@ -44,13 +44,10 @@ export function mapCartToSessionCart(cart: CartWithRelations): SessionCart {
     };
   });
 
-  const recipeSyncs: CartRecipeSyncView[] = cart.recipeSyncs.map((sync) => ({
+  const recipeSyncs = cart.recipeSyncs.map((sync) => ({
     recipeId: sync.recipeId,
+    recipeTitle: sync.recipeTitle,
     syncedOutputQuantity: Number(sync.syncedOutputQuantity),
-    lineSyncs: sync.lineSyncs.map((line) => ({
-      recipeIngredientId: line.recipeIngredientId,
-      syncedQuantity: Number(line.syncedQuantity),
-    })),
   }));
 
   return { items, recipeSyncs };
@@ -61,7 +58,5 @@ export const cartInclude = {
     orderBy: { createdAt: 'asc' as const },
     include: { unit: true },
   },
-  recipeSyncs: {
-    include: { lineSyncs: true },
-  },
+  recipeSyncs: true,
 } satisfies Prisma.CartInclude;

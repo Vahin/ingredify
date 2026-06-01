@@ -20,6 +20,7 @@ export async function RecipeDetails({ recipeId }: RecipeDetailsProps) {
             groups={recipe.ingredientGroups}
             output={recipe.output}
             recipeId={recipeId}
+            recipeTitle={recipe.title}
           />
           <EquipmentCard recipe={recipe} />
         </>

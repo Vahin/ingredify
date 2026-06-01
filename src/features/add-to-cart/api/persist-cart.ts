@@ -67,8 +67,10 @@ export async function persistSessionCart(userId: string, cart: SessionCart) {
       }
     }
 
+    const nextRecipeIds = new Set(cart.recipeSyncs.map((sync) => sync.recipeId));
+
     for (const sync of cart.recipeSyncs) {
-      const dbSync = await tx.cartRecipeSync.upsert({
+      await tx.cartRecipeSync.upsert({
         where: {
           cartId_recipeId: {
             cartId: dbCart.id,
@@ -78,30 +80,24 @@ export async function persistSessionCart(userId: string, cart: SessionCart) {
         create: {
           cartId: dbCart.id,
           recipeId: sync.recipeId,
+          recipeTitle: sync.recipeTitle,
           syncedOutputQuantity: sync.syncedOutputQuantity,
         },
         update: {
+          recipeTitle: sync.recipeTitle,
           syncedOutputQuantity: sync.syncedOutputQuantity,
         },
       });
+    }
 
-      for (const lineSync of sync.lineSyncs) {
-        await tx.cartRecipeLineSync.upsert({
-          where: {
-            syncId_recipeIngredientId: {
-              syncId: dbSync.id,
-              recipeIngredientId: lineSync.recipeIngredientId,
-            },
-          },
-          create: {
-            syncId: dbSync.id,
-            recipeIngredientId: lineSync.recipeIngredientId,
-            syncedQuantity: lineSync.syncedQuantity,
-          },
-          update: {
-            syncedQuantity: lineSync.syncedQuantity,
-          },
-        });
+    const existingSyncs = await tx.cartRecipeSync.findMany({
+      where: { cartId: dbCart.id },
+      select: { id: true, recipeId: true },
+    });
+
+    for (const existingSync of existingSyncs) {
+      if (!nextRecipeIds.has(existingSync.recipeId)) {
+        await tx.cartRecipeSync.delete({ where: { id: existingSync.id } });
       }
     }
   });

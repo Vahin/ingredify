@@ -106,8 +106,3 @@ export type CartItem = Prisma.CartItemModel
  * 
  */
 export type CartRecipeSync = Prisma.CartRecipeSyncModel
-/**
- * Model CartRecipeLineSync
- * 
- */
-export type CartRecipeLineSync = Prisma.CartRecipeLineSyncModel

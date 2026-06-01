@@ -214,27 +214,13 @@ model CartRecipeSync {
   id                   String   @id @default(cuid())
   cartId               String   @map("cart_id")
   recipeId             String   @map("recipe_id")
+  recipeTitle          String?  @map("recipe_title")
   syncedOutputQuantity Decimal  @map("synced_output_quantity") @db.Decimal(10, 2)
   createdAt            DateTime @default(now()) @map("created_at")
   updatedAt            DateTime @updatedAt @map("updated_at")
 
-  cart      Cart                 @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  lineSyncs CartRecipeLineSync[]
+  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
 
   @@unique([cartId, recipeId])
   @@index([cartId])
-}
-
-model CartRecipeLineSync {
-  id                 String   @id @default(cuid())
-  syncId             String   @map("sync_id")
-  recipeIngredientId String   @map("recipe_ingredient_id")
-  syncedQuantity     Decimal  @map("synced_quantity") @db.Decimal(10, 2)
-  createdAt          DateTime @default(now()) @map("created_at")
-  updatedAt          DateTime @updatedAt @map("updated_at")
-
-  sync CartRecipeSync @relation(fields: [syncId], references: [id], onDelete: Cascade)
-
-  @@unique([syncId, recipeIngredientId])
-  @@index([syncId])
 }

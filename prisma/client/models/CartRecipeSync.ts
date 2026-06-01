@@ -38,6 +38,7 @@ export type CartRecipeSyncMinAggregateOutputType = {
   id: string | null
   cartId: string | null
   recipeId: string | null
+  recipeTitle: string | null
   syncedOutputQuantity: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -47,6 +48,7 @@ export type CartRecipeSyncMaxAggregateOutputType = {
   id: string | null
   cartId: string | null
   recipeId: string | null
+  recipeTitle: string | null
   syncedOutputQuantity: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -56,6 +58,7 @@ export type CartRecipeSyncCountAggregateOutputType = {
   id: number
   cartId: number
   recipeId: number
+  recipeTitle: number
   syncedOutputQuantity: number
   createdAt: number
   updatedAt: number
@@ -75,6 +78,7 @@ export type CartRecipeSyncMinAggregateInputType = {
   id?: true
   cartId?: true
   recipeId?: true
+  recipeTitle?: true
   syncedOutputQuantity?: true
   createdAt?: true
   updatedAt?: true
@@ -84,6 +88,7 @@ export type CartRecipeSyncMaxAggregateInputType = {
   id?: true
   cartId?: true
   recipeId?: true
+  recipeTitle?: true
   syncedOutputQuantity?: true
   createdAt?: true
   updatedAt?: true
@@ -93,6 +98,7 @@ export type CartRecipeSyncCountAggregateInputType = {
   id?: true
   cartId?: true
   recipeId?: true
+  recipeTitle?: true
   syncedOutputQuantity?: true
   createdAt?: true
   updatedAt?: true
@@ -189,6 +195,7 @@ export type CartRecipeSyncGroupByOutputType = {
   id: string
   cartId: string
   recipeId: string
+  recipeTitle: string | null
   syncedOutputQuantity: runtime.Decimal
   createdAt: Date
   updatedAt: Date
@@ -221,22 +228,22 @@ export type CartRecipeSyncWhereInput = {
   id?: Prisma.StringFilter<"CartRecipeSync"> | string
   cartId?: Prisma.StringFilter<"CartRecipeSync"> | string
   recipeId?: Prisma.StringFilter<"CartRecipeSync"> | string
+  recipeTitle?: Prisma.StringNullableFilter<"CartRecipeSync"> | string | null
   syncedOutputQuantity?: Prisma.DecimalFilter<"CartRecipeSync"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"CartRecipeSync"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CartRecipeSync"> | Date | string
   cart?: Prisma.XOR<Prisma.CartScalarRelationFilter, Prisma.CartWhereInput>
-  lineSyncs?: Prisma.CartRecipeLineSyncListRelationFilter
 }
 
 export type CartRecipeSyncOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   cartId?: Prisma.SortOrder
   recipeId?: Prisma.SortOrder
+  recipeTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   syncedOutputQuantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   cart?: Prisma.CartOrderByWithRelationInput
-  lineSyncs?: Prisma.CartRecipeLineSyncOrderByRelationAggregateInput
 }
 
 export type CartRecipeSyncWhereUniqueInput = Prisma.AtLeast<{
@@ -247,17 +254,18 @@ export type CartRecipeSyncWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CartRecipeSyncWhereInput | Prisma.CartRecipeSyncWhereInput[]
   cartId?: Prisma.StringFilter<"CartRecipeSync"> | string
   recipeId?: Prisma.StringFilter<"CartRecipeSync"> | string
+  recipeTitle?: Prisma.StringNullableFilter<"CartRecipeSync"> | string | null
   syncedOutputQuantity?: Prisma.DecimalFilter<"CartRecipeSync"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"CartRecipeSync"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CartRecipeSync"> | Date | string
   cart?: Prisma.XOR<Prisma.CartScalarRelationFilter, Prisma.CartWhereInput>
-  lineSyncs?: Prisma.CartRecipeLineSyncListRelationFilter
 }, "id" | "cartId_recipeId">
 
 export type CartRecipeSyncOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   cartId?: Prisma.SortOrder
   recipeId?: Prisma.SortOrder
+  recipeTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   syncedOutputQuantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -275,6 +283,7 @@ export type CartRecipeSyncScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"CartRecipeSync"> | string
   cartId?: Prisma.StringWithAggregatesFilter<"CartRecipeSync"> | string
   recipeId?: Prisma.StringWithAggregatesFilter<"CartRecipeSync"> | string
+  recipeTitle?: Prisma.StringNullableWithAggregatesFilter<"CartRecipeSync"> | string | null
   syncedOutputQuantity?: Prisma.DecimalWithAggregatesFilter<"CartRecipeSync"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CartRecipeSync"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CartRecipeSync"> | Date | string
@@ -283,47 +292,48 @@ export type CartRecipeSyncScalarWhereWithAggregatesInput = {
 export type CartRecipeSyncCreateInput = {
   id?: string
   recipeId: string
+  recipeTitle?: string | null
   syncedOutputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
   cart: Prisma.CartCreateNestedOneWithoutRecipeSyncsInput
-  lineSyncs?: Prisma.CartRecipeLineSyncCreateNestedManyWithoutSyncInput
 }
 
 export type CartRecipeSyncUncheckedCreateInput = {
   id?: string
   cartId: string
   recipeId: string
+  recipeTitle?: string | null
   syncedOutputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  lineSyncs?: Prisma.CartRecipeLineSyncUncheckedCreateNestedManyWithoutSyncInput
 }
 
 export type CartRecipeSyncUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  recipeTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   syncedOutputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cart?: Prisma.CartUpdateOneRequiredWithoutRecipeSyncsNestedInput
-  lineSyncs?: Prisma.CartRecipeLineSyncUpdateManyWithoutSyncNestedInput
 }
 
 export type CartRecipeSyncUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   cartId?: Prisma.StringFieldUpdateOperationsInput | string
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  recipeTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   syncedOutputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lineSyncs?: Prisma.CartRecipeLineSyncUncheckedUpdateManyWithoutSyncNestedInput
 }
 
 export type CartRecipeSyncCreateManyInput = {
   id?: string
   cartId: string
   recipeId: string
+  recipeTitle?: string | null
   syncedOutputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -332,6 +342,7 @@ export type CartRecipeSyncCreateManyInput = {
 export type CartRecipeSyncUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  recipeTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   syncedOutputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -341,6 +352,7 @@ export type CartRecipeSyncUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   cartId?: Prisma.StringFieldUpdateOperationsInput | string
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  recipeTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   syncedOutputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -365,6 +377,7 @@ export type CartRecipeSyncCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   cartId?: Prisma.SortOrder
   recipeId?: Prisma.SortOrder
+  recipeTitle?: Prisma.SortOrder
   syncedOutputQuantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -378,6 +391,7 @@ export type CartRecipeSyncMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   cartId?: Prisma.SortOrder
   recipeId?: Prisma.SortOrder
+  recipeTitle?: Prisma.SortOrder
   syncedOutputQuantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -387,6 +401,7 @@ export type CartRecipeSyncMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   cartId?: Prisma.SortOrder
   recipeId?: Prisma.SortOrder
+  recipeTitle?: Prisma.SortOrder
   syncedOutputQuantity?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -394,11 +409,6 @@ export type CartRecipeSyncMinOrderByAggregateInput = {
 
 export type CartRecipeSyncSumOrderByAggregateInput = {
   syncedOutputQuantity?: Prisma.SortOrder
-}
-
-export type CartRecipeSyncScalarRelationFilter = {
-  is?: Prisma.CartRecipeSyncWhereInput
-  isNot?: Prisma.CartRecipeSyncWhereInput
 }
 
 export type CartRecipeSyncCreateNestedManyWithoutCartInput = {
@@ -443,36 +453,22 @@ export type CartRecipeSyncUncheckedUpdateManyWithoutCartNestedInput = {
   deleteMany?: Prisma.CartRecipeSyncScalarWhereInput | Prisma.CartRecipeSyncScalarWhereInput[]
 }
 
-export type CartRecipeSyncCreateNestedOneWithoutLineSyncsInput = {
-  create?: Prisma.XOR<Prisma.CartRecipeSyncCreateWithoutLineSyncsInput, Prisma.CartRecipeSyncUncheckedCreateWithoutLineSyncsInput>
-  connectOrCreate?: Prisma.CartRecipeSyncCreateOrConnectWithoutLineSyncsInput
-  connect?: Prisma.CartRecipeSyncWhereUniqueInput
-}
-
-export type CartRecipeSyncUpdateOneRequiredWithoutLineSyncsNestedInput = {
-  create?: Prisma.XOR<Prisma.CartRecipeSyncCreateWithoutLineSyncsInput, Prisma.CartRecipeSyncUncheckedCreateWithoutLineSyncsInput>
-  connectOrCreate?: Prisma.CartRecipeSyncCreateOrConnectWithoutLineSyncsInput
-  upsert?: Prisma.CartRecipeSyncUpsertWithoutLineSyncsInput
-  connect?: Prisma.CartRecipeSyncWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CartRecipeSyncUpdateToOneWithWhereWithoutLineSyncsInput, Prisma.CartRecipeSyncUpdateWithoutLineSyncsInput>, Prisma.CartRecipeSyncUncheckedUpdateWithoutLineSyncsInput>
-}
-
 export type CartRecipeSyncCreateWithoutCartInput = {
   id?: string
   recipeId: string
+  recipeTitle?: string | null
   syncedOutputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  lineSyncs?: Prisma.CartRecipeLineSyncCreateNestedManyWithoutSyncInput
 }
 
 export type CartRecipeSyncUncheckedCreateWithoutCartInput = {
   id?: string
   recipeId: string
+  recipeTitle?: string | null
   syncedOutputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  lineSyncs?: Prisma.CartRecipeLineSyncUncheckedCreateNestedManyWithoutSyncInput
 }
 
 export type CartRecipeSyncCreateOrConnectWithoutCartInput = {
@@ -508,66 +504,16 @@ export type CartRecipeSyncScalarWhereInput = {
   id?: Prisma.StringFilter<"CartRecipeSync"> | string
   cartId?: Prisma.StringFilter<"CartRecipeSync"> | string
   recipeId?: Prisma.StringFilter<"CartRecipeSync"> | string
+  recipeTitle?: Prisma.StringNullableFilter<"CartRecipeSync"> | string | null
   syncedOutputQuantity?: Prisma.DecimalFilter<"CartRecipeSync"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"CartRecipeSync"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CartRecipeSync"> | Date | string
 }
 
-export type CartRecipeSyncCreateWithoutLineSyncsInput = {
-  id?: string
-  recipeId: string
-  syncedOutputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  cart: Prisma.CartCreateNestedOneWithoutRecipeSyncsInput
-}
-
-export type CartRecipeSyncUncheckedCreateWithoutLineSyncsInput = {
-  id?: string
-  cartId: string
-  recipeId: string
-  syncedOutputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type CartRecipeSyncCreateOrConnectWithoutLineSyncsInput = {
-  where: Prisma.CartRecipeSyncWhereUniqueInput
-  create: Prisma.XOR<Prisma.CartRecipeSyncCreateWithoutLineSyncsInput, Prisma.CartRecipeSyncUncheckedCreateWithoutLineSyncsInput>
-}
-
-export type CartRecipeSyncUpsertWithoutLineSyncsInput = {
-  update: Prisma.XOR<Prisma.CartRecipeSyncUpdateWithoutLineSyncsInput, Prisma.CartRecipeSyncUncheckedUpdateWithoutLineSyncsInput>
-  create: Prisma.XOR<Prisma.CartRecipeSyncCreateWithoutLineSyncsInput, Prisma.CartRecipeSyncUncheckedCreateWithoutLineSyncsInput>
-  where?: Prisma.CartRecipeSyncWhereInput
-}
-
-export type CartRecipeSyncUpdateToOneWithWhereWithoutLineSyncsInput = {
-  where?: Prisma.CartRecipeSyncWhereInput
-  data: Prisma.XOR<Prisma.CartRecipeSyncUpdateWithoutLineSyncsInput, Prisma.CartRecipeSyncUncheckedUpdateWithoutLineSyncsInput>
-}
-
-export type CartRecipeSyncUpdateWithoutLineSyncsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  recipeId?: Prisma.StringFieldUpdateOperationsInput | string
-  syncedOutputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  cart?: Prisma.CartUpdateOneRequiredWithoutRecipeSyncsNestedInput
-}
-
-export type CartRecipeSyncUncheckedUpdateWithoutLineSyncsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  cartId?: Prisma.StringFieldUpdateOperationsInput | string
-  recipeId?: Prisma.StringFieldUpdateOperationsInput | string
-  syncedOutputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 export type CartRecipeSyncCreateManyCartInput = {
   id?: string
   recipeId: string
+  recipeTitle?: string | null
   syncedOutputQuantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -576,76 +522,48 @@ export type CartRecipeSyncCreateManyCartInput = {
 export type CartRecipeSyncUpdateWithoutCartInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  recipeTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   syncedOutputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lineSyncs?: Prisma.CartRecipeLineSyncUpdateManyWithoutSyncNestedInput
 }
 
 export type CartRecipeSyncUncheckedUpdateWithoutCartInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  recipeTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   syncedOutputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lineSyncs?: Prisma.CartRecipeLineSyncUncheckedUpdateManyWithoutSyncNestedInput
 }
 
 export type CartRecipeSyncUncheckedUpdateManyWithoutCartInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  recipeTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   syncedOutputQuantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-
-/**
- * Count Type CartRecipeSyncCountOutputType
- */
-
-export type CartRecipeSyncCountOutputType = {
-  lineSyncs: number
-}
-
-export type CartRecipeSyncCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  lineSyncs?: boolean | CartRecipeSyncCountOutputTypeCountLineSyncsArgs
-}
-
-/**
- * CartRecipeSyncCountOutputType without action
- */
-export type CartRecipeSyncCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CartRecipeSyncCountOutputType
-   */
-  select?: Prisma.CartRecipeSyncCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * CartRecipeSyncCountOutputType without action
- */
-export type CartRecipeSyncCountOutputTypeCountLineSyncsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CartRecipeLineSyncWhereInput
-}
 
 
 export type CartRecipeSyncSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   cartId?: boolean
   recipeId?: boolean
+  recipeTitle?: boolean
   syncedOutputQuantity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   cart?: boolean | Prisma.CartDefaultArgs<ExtArgs>
-  lineSyncs?: boolean | Prisma.CartRecipeSync$lineSyncsArgs<ExtArgs>
-  _count?: boolean | Prisma.CartRecipeSyncCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cartRecipeSync"]>
 
 export type CartRecipeSyncSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   cartId?: boolean
   recipeId?: boolean
+  recipeTitle?: boolean
   syncedOutputQuantity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -656,6 +574,7 @@ export type CartRecipeSyncSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   cartId?: boolean
   recipeId?: boolean
+  recipeTitle?: boolean
   syncedOutputQuantity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -666,16 +585,15 @@ export type CartRecipeSyncSelectScalar = {
   id?: boolean
   cartId?: boolean
   recipeId?: boolean
+  recipeTitle?: boolean
   syncedOutputQuantity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CartRecipeSyncOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cartId" | "recipeId" | "syncedOutputQuantity" | "createdAt" | "updatedAt", ExtArgs["result"]["cartRecipeSync"]>
+export type CartRecipeSyncOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cartId" | "recipeId" | "recipeTitle" | "syncedOutputQuantity" | "createdAt" | "updatedAt", ExtArgs["result"]["cartRecipeSync"]>
 export type CartRecipeSyncInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cart?: boolean | Prisma.CartDefaultArgs<ExtArgs>
-  lineSyncs?: boolean | Prisma.CartRecipeSync$lineSyncsArgs<ExtArgs>
-  _count?: boolean | Prisma.CartRecipeSyncCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CartRecipeSyncIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cart?: boolean | Prisma.CartDefaultArgs<ExtArgs>
@@ -688,12 +606,12 @@ export type $CartRecipeSyncPayload<ExtArgs extends runtime.Types.Extensions.Inte
   name: "CartRecipeSync"
   objects: {
     cart: Prisma.$CartPayload<ExtArgs>
-    lineSyncs: Prisma.$CartRecipeLineSyncPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     cartId: string
     recipeId: string
+    recipeTitle: string | null
     syncedOutputQuantity: runtime.Decimal
     createdAt: Date
     updatedAt: Date
@@ -1092,7 +1010,6 @@ readonly fields: CartRecipeSyncFieldRefs;
 export interface Prisma__CartRecipeSyncClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   cart<T extends Prisma.CartDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CartDefaultArgs<ExtArgs>>): Prisma.Prisma__CartClient<runtime.Types.Result.GetResult<Prisma.$CartPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  lineSyncs<T extends Prisma.CartRecipeSync$lineSyncsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CartRecipeSync$lineSyncsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CartRecipeLineSyncPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1125,6 +1042,7 @@ export interface CartRecipeSyncFieldRefs {
   readonly id: Prisma.FieldRef<"CartRecipeSync", 'String'>
   readonly cartId: Prisma.FieldRef<"CartRecipeSync", 'String'>
   readonly recipeId: Prisma.FieldRef<"CartRecipeSync", 'String'>
+  readonly recipeTitle: Prisma.FieldRef<"CartRecipeSync", 'String'>
   readonly syncedOutputQuantity: Prisma.FieldRef<"CartRecipeSync", 'Decimal'>
   readonly createdAt: Prisma.FieldRef<"CartRecipeSync", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CartRecipeSync", 'DateTime'>
@@ -1526,30 +1444,6 @@ export type CartRecipeSyncDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many CartRecipeSyncs to delete.
    */
   limit?: number
-}
-
-/**
- * CartRecipeSync.lineSyncs
- */
-export type CartRecipeSync$lineSyncsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CartRecipeLineSync
-   */
-  select?: Prisma.CartRecipeLineSyncSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CartRecipeLineSync
-   */
-  omit?: Prisma.CartRecipeLineSyncOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CartRecipeLineSyncInclude<ExtArgs> | null
-  where?: Prisma.CartRecipeLineSyncWhereInput
-  orderBy?: Prisma.CartRecipeLineSyncOrderByWithRelationInput | Prisma.CartRecipeLineSyncOrderByWithRelationInput[]
-  cursor?: Prisma.CartRecipeLineSyncWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CartRecipeLineSyncScalarFieldEnum | Prisma.CartRecipeLineSyncScalarFieldEnum[]
 }
 
 /**

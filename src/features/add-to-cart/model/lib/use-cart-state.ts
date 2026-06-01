@@ -1,16 +1,23 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  applyCartDelta,
-  clearLineSyncForRemovedItem,
+  addRecipeLines,
   emptyCart,
   readSessionCart,
+  removeCartItemFromSession,
+  removeCartItemsFromSession,
+  updateRecipeCartQuantities,
   writeSessionCart,
   type AddableCartLine,
-  type ApplyCartDeltaResult,
+  type AddRecipeLinesResult,
   type SessionCart,
+  type UpdateRecipeCartQuantitiesResult,
 } from '@/entities/cart';
 import { addRecipeLinesToCart } from '../../api/add-recipe-lines-to-cart';
-import { removeCartItem as removeCartItemAction } from '../../api/remove-cart-item';
+import {
+  removeCartItem as removeCartItemAction,
+  removeCartItems as removeCartItemsAction,
+} from '../../api/remove-cart-item';
+import { updateRecipeCartQuantitiesInCart } from '../../api/update-recipe-cart-quantities-in-cart';
 
 type UseCartOptions = {
   isAuthenticated: boolean;
@@ -33,12 +40,13 @@ export function useCartState({ isAuthenticated, initialCart }: UseCartOptions) {
 
   const itemCount = cart.items.length;
 
-  const addRecipeLines = useCallback(
+  const addRecipeLinesToCartState = useCallback(
     async (params: {
       recipeId: string;
+      recipeTitle: string;
       outputQuantity: number;
       lines: AddableCartLine[];
-    }): Promise<ApplyCartDeltaResult> => {
+    }): Promise<AddRecipeLinesResult> => {
       if (isAuthenticated) {
         const result = await addRecipeLinesToCart({
           ...params,
@@ -48,10 +56,31 @@ export function useCartState({ isAuthenticated, initialCart }: UseCartOptions) {
         return result;
       }
 
-      const result = applyCartDelta(cart, {
+      const result = addRecipeLines(cart, {
         ...params,
         createId: () => crypto.randomUUID(),
       });
+      setCart(result.cart);
+      return result;
+    },
+    [cart, isAuthenticated],
+  );
+
+  const updateRecipeCartQuantitiesState = useCallback(
+    async (params: {
+      recipeId: string;
+      newOutputQuantity: number;
+    }): Promise<UpdateRecipeCartQuantitiesResult> => {
+      if (isAuthenticated) {
+        const result = await updateRecipeCartQuantitiesInCart({
+          ...params,
+          currentCart: cart,
+        });
+        setCart(result.cart);
+        return result;
+      }
+
+      const result = updateRecipeCartQuantities(cart, params);
       setCart(result.cart);
       return result;
     },
@@ -66,19 +95,20 @@ export function useCartState({ isAuthenticated, initialCart }: UseCartOptions) {
         return;
       }
 
-      setCart((current) => {
-        const removedItem = current.items.find((item) => item.id === itemId);
-        if (!removedItem) {
-          return current;
-        }
+      setCart((current) => removeCartItemFromSession(current, itemId));
+    },
+    [isAuthenticated],
+  );
 
-        const withoutItem: SessionCart = {
-          ...current,
-          items: current.items.filter((item) => item.id !== itemId),
-        };
+  const removeItems = useCallback(
+    async (itemIds: string[]) => {
+      if (isAuthenticated) {
+        const nextCart = await removeCartItemsAction(itemIds);
+        setCart(nextCart);
+        return;
+      }
 
-        return clearLineSyncForRemovedItem(withoutItem, removedItem);
-      });
+      setCart((current) => removeCartItemsFromSession(current, itemIds));
     },
     [isAuthenticated],
   );
@@ -87,10 +117,19 @@ export function useCartState({ isAuthenticated, initialCart }: UseCartOptions) {
     () => ({
       cart,
       itemCount,
-      addRecipeLines,
+      addRecipeLines: addRecipeLinesToCartState,
+      updateRecipeCartQuantities: updateRecipeCartQuantitiesState,
       removeItem,
+      removeItems,
       setCart,
     }),
-    [addRecipeLines, cart, itemCount, removeItem],
+    [
+      addRecipeLinesToCartState,
+      cart,
+      itemCount,
+      removeItem,
+      removeItems,
+      updateRecipeCartQuantitiesState,
+    ],
   );
 }

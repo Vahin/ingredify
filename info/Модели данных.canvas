@@ -133,21 +133,11 @@
 		{
 			"id": "cart-recipe-sync",
 			"type": "text",
-			"text": "## CartRecipeSync\n\nСнимок синхронизации рецепта с корзиной (для delta-добавления).\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| cartId | String | FK -> Cart |\n| recipeId | String |  |\n| syncedOutputQuantity | Decimal | Decimal(10, 2) |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- cart: `Cart` (`Cascade`)\n- lineSyncs: `CartRecipeLineSync[]`\n\nУникальность: `[cartId, recipeId]`",
+			"text": "## CartRecipeSync\n\nМетаданные рецепта в корзине (выход и название для группировки).\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| cartId | String | FK -> Cart |\n| recipeId | String |  |\n| recipeTitle | String? | название для UI |\n| syncedOutputQuantity | Decimal | Decimal(10, 2) |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- cart: `Cart` (`Cascade`)\n\nУникальность: `[cartId, recipeId]`",
 			"x": 180,
 			"y": 520,
 			"width": 520,
 			"height": 480,
-			"color": "5"
-		},
-		{
-			"id": "cart-recipe-line-sync",
-			"type": "text",
-			"text": "## CartRecipeLineSync\n\nСнимок количества строки ингредиента при последней синхронизации.\n\n| Поле | Тип | Примечание |\n|---|---|---|\n| id | String | PK, cuid |\n| syncId | String | FK -> CartRecipeSync |\n| recipeIngredientId | String |  |\n| syncedQuantity | Decimal | Decimal(10, 2) |\n| createdAt | DateTime | `now()` |\n| updatedAt | DateTime | `updatedAt` |\n\nСвязи:\n- sync: `CartRecipeSync` (`Cascade`)\n\nУникальность: `[syncId, recipeIngredientId]`",
-			"x": 780,
-			"y": 520,
-			"width": 520,
-			"height": 460,
 			"color": "5"
 		}
 	],
@@ -279,14 +269,6 @@
 			"toNode": "cart-item",
 			"toSide": "top",
 			"label": "1:N / Restrict"
-		},
-		{
-			"id": "recipe-sync-to-line-sync",
-			"fromNode": "cart-recipe-sync",
-			"fromSide": "right",
-			"toNode": "cart-recipe-line-sync",
-			"toSide": "left",
-			"label": "1:N lineSyncs / Cascade"
 		}
 	]
 }

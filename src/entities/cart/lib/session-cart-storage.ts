@@ -1,5 +1,5 @@
 import type { SessionCart } from '../model/types/cart';
-import { emptyCart } from './apply-cart-delta';
+import { emptyCart } from './empty-cart';
 
 export const SESSION_CART_STORAGE_KEY = 'ingredify:cart';
 

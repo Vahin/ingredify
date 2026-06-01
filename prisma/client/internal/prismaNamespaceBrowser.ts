@@ -63,8 +63,7 @@ export const ModelName = {
   RecipeComment: 'RecipeComment',
   Cart: 'Cart',
   CartItem: 'CartItem',
-  CartRecipeSync: 'CartRecipeSync',
-  CartRecipeLineSync: 'CartRecipeLineSync'
+  CartRecipeSync: 'CartRecipeSync'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -249,24 +248,13 @@ export const CartRecipeSyncScalarFieldEnum = {
   id: 'id',
   cartId: 'cartId',
   recipeId: 'recipeId',
+  recipeTitle: 'recipeTitle',
   syncedOutputQuantity: 'syncedOutputQuantity',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type CartRecipeSyncScalarFieldEnum = (typeof CartRecipeSyncScalarFieldEnum)[keyof typeof CartRecipeSyncScalarFieldEnum]
-
-
-export const CartRecipeLineSyncScalarFieldEnum = {
-  id: 'id',
-  syncId: 'syncId',
-  recipeIngredientId: 'recipeIngredientId',
-  syncedQuantity: 'syncedQuantity',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CartRecipeLineSyncScalarFieldEnum = (typeof CartRecipeLineSyncScalarFieldEnum)[keyof typeof CartRecipeLineSyncScalarFieldEnum]
 
 
 export const SortOrder = {

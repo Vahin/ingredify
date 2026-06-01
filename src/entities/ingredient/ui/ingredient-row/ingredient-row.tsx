@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { CheckIcon } from 'lucide-react';
 import type { RecipeIngredientLine } from '../../model/types/recipe-ingredient-line';
 import { IngredientSticker } from '../ingredient-sticker/ingredient-sticker';
 import { Checkbox } from '@/shared/ui/checkbox';
@@ -50,6 +51,8 @@ type IngredientRowProps = {
   line: RecipeIngredientLine;
   isSelectionMode?: boolean;
   isSelected?: boolean;
+  isInCart?: boolean;
+  isLocked?: boolean;
   onToggleSelect?: () => void;
 };
 
@@ -57,18 +60,21 @@ export const IngredientRow = ({
   line,
   isSelectionMode = false,
   isSelected = false,
+  isInCart = false,
+  isLocked = false,
   onToggleSelect,
 }: IngredientRowProps) => {
-  const interactive = isSelectionMode && onToggleSelect;
+  const interactive = isSelectionMode && onToggleSelect && !isLocked;
+  const showLeadingSlot = isSelectionMode || isInCart;
 
   return (
     <div
       className={cn(
         'grid items-center gap-3 rounded-[10px] p-2.5 transition-colors',
-        isSelectionMode
-          ? 'grid-cols-[28px_32px_minmax(0,1fr)_auto] cursor-pointer'
+        showLeadingSlot
+          ? 'grid-cols-[28px_32px_minmax(0,1fr)_auto]'
           : 'grid-cols-[32px_minmax(0,1fr)_auto]',
-        interactive && 'hover:bg-muted',
+        interactive && 'cursor-pointer hover:bg-muted',
         isSelected && 'bg-muted/80',
       )}
       data-ingredient-row-id={line.id}
@@ -86,12 +92,22 @@ export const IngredientRow = ({
       role={interactive ? 'button' : undefined}
       tabIndex={interactive ? 0 : undefined}
     >
-      {isSelectionMode ? (
-        <Checkbox
-          checked={isSelected}
-          className='pointer-events-none'
-          tabIndex={-1}
-        />
+      {showLeadingSlot ? (
+        isSelectionMode ? (
+          <Checkbox
+            checked={isSelected}
+            className='pointer-events-none'
+            disabled={isLocked}
+            tabIndex={-1}
+          />
+        ) : (
+          <span
+            aria-label='В корзине'
+            className='flex size-4 items-center justify-center text-primary'
+          >
+            <CheckIcon />
+          </span>
+        )
       ) : null}
       <div data-ingredient-sticker>
         <IngredientSticker src={line.sticker} />

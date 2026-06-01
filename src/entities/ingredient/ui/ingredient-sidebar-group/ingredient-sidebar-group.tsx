@@ -3,33 +3,43 @@ import { IngredientRow } from '../ingredient-row/ingredient-row';
 
 type IngredientSidebarGroupProps = {
   group: RecipeIngredientGroupView;
+  inCartIds?: Set<string>;
   isSelectionMode?: boolean;
-  selectedIds?: Set<string>;
+  isLineSelected?: (lineId: string) => boolean;
   onToggleLine?: (lineId: string) => void;
 };
 
 export const IngredientSidebarGroup = ({
   group,
+  inCartIds,
   isSelectionMode = false,
-  selectedIds,
+  isLineSelected,
   onToggleLine,
 }: IngredientSidebarGroupProps) => {
   const plainMode = group.label === null;
 
+  const renderLine = (line: (typeof group.lines)[number]) => {
+    const isInCart = inCartIds?.has(line.id) ?? false;
+
+    return (
+      <IngredientRow
+        isInCart={isInCart}
+        isLocked={isInCart}
+        isSelected={isLineSelected?.(line.id) ?? false}
+        isSelectionMode={isSelectionMode}
+        key={line.id}
+        line={line}
+        onToggleSelect={
+          onToggleLine ? () => onToggleLine(line.id) : undefined
+        }
+      />
+    );
+  };
+
   if (plainMode) {
     return (
       <div className='flex flex-col gap-2'>
-        {group.lines.map((line) => (
-          <IngredientRow
-            isSelected={selectedIds?.has(line.id)}
-            isSelectionMode={isSelectionMode}
-            key={line.id}
-            line={line}
-            onToggleSelect={
-              onToggleLine ? () => onToggleLine(line.id) : undefined
-            }
-          />
-        ))}
+        {group.lines.map(renderLine)}
       </div>
     );
   }
@@ -39,17 +49,7 @@ export const IngredientSidebarGroup = ({
       <h3 className='px-2.5 text-xs font-extrabold tracking-[0.14em] text-secondary'>
         {group.label}
       </h3>
-      {group.lines.map((line) => (
-        <IngredientRow
-          isSelected={selectedIds?.has(line.id)}
-          isSelectionMode={isSelectionMode}
-          key={line.id}
-          line={line}
-          onToggleSelect={
-            onToggleLine ? () => onToggleLine(line.id) : undefined
-          }
-        />
-      ))}
+      {group.lines.map(renderLine)}
     </div>
   );
 };

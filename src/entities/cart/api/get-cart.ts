@@ -1,7 +1,7 @@
 import { cache } from 'react';
 import { getCurrentUser } from '@/entities/user';
 import { prisma } from '@/shared/lib/prisma';
-import { emptyCart } from '../lib/apply-cart-delta';
+import { emptyCart } from '../lib/empty-cart';
 import { cartInclude, mapCartToSessionCart } from '../lib/map-cart-to-session';
 import type { SessionCart } from '../model/types/cart';
 

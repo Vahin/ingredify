@@ -1,17 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { RecipeIngredientGroupView } from '@/entities/recipe/model/types/recipe';
 import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
 import {
+  getRecipeCartLineIds,
   getSyncedOutputQuantity,
 } from '@/entities/cart';
 import {
   collectAddableLines,
+  CartUpdateDialog,
   IngredientSelectionBar,
   IngredientSidebarMenu,
   showCartAddToasts,
-  showOutputQuantityChangedToast,
+  showCartUpdatedToast,
   useCart,
   useCartFlyAnimation,
   useIngredientSelection,
@@ -23,27 +25,37 @@ import { IngredientSidebarHeader } from '../ingredient-sidebar-header/ingredient
 import { IngredientSidebarLayout } from '../ingredient-sidebar-layout/ingredient-sidebar-layout';
 import { IngredientSidebarList } from '@/entities/ingredient';
 
+const OUTPUT_CHANGE_DEBOUNCE_MS = 600;
+
 type IngredientSidebarProps = {
   recipeId: string;
+  recipeTitle: string;
   groups: RecipeIngredientGroupView[];
   output: RecipeOutput;
 };
 
 export const IngredientSidebar = ({
   recipeId,
+  recipeTitle,
   groups,
   output,
 }: IngredientSidebarProps) => {
-  const { cart, addRecipeLines } = useCart();
+  const { cart, addRecipeLines, updateRecipeCartQuantities } = useCart();
   const { flyStickers } = useCartFlyAnimation();
+
+  const inCartIds = useMemo(
+    () => getRecipeCartLineIds(cart, recipeId),
+    [cart, recipeId],
+  );
+
   const {
     isSelectionMode,
-    selectedIds,
     selectedCount,
     toggleSelectionMode,
     toggleLine,
     exitSelectionMode,
-  } = useIngredientSelection();
+    isLineSelected,
+  } = useIngredientSelection(inCartIds);
 
   const {
     selectedOutputQuantity,
@@ -53,27 +65,80 @@ export const IngredientSidebar = ({
     scaledGroups,
   } = useRecipeOutputQuantity(output, groups);
 
-  const previousOutputRef = useRef<number>(selectedOutputQuantity);
+  const hasUserChangedOutputRef = useRef(false);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+  const [dialogQuantities, setDialogQuantities] = useState({
+    previous: selectedOutputQuantity,
+    next: selectedOutputQuantity,
+  });
+
+  const markUserOutputChange = useCallback(() => {
+    hasUserChangedOutputRef.current = true;
+  }, []);
+
+  const wrappedSetOutputQuantity = useCallback(
+    (value: number) => {
+      markUserOutputChange();
+      setOutputQuantity(value);
+    },
+    [markUserOutputChange, setOutputQuantity],
+  );
+
+  const wrappedIncreaseOutputQuantity = useCallback(() => {
+    markUserOutputChange();
+    increaseOutputQuantity();
+  }, [increaseOutputQuantity, markUserOutputChange]);
+
+  const wrappedDecreaseOutputQuantity = useCallback(() => {
+    markUserOutputChange();
+    decreaseOutputQuantity();
+  }, [decreaseOutputQuantity, markUserOutputChange]);
 
   useEffect(() => {
-    const previousSynced = getSyncedOutputQuantity(cart, recipeId);
-
-    if (
-      previousSynced !== null &&
-      previousSynced !== selectedOutputQuantity &&
-      previousOutputRef.current !== selectedOutputQuantity
-    ) {
-      const portionRecipe = hasRecipeServings(output);
-      const unitLabel = portionRecipe ? 'порций' : output.unit.label;
-      showOutputQuantityChangedToast(
-        previousSynced,
-        selectedOutputQuantity,
-        unitLabel,
-      );
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
     }
 
-    previousOutputRef.current = selectedOutputQuantity;
-  }, [cart, output, recipeId, selectedOutputQuantity]);
+    if (!hasUserChangedOutputRef.current) {
+      return;
+    }
+
+    const syncedOutput = getSyncedOutputQuantity(cart, recipeId);
+
+    if (
+      syncedOutput === null ||
+      syncedOutput === selectedOutputQuantity ||
+      inCartIds.size === 0
+    ) {
+      return;
+    }
+
+    debounceTimerRef.current = setTimeout(() => {
+      setDialogQuantities({
+        previous: syncedOutput,
+        next: selectedOutputQuantity,
+      });
+      setUpdateDialogOpen(true);
+    }, OUTPUT_CHANGE_DEBOUNCE_MS);
+
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, [cart, inCartIds.size, recipeId, selectedOutputQuantity]);
+
+  const handleConfirmCartUpdate = useCallback(async () => {
+    setUpdateDialogOpen(false);
+
+    const result = await updateRecipeCartQuantities({
+      recipeId,
+      newOutputQuantity: selectedOutputQuantity,
+    });
+
+    showCartUpdatedToast(result.updatedCount);
+  }, [recipeId, selectedOutputQuantity, updateRecipeCartQuantities]);
 
   const runFlyAnimation = useCallback((lineIds: string[]) => {
     const sourceElements = lineIds
@@ -101,28 +166,42 @@ export const IngredientSidebar = ({
       const scaleFactor =
         selectedOutputQuantity / getScalingBase(output);
 
-      const lines = collectAddableLines(
-        groups,
-        scaleFactor,
-        selectedOnly ? selectedIds : undefined,
-      );
+      const newLines = selectedOnly
+        ? collectAddableLines(
+            groups,
+            scaleFactor,
+            new Set(
+              groups
+                .flatMap((group) => group.lines)
+                .map((line) => line.id)
+                .filter((id) => isLineSelected(id) && !inCartIds.has(id)),
+            ),
+          )
+        : collectAddableLines(groups, scaleFactor).filter(
+            (line) => !inCartIds.has(line.recipeIngredientId),
+          );
 
-      if (lines.length === 0) {
+      if (newLines.length === 0) {
+        showCartAddToasts({ cart, addedLines: [], skippedCount: 0 });
+        if (selectedOnly) {
+          exitSelectionMode();
+        }
         return;
       }
 
       const result = await addRecipeLines({
         recipeId,
+        recipeTitle,
         outputQuantity: selectedOutputQuantity,
-        lines,
+        lines: newLines,
       });
 
       showCartAddToasts(result, {
-        selectionCount: selectedOnly ? selectedCount : lines.length,
+        selectionCount: selectedOnly ? selectedCount : newLines.length,
       });
 
-      if (!result.isAlreadySynced) {
-        runFlyAnimation(lines.map((line) => line.recipeIngredientId));
+      if (result.addedLines.length > 0) {
+        runFlyAnimation(result.addedLines.map((line) => line.recipeIngredientId));
       }
 
       if (selectedOnly) {
@@ -131,53 +210,71 @@ export const IngredientSidebar = ({
     },
     [
       addRecipeLines,
+      cart,
       exitSelectionMode,
       groups,
+      inCartIds,
+      isLineSelected,
       output,
       recipeId,
+      recipeTitle,
       runFlyAnimation,
       selectedCount,
-      selectedIds,
       selectedOutputQuantity,
     ],
   );
 
+  const portionRecipe = hasRecipeServings(output);
+  const unitLabel = portionRecipe ? 'порций' : output.unit.label;
+
   return (
-    <IngredientSidebarLayout
-      footer={
-        isSelectionMode ? (
-          <IngredientSelectionBar
-            onAddSelected={() => void handleAddLines(true)}
-            selectedCount={selectedCount}
-          />
-        ) : null
-      }
-      header={
-        <IngredientSidebarHeader
-          menu={
-            <IngredientSidebarMenu
-              isSelectionMode={isSelectionMode}
-              onAddAllToCart={() => void handleAddLines(false)}
-              onToggleSelectionMode={toggleSelectionMode}
+    <>
+      <IngredientSidebarLayout
+        footer={
+          isSelectionMode ? (
+            <IngredientSelectionBar
+              onAddSelected={() => void handleAddLines(true)}
+              selectedCount={selectedCount}
             />
-          }
-          quantityControl={{
-            value: selectedOutputQuantity,
-            output,
-            onChange: setOutputQuantity,
-            onDecrease: decreaseOutputQuantity,
-            onIncrease: increaseOutputQuantity,
-          }}
-        />
-      }
-      list={
-        <IngredientSidebarList
-          groups={scaledGroups}
-          isSelectionMode={isSelectionMode}
-          onToggleLine={toggleLine}
-          selectedIds={selectedIds}
-        />
-      }
-    />
+          ) : null
+        }
+        header={
+          <IngredientSidebarHeader
+            menu={
+              <IngredientSidebarMenu
+                isSelectionMode={isSelectionMode}
+                onAddAllToCart={() => void handleAddLines(false)}
+                onToggleSelectionMode={toggleSelectionMode}
+              />
+            }
+            quantityControl={{
+              value: selectedOutputQuantity,
+              output,
+              onChange: wrappedSetOutputQuantity,
+              onDecrease: wrappedDecreaseOutputQuantity,
+              onIncrease: wrappedIncreaseOutputQuantity,
+            }}
+          />
+        }
+        list={
+          <IngredientSidebarList
+            groups={scaledGroups}
+            inCartIds={inCartIds}
+            isLineSelected={isLineSelected}
+            isSelectionMode={isSelectionMode}
+            onToggleLine={toggleLine}
+          />
+        }
+      />
+
+      <CartUpdateDialog
+        nextQuantity={dialogQuantities.next}
+        onConfirm={() => void handleConfirmCartUpdate()}
+        onOpenChange={setUpdateDialogOpen}
+        open={updateDialogOpen}
+        previousQuantity={dialogQuantities.previous}
+        unitLabel={unitLabel}
+      />
+    </>
   );
 };
