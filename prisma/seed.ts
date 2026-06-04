@@ -6,10 +6,10 @@ import { MEASUREMENT_UNITS } from "../src/entities/recipe/model/constants/measur
 import type { RecipePhysicalOutputUnitShortName } from "../src/entities/recipe/model/constants/measurement-units";
 
 const DEMO_USER_ID = "demo_user_ingredify";
-const DEMO_USER_EMAIL = "demo@ingredify.local";
+const DEMO_USER_EMAIL = "test@test.ru";
 
 /** Данные стартового рецепта */
-const DEMO_AUTHOR_NAME = "Алена Кравцова";
+const DEMO_AUTHOR_NAME = "Светка Тенькова";
 
 type SeedIngredient = {
   name: string;
@@ -100,7 +100,7 @@ const cherryCobblerIngredients: SeedIngredient[] = [
     name: "Разрыхлитель",
     sticker: "/ingredients/baking-powder.png",
     quantity: 1,
-    unitShortName: "ч. л.",
+    unitShortName: "ч.л.",
   },
 ];
 
@@ -185,7 +185,7 @@ const pastaAlfredoHomemadeIngredients: SeedGroupedIngredient[] = [
     name: "Оливковое масло",
     sticker: "/ingredients/olive-oil.png",
     quantity: 1,
-    unitShortName: "ч. л.",
+    unitShortName: "ч.л.",
     groupLabel: "Паста",
   },
   {
