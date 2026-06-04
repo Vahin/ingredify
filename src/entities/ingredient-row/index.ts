@@ -1,0 +1,1 @@
+export { IngredientRow } from './ui/ingredient-row/ingredient-row'

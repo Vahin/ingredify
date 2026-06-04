@@ -1,5 +1,6 @@
+import { IngredientRow } from '@/entities/ingredient-row';
 import type { RecipeIngredientGroupView } from '@/entities/recipe';
-import { IngredientSidebarRow } from '../ingredient-sidebar-row/ingredient-sidebar-row';
+
 
 type IngredientSidebarGroupProps = {
   group: RecipeIngredientGroupView;
@@ -22,7 +23,7 @@ export const IngredientSidebarGroup = ({
     const isInCart = inCartIds?.has(line.id) ?? false;
 
     return (
-      <IngredientSidebarRow
+      <IngredientRow
         isInCart={isInCart}
         key={line.id}
         line={line}

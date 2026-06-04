@@ -15,11 +15,9 @@ import {
   showCartAddToasts,
   showCartUpdatedToast,
   useCart,
-  useCartFlyAnimation,
   useIngredientSelection,
 } from '@/features/add-to-cart';
 import { hasRecipeServings } from '@/entities/recipe/lib/has-recipe-servings';
-import { getIngredientStickerSelector } from '../../model/constants/ingredient-sidebar-dom';
 import { getScalingBase } from '../../model/lib/output-quantity';
 import { useRecipeOutputQuantity } from '../../model/lib/use-recipe-output-quantity';
 import { IngredientSidebarHeader } from '../ingredient-sidebar-header/ingredient-sidebar-header';
@@ -42,7 +40,6 @@ export const IngredientSidebar = ({
   output,
 }: IngredientSidebarProps) => {
   const { cart, addRecipeLines, updateRecipeCartQuantities } = useCart();
-  const { flyStickers } = useCartFlyAnimation();
 
   const inCartIds = useMemo(
     () => getRecipeCartLineIds(cart, recipeId),
@@ -141,25 +138,6 @@ export const IngredientSidebar = ({
     showCartUpdatedToast(result.updatedCount);
   }, [recipeId, selectedOutputQuantity, updateRecipeCartQuantities]);
 
-  const runFlyAnimation = useCallback((lineIds: string[]) => {
-    const sourceElements = lineIds
-      .map((lineId) =>
-        document.querySelector(getIngredientStickerSelector(lineId)),
-      )
-      .filter((element): element is Element => element !== null);
-
-    const stickers = lineIds
-      .map((lineId) => {
-        const groupLine = scaledGroups
-          .flatMap((group) => group.lines)
-          .find((line) => line.id === lineId);
-        return groupLine?.sticker;
-      })
-      .filter((sticker): sticker is string => Boolean(sticker));
-
-    flyStickers(stickers, sourceElements);
-  }, [flyStickers, scaledGroups]);
-
   const handleAddLines = useCallback(
     async (selectedOnly: boolean) => {
       const scaleFactor =
@@ -199,10 +177,6 @@ export const IngredientSidebar = ({
         selectionCount: selectedOnly ? selectedCount : newLines.length,
       });
 
-      if (result.addedLines.length > 0) {
-        runFlyAnimation(result.addedLines.map((line) => line.recipeIngredientId));
-      }
-
       if (selectedOnly) {
         exitSelectionMode();
       }
@@ -217,7 +191,6 @@ export const IngredientSidebar = ({
       output,
       recipeId,
       recipeTitle,
-      runFlyAnimation,
       selectedCount,
       selectedOutputQuantity,
     ],
