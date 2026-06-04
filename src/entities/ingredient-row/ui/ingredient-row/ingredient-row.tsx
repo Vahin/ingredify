@@ -1,11 +1,9 @@
 
 import { IngredientSticker, type RecipeIngredientLine } from '@/entities/ingredient';
 import { cn } from '@/shared/lib/utils';
-import { Checkbox, InCartIndicator } from '@/shared/ui';
-import { CheckIcon } from 'lucide-react';
+import { Checkbox } from '@/shared/ui';
 import { IngredientName } from '../ingredient-name/ingredient-name';
 import { IngredientAmount } from '../ingredient-amount/ingredient-amount';
-import { LeadingSlot } from '../leading-slot/leading-slot';
 
 type IngredientRowProps = {
   line: RecipeIngredientLine;
@@ -28,7 +26,6 @@ export const IngredientRow = ({
   const isLocked = selection?.isLocked ?? false;
   const onToggle = selection?.onToggle;
   const interactive = isSelectionMode && Boolean(onToggle) && !isLocked;
-  const showLeadingSlot = isSelectionMode || isInCart;
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== 'Enter' && event.key !== ' ') {
@@ -42,12 +39,9 @@ export const IngredientRow = ({
   return (
     <div
       className={cn(
-        'grid items-center gap-3 rounded-[10px] border border-border border-l-[3px] border-l-transparent bg-card py-2.5 pr-3 pl-3.5 shadow-sm',
-        showLeadingSlot
-          ? 'grid-cols-[28px_32px_minmax(0,1fr)_auto]'
-          : 'grid-cols-[32px_minmax(0,1fr)_auto]',
-        isSelectionMode && 'border-l-accent',
-        isSelected && 'bg-accent/6',
+        'grid items-center gap-2 rounded-[10px] border border-border border-l-[3px] border-l-transparent bg-card py-1.5 px-2 shadow-sm',
+        'grid-cols-[32px_minmax(0,1fr)_auto]',
+        isSelectionMode && isSelected && 'border-l-accent',
         isInCart && !isSelectionMode && 'border-l-accent-hover',
         interactive && 'cursor-pointer',
         interactive && !isSelected && 'hover:bg-muted',
@@ -58,11 +52,10 @@ export const IngredientRow = ({
       role={interactive ? 'button' : undefined}
       tabIndex={interactive ? 0 : undefined}
     >
-      {showLeadingSlot
-        ? <LeadingSlot isSelectionMode={isSelectionMode} isSelected={isSelected} isLocked={isLocked} isInCart={isInCart} />
-        : null}
-      <div>
-        <IngredientSticker src={line.sticker} />
+      <div className='grid size-8 place-items-center'>
+        {isSelectionMode
+          ? <Checkbox isLocked={isLocked} isSelected={isSelected} />
+          : <IngredientSticker src={line.sticker} />}
       </div>
       <IngredientName name={line.name} linkedRecipeId={line.linkedRecipeId} />
       <IngredientAmount
