@@ -6,6 +6,7 @@ import type {
 } from '@/entities/recipe/model/constants/measurement-units';
 import type { MeasurementUnitView } from '@/entities/recipe/model/types/measurement-unit';
 import type { CartItemView, SessionCart } from '../model/types/cart';
+import { normalizeCartQuantity } from './normalize-cart-quantity';
 
 type CartWithRelations = Prisma.CartGetPayload<{
   include: {
@@ -26,7 +27,7 @@ function mapUnit(row: CartWithRelations['items'][number]['unit']): MeasurementUn
 export function mapCartToSessionCart(cart: CartWithRelations): SessionCart {
   const items: CartItemView[] = cart.items.map((item) => {
     const unit = mapUnit(item.unit);
-    const quantity = Number(item.quantity);
+    const quantity = normalizeCartQuantity(Number(item.quantity), unit);
 
     return {
       id: item.id,
@@ -35,9 +36,7 @@ export function mapCartToSessionCart(cart: CartWithRelations): SessionCart {
       name: item.name,
       sticker: item.sticker,
       quantity,
-      amountValue: formatAmountValue(quantity, {
-        roundToInteger: unit.roundToInteger,
-      }),
+      amountValue: formatAmountValue(quantity, unit),
       unit,
       unitId: item.unitId,
       isSubRecipe: item.isSubRecipe,

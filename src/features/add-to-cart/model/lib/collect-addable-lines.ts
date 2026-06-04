@@ -39,9 +39,7 @@ function mapLineToAddable(
     name: line.name,
     sticker: line.sticker,
     quantity,
-    amountValue: formatAmountValue(quantity, {
-      roundToInteger: line.unit.roundToInteger,
-    }),
+    amountValue: formatAmountValue(quantity, line.unit),
     unit: line.unit,
     unitId: line.unitId,
     isSubRecipe: Boolean(line.linkedRecipeId),

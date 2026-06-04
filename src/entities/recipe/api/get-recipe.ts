@@ -68,9 +68,7 @@ function mapIngredientLineToDto(
     name: line.ingredient.name,
     sticker: line.ingredient.sticker,
     amountNumeric,
-    amountValue: formatAmountValue(amountNumeric, {
-      roundToInteger: unit.roundToInteger,
-    }),
+    amountValue: formatAmountValue(amountNumeric, unit),
     unit,
     unitId: line.unitId,
     ...(line.ingredient.recipe ? { linkedRecipeId: line.ingredient.recipe.id } : {}),

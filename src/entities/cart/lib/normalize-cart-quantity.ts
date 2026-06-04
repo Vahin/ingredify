@@ -1,17 +1,14 @@
 import type { MeasurementUnitView } from '@/entities/recipe/model/types/measurement-unit';
+import { normalizeAmountQuantity } from '@/entities/recipe/lib/format-amount-value';
 
 const QUANTITY_EPSILON = 0.001;
 
 /** Нормализует количество для хранения и сравнения в корзине */
 export function normalizeCartQuantity(
   quantity: number,
-  unit: Pick<MeasurementUnitView, 'roundToInteger'>,
+  unit: Pick<MeasurementUnitView, 'roundToInteger' | 'shortName'>,
 ): number {
-  if (unit.roundToInteger) {
-    return Math.round(quantity);
-  }
-
-  return Math.round(quantity * 100) / 100;
+  return normalizeAmountQuantity(quantity, unit);
 }
 
 /** Проверяет, что delta практически равна нулю */

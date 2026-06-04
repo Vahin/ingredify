@@ -41,9 +41,7 @@ export function updateRecipeCartQuantities(
       return {
         ...item,
         quantity: nextQuantity,
-        amountValue: formatAmountValue(nextQuantity, {
-          roundToInteger: item.unit.roundToInteger,
-        }),
+        amountValue: formatAmountValue(nextQuantity, item.unit),
       };
     }),
     recipeSyncs: cart.recipeSyncs.map((sync) =>

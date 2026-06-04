@@ -63,13 +63,13 @@ export const MEASUREMENT_UNITS = [
     shortName: 'ч. л.',
     name: 'Чайная ложка',
     kind: 'volume',
-    roundToInteger: false,
+    roundToInteger: true,
   },
   {
     shortName: 'ст. л.',
     name: 'Столовая ложка',
     kind: 'volume',
-    roundToInteger: false,
+    roundToInteger: true,
   },
   {
     shortName: 'щепотка',

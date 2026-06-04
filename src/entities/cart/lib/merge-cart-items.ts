@@ -37,9 +37,7 @@ export function mergeCartItems(items: CartItemView[]): MergedCartItemView[] {
     merged.set(mergeKey, {
       ...existing,
       quantity: nextQuantity,
-      amountValue: formatAmountValue(nextQuantity, {
-        roundToInteger: item.unit.roundToInteger,
-      }),
+      amountValue: formatAmountValue(nextQuantity, item.unit),
       sourceItemIds: [...existing.sourceItemIds, item.id],
     });
   }

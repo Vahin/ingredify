@@ -18,9 +18,7 @@ export function scaleIngredientGroups(
     baseOutput: group.baseOutput,
     lines: group.lines.map((line) => ({
       ...line,
-      amountValue: formatAmountValue(line.amountNumeric * scaleFactor, {
-        roundToInteger: line.unit.roundToInteger,
-      }),
+      amountValue: formatAmountValue(line.amountNumeric * scaleFactor, line.unit),
     })),
   }));
 }
