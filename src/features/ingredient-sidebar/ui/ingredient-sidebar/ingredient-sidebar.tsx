@@ -10,13 +10,11 @@ import {
 import {
   collectAddableLines,
   CartUpdateDialog,
-  IngredientSelectionBar,
   IngredientSidebarMenu,
   showCartAddToasts,
   showCartRemovedToast,
   showCartUpdatedToast,
   useCart,
-  useIngredientSelection,
 } from '@/features/add-to-cart';
 import { hasRecipeServings } from '@/entities/recipe/lib/has-recipe-servings';
 import { getScalingBase } from '../../model/lib/output-quantity';
@@ -64,15 +62,6 @@ export const IngredientSidebar = ({
   }, [cart.items, recipeId]);
 
   const {
-    isSelectionMode,
-    selectedCount,
-    toggleSelectionMode,
-    toggleLine,
-    exitSelectionMode,
-    isLineSelected,
-  } = useIngredientSelection(inCartIds);
-
-  const {
     selectedOutputQuantity,
     setOutputQuantity,
     increaseOutputQuantity,
@@ -87,6 +76,9 @@ export const IngredientSidebar = ({
     previous: selectedOutputQuantity,
     next: selectedOutputQuantity,
   });
+  const [addingLineIds, setAddingLineIds] = useState<Set<string>>(
+    () => new Set(),
+  );
   const [removingLineIds, setRemovingLineIds] = useState<Set<string>>(
     () => new Set(),
   );
@@ -158,34 +150,32 @@ export const IngredientSidebar = ({
     showCartUpdatedToast(result.updatedCount);
   }, [recipeId, selectedOutputQuantity, updateRecipeCartQuantities]);
 
-  const handleAddLines = useCallback(
-    async (selectedOnly: boolean) => {
-      const scaleFactor =
-        selectedOutputQuantity / getScalingBase(output);
+  const handleAddAllLines = useCallback(async () => {
+    const scaleFactor = selectedOutputQuantity / getScalingBase(output);
 
-      const newLines = selectedOnly
-        ? collectAddableLines(
-            groups,
-            scaleFactor,
-            new Set(
-              groups
-                .flatMap((group) => group.lines)
-                .map((line) => line.id)
-                .filter((id) => isLineSelected(id) && !inCartIds.has(id)),
-            ),
-          )
-        : collectAddableLines(groups, scaleFactor).filter(
-            (line) => !inCartIds.has(line.recipeIngredientId),
-          );
+    const newLines = collectAddableLines(groups, scaleFactor).filter(
+      (line) => !inCartIds.has(line.recipeIngredientId),
+    );
 
-      if (newLines.length === 0) {
-        showCartAddToasts({ cart, addedLines: [], skippedCount: 0 });
-        if (selectedOnly) {
-          exitSelectionMode();
-        }
-        return;
+    if (newLines.length === 0) {
+      showCartAddToasts(
+        { cart, addedLines: [], skippedCount: 0 },
+        { emptyMessage: 'Все ингредиенты уже в корзине' },
+      );
+      return;
+    }
+
+    const lineIds = newLines.map((line) => line.recipeIngredientId);
+
+    setAddingLineIds((current) => {
+      const next = new Set(current);
+      for (const lineId of lineIds) {
+        next.add(lineId);
       }
+      return next;
+    });
 
+    try {
       const result = await addRecipeLines({
         recipeId,
         recipeTitle,
@@ -193,25 +183,82 @@ export const IngredientSidebar = ({
         lines: newLines,
       });
 
-      showCartAddToasts(result, {
-        selectionCount: selectedOnly ? selectedCount : newLines.length,
+      showCartAddToasts(result);
+    } finally {
+      setAddingLineIds((current) => {
+        const next = new Set(current);
+        for (const lineId of lineIds) {
+          next.delete(lineId);
+        }
+        return next;
+      });
+    }
+  }, [
+    addRecipeLines,
+    cart,
+    groups,
+    inCartIds,
+    output,
+    recipeId,
+    recipeTitle,
+    selectedOutputQuantity,
+  ]);
+
+  const handleAddLineToCart = useCallback(
+    async (lineId: string) => {
+      if (inCartIds.has(lineId)) {
+        return;
+      }
+
+      const scaleFactor = selectedOutputQuantity / getScalingBase(output);
+
+      const newLines = collectAddableLines(
+        groups,
+        scaleFactor,
+        new Set([lineId]),
+      ).filter((line) => !inCartIds.has(line.recipeIngredientId));
+
+      if (newLines.length === 0) {
+        showCartAddToasts(
+          { cart, addedLines: [], skippedCount: 0 },
+          { emptyMessage: 'Ингредиент уже в корзине' },
+        );
+        return;
+      }
+
+      setAddingLineIds((current) => {
+        const next = new Set(current);
+        next.add(lineId);
+        return next;
       });
 
-      if (selectedOnly) {
-        exitSelectionMode();
+      try {
+        const result = await addRecipeLines({
+          recipeId,
+          recipeTitle,
+          outputQuantity: selectedOutputQuantity,
+          lines: newLines,
+        });
+
+        showCartAddToasts(result, {
+          emptyMessage: 'Ингредиент уже в корзине',
+        });
+      } finally {
+        setAddingLineIds((current) => {
+          const next = new Set(current);
+          next.delete(lineId);
+          return next;
+        });
       }
     },
     [
       addRecipeLines,
       cart,
-      exitSelectionMode,
       groups,
       inCartIds,
-      isLineSelected,
       output,
       recipeId,
       recipeTitle,
-      selectedCount,
       selectedOutputQuantity,
     ],
   );
@@ -250,22 +297,12 @@ export const IngredientSidebar = ({
   return (
     <>
       <IngredientSidebarLayout
-        footer={
-          isSelectionMode ? (
-            <IngredientSelectionBar
-              onAddSelected={() => void handleAddLines(true)}
-              onCancelSelection={exitSelectionMode}
-              selectedCount={selectedCount}
-            />
-          ) : null
-        }
+        footer={null}
         header={
           <IngredientSidebarHeader
             menu={
               <IngredientSidebarMenu
-                isSelectionMode={isSelectionMode}
-                onAddAllToCart={() => void handleAddLines(false)}
-                onToggleSelectionMode={toggleSelectionMode}
+                onAddAllToCart={() => void handleAddAllLines()}
               />
             }
             quantityControl={{
@@ -279,12 +316,11 @@ export const IngredientSidebar = ({
         }
         list={
           <IngredientSidebarList
+            addingLineIds={addingLineIds}
             groups={scaledGroups}
             inCartIds={inCartIds}
-            isLineSelected={isLineSelected}
-            isSelectionMode={isSelectionMode}
+            onAddLine={(lineId) => void handleAddLineToCart(lineId)}
             onRemoveLine={(lineId) => void handleRemoveLineFromCart(lineId)}
-            onToggleLine={toggleLine}
             removingLineIds={removingLineIds}
           />
         }

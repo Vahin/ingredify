@@ -3,34 +3,31 @@ import { IngredientSidebarGroup } from '../ingredient-sidebar-group/ingredient-s
 
 type IngredientSidebarListProps = {
   groups: RecipeIngredientGroupView[];
+  addingLineIds?: Set<string>;
   inCartIds?: Set<string>;
-  isSelectionMode?: boolean;
-  isLineSelected?: (lineId: string) => boolean;
   removingLineIds?: Set<string>;
+  onAddLine?: (lineId: string) => void;
   onRemoveLine?: (lineId: string) => void;
-  onToggleLine?: (lineId: string) => void;
 };
 
 export const IngredientSidebarList = ({
   groups,
+  addingLineIds,
   inCartIds,
-  isSelectionMode = false,
-  isLineSelected,
   removingLineIds,
+  onAddLine,
   onRemoveLine,
-  onToggleLine,
 }: IngredientSidebarListProps) => {
   return (
     <div className='flex flex-col gap-2'>
       {groups.map((group) => (
         <IngredientSidebarGroup
+          addingLineIds={addingLineIds}
           group={group}
           inCartIds={inCartIds}
-          isLineSelected={isLineSelected}
-          isSelectionMode={isSelectionMode}
           key={group.id}
+          onAddLine={onAddLine}
           onRemoveLine={onRemoveLine}
-          onToggleLine={onToggleLine}
           removingLineIds={removingLineIds}
         />
       ))}

@@ -4,22 +4,20 @@ import type { RecipeIngredientGroupView } from '@/entities/recipe';
 
 type IngredientSidebarGroupProps = {
   group: RecipeIngredientGroupView;
+  addingLineIds?: Set<string>;
   inCartIds?: Set<string>;
-  isSelectionMode?: boolean;
-  isLineSelected?: (lineId: string) => boolean;
   removingLineIds?: Set<string>;
+  onAddLine?: (lineId: string) => void;
   onRemoveLine?: (lineId: string) => void;
-  onToggleLine?: (lineId: string) => void;
 };
 
 export const IngredientSidebarGroup = ({
   group,
+  addingLineIds,
   inCartIds,
-  isSelectionMode = false,
-  isLineSelected,
   removingLineIds,
+  onAddLine,
   onRemoveLine,
-  onToggleLine,
 }: IngredientSidebarGroupProps) => {
   const plainMode = group.label === null;
 
@@ -28,17 +26,13 @@ export const IngredientSidebarGroup = ({
 
     return (
       <IngredientRow
+        isAddingToCart={addingLineIds?.has(line.id) ?? false}
         isInCart={isInCart}
         isRemovingFromCart={removingLineIds?.has(line.id) ?? false}
         key={line.id}
         line={line}
+        onAddToCart={onAddLine ? () => onAddLine(line.id) : undefined}
         onRemoveFromCart={onRemoveLine ? () => onRemoveLine(line.id) : undefined}
-        selection={{
-          enabled: isSelectionMode,
-          isLocked: isInCart,
-          isSelected: isLineSelected?.(line.id) ?? false,
-          onToggle: onToggleLine ? () => onToggleLine(line.id) : undefined,
-        }}
       />
     );
   };

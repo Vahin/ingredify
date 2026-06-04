@@ -3,14 +3,14 @@ import { toast } from 'sonner';
 
 export function showCartAddToasts(
   result: AddRecipeLinesResult,
-  options?: { selectionCount?: number },
+  options?: { emptyMessage?: string },
 ) {
   if (result.addedLines.length === 0) {
-    toast.info('Все выбранные ингредиенты уже в корзине');
+    toast.info(options?.emptyMessage ?? 'Ингредиенты уже в корзине');
     return;
   }
 
-  const count = options?.selectionCount ?? result.addedLines.length;
+  const count = result.addedLines.length;
 
   if (count === 1) {
     toast.success('1 ингредиент добавлен в корзину');
