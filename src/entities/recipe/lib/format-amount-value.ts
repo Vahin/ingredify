@@ -3,8 +3,8 @@ import type { MeasurementUnitView } from '../model/types/measurement-unit';
 type AmountUnit = Pick<MeasurementUnitView, 'roundToInteger' | 'shortName'>;
 
 const HALF_STEP_UNIT_SHORT_NAMES = new Set<AmountUnit['shortName']>([
-  'ч. л.',
-  'ст. л.',
+  'ч.л.',
+  'ст.л.',
 ]);
 const HALF_STEP_QUANTITY = 0.5;
 

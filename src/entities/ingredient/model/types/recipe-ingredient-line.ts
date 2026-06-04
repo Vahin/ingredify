@@ -2,6 +2,7 @@ import type { MeasurementUnitView } from '@/entities/recipe/model/types/measurem
 
 export type RecipeIngredientLine = {
   id: string;
+  ingredientId: string;
   name: string;
   sticker: string;
   /** Числовое количество для пересчёта по порциям */
@@ -9,6 +10,6 @@ export type RecipeIngredientLine = {
   amountValue: string;
   unit: MeasurementUnitView;
   unitId: string;
-  /** Id рецепта приготовления, если ингредиент составной */
+  /** Id рецепта приготовления, если ингредиент является заготовкой */
   linkedRecipeId?: string;
 };

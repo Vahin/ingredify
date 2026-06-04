@@ -1,26 +1,26 @@
-import Link from "next/link";
-
+import Link from 'next/link';
 
 export const IngredientName = ({
   name,
-  linkedRecipeId,
+  href,
 }: {
   name: string;
-  linkedRecipeId?: string;
+  href?: string;
 }) => {
-  if (linkedRecipeId) {
+  if (href) {
     return (
       <Link
-        className='min-w-0 text-sm font-normal text-foreground underline-offset-2 hover:underline'
-        href={`/recipes/${linkedRecipeId}`}
+        className='block min-w-0 truncate text-sm font-normal text-foreground underline-offset-2 hover:underline'
+        href={href}
         onClick={(event) => event.stopPropagation()}
+        title={name}
       >
         {name}
       </Link>
     );
   }
   return (
-    <span className='min-w-0 text-sm font-normal text-foreground'>
+    <span className='block min-w-0 truncate text-sm font-normal text-foreground' title={name}>
       {name}
     </span>
   );

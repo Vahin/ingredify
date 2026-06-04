@@ -11,7 +11,9 @@ export const CartItemRow = ({ item, actions }: CartItemRowProps) => {
     <div className='grid grid-cols-[32px_minmax(0,1fr)_auto] items-center gap-3 rounded-[10px] border border-border bg-card p-2.5'>
       <IngredientSticker src={item.sticker} />
       <div className='min-w-0'>
-        <p className='truncate text-sm font-semibold text-foreground'>{item.name}</p>
+        <p className='truncate text-sm font-semibold text-foreground' title={item.name}>
+          {item.name}
+        </p>
         {item.isSubRecipe ? (
           <p className='text-xs text-secondary'>Подрецепт</p>
         ) : null}

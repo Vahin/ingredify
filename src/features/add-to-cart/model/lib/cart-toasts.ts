@@ -27,3 +27,7 @@ export function showCartUpdatedToast(updatedCount: number) {
 
   toast.success('Количества в корзине обновлены');
 }
+
+export function showCartRemovedToast() {
+  toast.success('Ингредиент убран из корзины');
+}

@@ -65,6 +65,7 @@ function mapIngredientLineToDto(
 
   return {
     id: line.id,
+    ingredientId: line.ingredientId,
     name: line.ingredient.name,
     sticker: line.ingredient.sticker,
     amountNumeric,

@@ -8,5 +8,6 @@ export { useIngredientSelection } from './model/lib/use-ingredient-selection';
 export { useCartFlyAnimation } from './model/lib/use-cart-fly-animation';
 export {
   showCartAddToasts,
+  showCartRemovedToast,
   showCartUpdatedToast,
 } from './model/lib/cart-toasts';

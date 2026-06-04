@@ -13,6 +13,7 @@ import {
   IngredientSelectionBar,
   IngredientSidebarMenu,
   showCartAddToasts,
+  showCartRemovedToast,
   showCartUpdatedToast,
   useCart,
   useIngredientSelection,
@@ -39,12 +40,28 @@ export const IngredientSidebar = ({
   groups,
   output,
 }: IngredientSidebarProps) => {
-  const { cart, addRecipeLines, updateRecipeCartQuantities } = useCart();
+  const {
+    cart,
+    addRecipeLines,
+    removeItem,
+    updateRecipeCartQuantities,
+  } = useCart();
 
   const inCartIds = useMemo(
     () => getRecipeCartLineIds(cart, recipeId),
     [cart, recipeId],
   );
+  const cartItemIdsByLineId = useMemo(() => {
+    const ids = new Map<string, string>();
+
+    for (const item of cart.items) {
+      if (item.sourceRecipeId === recipeId && item.recipeIngredientId) {
+        ids.set(item.recipeIngredientId, item.id);
+      }
+    }
+
+    return ids;
+  }, [cart.items, recipeId]);
 
   const {
     isSelectionMode,
@@ -70,6 +87,9 @@ export const IngredientSidebar = ({
     previous: selectedOutputQuantity,
     next: selectedOutputQuantity,
   });
+  const [removingLineIds, setRemovingLineIds] = useState<Set<string>>(
+    () => new Set(),
+  );
 
   const markUserOutputChange = useCallback(() => {
     hasUserChangedOutputRef.current = true;
@@ -196,6 +216,34 @@ export const IngredientSidebar = ({
     ],
   );
 
+  const handleRemoveLineFromCart = useCallback(
+    async (lineId: string) => {
+      const itemId = cartItemIdsByLineId.get(lineId);
+
+      if (!itemId) {
+        return;
+      }
+
+      setRemovingLineIds((current) => {
+        const next = new Set(current);
+        next.add(lineId);
+        return next;
+      });
+
+      try {
+        await removeItem(itemId);
+        showCartRemovedToast();
+      } finally {
+        setRemovingLineIds((current) => {
+          const next = new Set(current);
+          next.delete(lineId);
+          return next;
+        });
+      }
+    },
+    [cartItemIdsByLineId, removeItem],
+  );
+
   const portionRecipe = hasRecipeServings(output);
   const unitLabel = portionRecipe ? 'порций' : output.unit.label;
 
@@ -206,6 +254,7 @@ export const IngredientSidebar = ({
           isSelectionMode ? (
             <IngredientSelectionBar
               onAddSelected={() => void handleAddLines(true)}
+              onCancelSelection={exitSelectionMode}
               selectedCount={selectedCount}
             />
           ) : null
@@ -234,7 +283,9 @@ export const IngredientSidebar = ({
             inCartIds={inCartIds}
             isLineSelected={isLineSelected}
             isSelectionMode={isSelectionMode}
+            onRemoveLine={(lineId) => void handleRemoveLineFromCart(lineId)}
             onToggleLine={toggleLine}
+            removingLineIds={removingLineIds}
           />
         }
       />

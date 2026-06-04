@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export function useIngredientSelection(inCartIds: Set<string>) {
   const [isSelectionMode, setIsSelectionMode] = useState(false);
@@ -13,10 +13,10 @@ export function useIngredientSelection(inCartIds: Set<string>) {
         return false;
       }
 
-      setSelectedIds(new Set(inCartIds));
+      setSelectedIds(new Set());
       return true;
     });
-  }, [inCartIds]);
+  }, []);
 
   const toggleLine = useCallback(
     (lineId: string) => {
@@ -41,6 +41,26 @@ export function useIngredientSelection(inCartIds: Set<string>) {
     setIsSelectionMode(false);
     setSelectedIds(new Set());
   }, []);
+
+  useEffect(() => {
+    if (!isSelectionMode) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.defaultPrevented || event.key !== 'Escape') {
+        return;
+      }
+
+      exitSelectionMode();
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [exitSelectionMode, isSelectionMode]);
 
   const isLineSelected = useCallback(
     (lineId: string) => inCartIds.has(lineId) || selectedIds.has(lineId),

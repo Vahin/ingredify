@@ -7,6 +7,8 @@ type IngredientSidebarGroupProps = {
   inCartIds?: Set<string>;
   isSelectionMode?: boolean;
   isLineSelected?: (lineId: string) => boolean;
+  removingLineIds?: Set<string>;
+  onRemoveLine?: (lineId: string) => void;
   onToggleLine?: (lineId: string) => void;
 };
 
@@ -15,6 +17,8 @@ export const IngredientSidebarGroup = ({
   inCartIds,
   isSelectionMode = false,
   isLineSelected,
+  removingLineIds,
+  onRemoveLine,
   onToggleLine,
 }: IngredientSidebarGroupProps) => {
   const plainMode = group.label === null;
@@ -25,8 +29,10 @@ export const IngredientSidebarGroup = ({
     return (
       <IngredientRow
         isInCart={isInCart}
+        isRemovingFromCart={removingLineIds?.has(line.id) ?? false}
         key={line.id}
         line={line}
+        onRemoveFromCart={onRemoveLine ? () => onRemoveLine(line.id) : undefined}
         selection={{
           enabled: isSelectionMode,
           isLocked: isInCart,
