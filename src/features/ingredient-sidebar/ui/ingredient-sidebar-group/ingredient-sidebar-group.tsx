@@ -1,5 +1,5 @@
 import type { RecipeIngredientGroupView } from '@/entities/recipe';
-import { IngredientRow } from '../ingredient-row/ingredient-row';
+import { IngredientSidebarRow } from '../ingredient-sidebar-row/ingredient-sidebar-row';
 
 type IngredientSidebarGroupProps = {
   group: RecipeIngredientGroupView;
@@ -22,16 +22,16 @@ export const IngredientSidebarGroup = ({
     const isInCart = inCartIds?.has(line.id) ?? false;
 
     return (
-      <IngredientRow
+      <IngredientSidebarRow
         isInCart={isInCart}
-        isLocked={isInCart}
-        isSelected={isLineSelected?.(line.id) ?? false}
-        isSelectionMode={isSelectionMode}
         key={line.id}
         line={line}
-        onToggleSelect={
-          onToggleLine ? () => onToggleLine(line.id) : undefined
-        }
+        selection={{
+          enabled: isSelectionMode,
+          isLocked: isInCart,
+          isSelected: isLineSelected?.(line.id) ?? false,
+          onToggle: onToggleLine ? () => onToggleLine(line.id) : undefined,
+        }}
       />
     );
   };

@@ -19,11 +19,12 @@ import {
   useIngredientSelection,
 } from '@/features/add-to-cart';
 import { hasRecipeServings } from '@/entities/recipe/lib/has-recipe-servings';
+import { getIngredientStickerSelector } from '../../model/constants/ingredient-sidebar-dom';
 import { getScalingBase } from '../../model/lib/output-quantity';
 import { useRecipeOutputQuantity } from '../../model/lib/use-recipe-output-quantity';
 import { IngredientSidebarHeader } from '../ingredient-sidebar-header/ingredient-sidebar-header';
 import { IngredientSidebarLayout } from '../ingredient-sidebar-layout/ingredient-sidebar-layout';
-import { IngredientSidebarList } from '@/entities/ingredient';
+import { IngredientSidebarList } from '../ingredient-sidebar-list/ingredient-sidebar-list';
 
 const OUTPUT_CHANGE_DEBOUNCE_MS = 600;
 
@@ -143,9 +144,7 @@ export const IngredientSidebar = ({
   const runFlyAnimation = useCallback((lineIds: string[]) => {
     const sourceElements = lineIds
       .map((lineId) =>
-        document.querySelector(
-          `[data-ingredient-row-id="${lineId}"] [data-ingredient-sticker]`,
-        ),
+        document.querySelector(getIngredientStickerSelector(lineId)),
       )
       .filter((element): element is Element => element !== null);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { hasRecipeServings } from '@/entities/recipe/lib/has-recipe-servings';
 import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
 import { IconOld } from '@/shared/ui/icon';
@@ -49,25 +49,18 @@ export const IngredientSidebarHeader = ({
   const portionRecipe = hasRecipeServings(output);
   const [inputDraft, setInputDraft] = useState(String(value));
   const [isEditing, setIsEditing] = useState(false);
-
-  useEffect(() => {
-    if (!isEditing) {
-      setInputDraft(String(value));
-    }
-  }, [isEditing, value]);
+  const inputValue = isEditing ? inputDraft : String(value);
 
   const commitDraft = () => {
-    const parsed = parseOutputQuantityInput(inputDraft);
+    const parsed = parseOutputQuantityInput(inputValue);
 
     if (parsed === null) {
-      setInputDraft(String(value));
       setIsEditing(false);
       return;
     }
 
     const next = clampOutputQuantity(parsed, output);
     onChange(next);
-    setInputDraft(String(next));
     setIsEditing(false);
   };
 
@@ -121,7 +114,7 @@ export const IngredientSidebarHeader = ({
               }
             }}
             type='text'
-            value={inputDraft}
+            value={inputValue}
           />
           <button
             aria-label='Увеличить количество'
