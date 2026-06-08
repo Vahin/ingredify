@@ -14,7 +14,7 @@ import {
   showCartAddToasts,
   showCartRemovedToast,
   showCartUpdatedToast,
-  useCart,
+  useCartStore,
 } from '@/features/add-to-cart';
 import { hasRecipeServings } from '@/entities/recipe/lib/has-recipe-servings';
 import { getScalingBase } from '../../model/lib/output-quantity';
@@ -38,17 +38,18 @@ export const IngredientSidebar = ({
   groups,
   output,
 }: IngredientSidebarProps) => {
-  const {
-    cart,
-    addRecipeLines,
-    removeItem,
-    updateRecipeCartQuantities,
-  } = useCart();
+  const cart = useCartStore((state) => state.cart);
+  const addRecipeLines = useCartStore((state) => state.addRecipeLines);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const updateRecipeCartQuantities = useCartStore(
+    (state) => state.updateRecipeCartQuantities,
+  );
 
   const inCartIds = useMemo(
     () => getRecipeCartLineIds(cart, recipeId),
     [cart, recipeId],
   );
+
   const cartItemIdsByLineId = useMemo(() => {
     const ids = new Map<string, string>();
 

@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import {
   addRecipeLines,
   type AddableCartLine,
@@ -34,6 +35,7 @@ export async function addRecipeLinesToCart(
   });
 
   const cart = await persistSessionCart(user.id, result.cart);
+  revalidatePath('/cart');
 
   return {
     ...result,

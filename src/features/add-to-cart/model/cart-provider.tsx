@@ -1,12 +1,11 @@
 'use client';
 
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
+import { useStore } from 'zustand';
 import type { SessionCart } from '@/entities/cart';
-import { useCartState } from './lib/use-cart-state';
+import { createCartStore, type CartStore } from './cart-store';
 
-type CartContextValue = ReturnType<typeof useCartState>;
-
-const CartContext = createContext<CartContextValue | null>(null);
+type CartStoreApi = ReturnType<typeof createCartStore>;
 
 type CartProviderProps = {
   children: React.ReactNode;
@@ -14,20 +13,34 @@ type CartProviderProps = {
   initialCart?: SessionCart;
 };
 
+const CartStoreContext = createContext<CartStoreApi | null>(null);
+
 export const CartProvider = ({
   children,
   isAuthenticated,
   initialCart,
 }: CartProviderProps) => {
-  const value = useCartState({ isAuthenticated, initialCart });
+  const [store] = useState(() =>
+    createCartStore({ isAuthenticated, initialCart }),
+  );
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return (
+    <CartStoreContext.Provider value={store}>
+      {children}
+    </CartStoreContext.Provider>
+  );
 };
 
-export function useCart() {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart должен использоваться внутри CartProvider');
+export function useCartStore<T>(selector: (state: CartStore) => T): T {
+  const store = useContext(CartStoreContext);
+
+  if (!store) {
+    throw new Error('useCartStore должен использоваться внутри CartProvider');
   }
-  return context;
+
+  return useStore(store, selector);
+}
+
+export function useCart() {
+  return useCartStore((state) => state);
 }

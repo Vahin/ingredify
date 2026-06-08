@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { ShoppingCart } from 'lucide-react';
-import { useCart } from '../../model/cart-provider';
+import { useCartStore } from '../../model/cart-provider';
 import { CART_HEADER_LINK_ID } from '../../model/lib/use-cart-fly-animation';
 import { cn } from '@/shared/lib/utils';
 
 export const CartHeaderLink = () => {
-  const { itemCount } = useCart();
+  const itemCount = useCartStore((state) => state.itemCount);
 
   return (
     <Link

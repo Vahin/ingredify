@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { getCart } from '@/entities/cart/api/get-cart';
 import {
   removeCartItemFromSession,
@@ -15,7 +16,10 @@ export async function removeCartItem(itemId: string): Promise<SessionCart> {
   const currentCart = await getCart();
   const nextCart = removeCartItemFromSession(currentCart, itemId);
 
-  return persistSessionCart(user.id, nextCart);
+  const cart = await persistSessionCart(user.id, nextCart);
+  revalidatePath('/cart');
+
+  return cart;
 }
 
 /** Удаляет несколько позиций из корзины авторизованного пользователя */
@@ -24,7 +28,10 @@ export async function removeCartItems(itemIds: string[]): Promise<SessionCart> {
   const currentCart = await getCart();
   const nextCart = removeCartItemsFromSession(currentCart, itemIds);
 
-  return persistSessionCart(user.id, nextCart);
+  const cart = await persistSessionCart(user.id, nextCart);
+  revalidatePath('/cart');
+
+  return cart;
 }
 
 /** Возвращает корзину авторизованного пользователя */

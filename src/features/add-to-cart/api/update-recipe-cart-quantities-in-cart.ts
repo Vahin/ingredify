@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import {
   updateRecipeCartQuantities,
   type SessionCart,
@@ -26,6 +27,7 @@ export async function updateRecipeCartQuantitiesInCart(
   });
 
   const cart = await persistSessionCart(user.id, result.cart);
+  revalidatePath('/cart');
 
   return {
     ...result,
