@@ -3,15 +3,10 @@
 import { useCallback } from 'react';
 import type { RecipeIngredientGroupView } from '@/entities/recipe/model/types/recipe';
 import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
-import { useCartActions, useRecipeCartMeta, useCartStore } from '@/entities/cart';
-import {
-  collectAddableLines,
-  CartUpdateDialog,
-  IngredientSidebarMenu,
-  showCartAddToasts,
-} from '@/features/add-to-cart';
+import { useRecipeCartMeta } from '@/entities/cart';
+import { CartUpdateDialog, IngredientSidebarMenu } from '@/features/add-to-cart';
 import { hasRecipeServings } from '@/entities/recipe/lib/has-recipe-servings';
-import { getScalingBase } from '../../model/lib/output-quantity';
+import { useAddAllIngredientsToCart } from '../../model/lib/use-add-all-ingredients-to-cart';
 import { useCartOutputUpdateDialog } from '../../model/lib/use-cart-output-update-dialog';
 import { useRecipeOutputQuantity } from '../../model/lib/use-recipe-output-quantity';
 import { IngredientSidebarHeader } from '../ingredient-sidebar-header/ingredient-sidebar-header';
@@ -31,8 +26,6 @@ export const IngredientSidebar = ({
   groups,
   output,
 }: IngredientSidebarProps) => {
-  const cart = useCartStore((state) => state.cart);
-  const { addItems } = useCartActions();
   const { inCartIds, syncedOutputQuantity } = useRecipeCartMeta(recipeId);
 
   const {
@@ -50,6 +43,15 @@ export const IngredientSidebar = ({
       selectedOutputQuantity,
       syncedOutputQuantity,
     });
+
+  const { addAllIngredientsToCart } = useAddAllIngredientsToCart({
+    groups,
+    inCartIds,
+    output,
+    recipeId,
+    recipeTitle,
+    selectedOutputQuantity,
+  });
 
   const wrappedSetOutputQuantity = useCallback(
     (value: number) => {
@@ -69,40 +71,6 @@ export const IngredientSidebar = ({
     decreaseOutputQuantity();
   }, [decreaseOutputQuantity, markOutputQuantityChanged]);
 
-  const handleAddAllLines = useCallback(async () => {
-    const scaleFactor = selectedOutputQuantity / getScalingBase(output);
-
-    const newLines = collectAddableLines(groups, scaleFactor).filter(
-      (line) => !inCartIds.has(line.recipeIngredientId),
-    );
-
-    if (newLines.length === 0) {
-      showCartAddToasts(
-        { cart, addedItems: [], skippedCount: 0 },
-        { emptyMessage: 'Все ингредиенты уже в корзине' },
-      );
-      return;
-    }
-
-    const result = await addItems({
-      recipeId,
-      recipeTitle,
-      outputQuantity: selectedOutputQuantity,
-      lines: newLines,
-    });
-
-    showCartAddToasts(result);
-  }, [
-    addItems,
-    cart,
-    groups,
-    inCartIds,
-    output,
-    recipeId,
-    recipeTitle,
-    selectedOutputQuantity,
-  ]);
-
   const portionRecipe = hasRecipeServings(output);
   const unitLabel = portionRecipe ? 'порций' : output.unit.label;
 
@@ -114,7 +82,7 @@ export const IngredientSidebar = ({
           <IngredientSidebarHeader
             menu={
               <IngredientSidebarMenu
-                onAddAllToCart={() => void handleAddAllLines()}
+                onAddAllToCart={() => void addAllIngredientsToCart()}
               />
             }
             quantityControl={{

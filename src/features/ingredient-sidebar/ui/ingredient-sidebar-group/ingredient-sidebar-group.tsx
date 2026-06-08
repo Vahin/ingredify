@@ -1,7 +1,6 @@
 import { IngredientRow } from '@/entities/ingredient-row';
 import type { RecipeIngredientGroupView } from '@/entities/recipe';
 
-
 type IngredientSidebarGroupProps = {
   group: RecipeIngredientGroupView;
   addingLineIds?: Set<string>;
@@ -46,8 +45,8 @@ export const IngredientSidebarGroup = ({
   }
 
   return (
-    <div className='flex flex-col gap-2 rounded-lg border border-border bg-card p-2.5'>
-      <h3 className='px-2.5 text-xs font-extrabold tracking-[0.14em] text-secondary'>
+    <div className='flex flex-col gap-2 rounded-xl bg-muted/45 p-2.5 shadow-[inset_0_0_0_1px_color-mix(in_oklch,var(--foreground)_6%,transparent)]'>
+      <h3 className='px-2 text-xs font-extrabold uppercase tracking-[0.14em] text-secondary'>
         {group.label}
       </h3>
       {group.lines.map(renderLine)}
