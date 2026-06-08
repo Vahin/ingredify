@@ -13,7 +13,6 @@ import {
   CartUpdateDialog,
   IngredientSidebarMenu,
   showCartAddToasts,
-  showCartRemovedToast,
   showCartUpdatedToast,
 } from '@/features/add-to-cart';
 import { hasRecipeServings } from '@/entities/recipe/lib/has-recipe-servings';
@@ -39,9 +38,8 @@ export const IngredientSidebar = ({
   output,
 }: IngredientSidebarProps) => {
   const cart = useCartStore((state) => state.cart);
-  const { addItems, removeItem, updateRecipeCartQuantities } = useCartActions();
-  const { inCartIds, itemIdsByLineId, syncedOutputQuantity } =
-    useRecipeCartMeta(recipeId);
+  const { addItems, updateRecipeCartQuantities } = useCartActions();
+  const { inCartIds, syncedOutputQuantity } = useRecipeCartMeta(recipeId);
 
   const {
     selectedOutputQuantity,
@@ -58,12 +56,6 @@ export const IngredientSidebar = ({
     previous: selectedOutputQuantity,
     next: selectedOutputQuantity,
   });
-  const [addingLineIds, setAddingLineIds] = useState<Set<string>>(
-    () => new Set(),
-  );
-  const [removingLineIds, setRemovingLineIds] = useState<Set<string>>(
-    () => new Set(),
-  );
 
   const markUserOutputChange = useCallback(() => {
     hasUserChangedOutputRef.current = true;
@@ -145,34 +137,14 @@ export const IngredientSidebar = ({
       return;
     }
 
-    const lineIds = newLines.map((line) => line.recipeIngredientId);
-
-    setAddingLineIds((current) => {
-      const next = new Set(current);
-      for (const lineId of lineIds) {
-        next.add(lineId);
-      }
-      return next;
+    const result = await addItems({
+      recipeId,
+      recipeTitle,
+      outputQuantity: selectedOutputQuantity,
+      lines: newLines,
     });
 
-    try {
-      const result = await addItems({
-        recipeId,
-        recipeTitle,
-        outputQuantity: selectedOutputQuantity,
-        lines: newLines,
-      });
-
-      showCartAddToasts(result);
-    } finally {
-      setAddingLineIds((current) => {
-        const next = new Set(current);
-        for (const lineId of lineIds) {
-          next.delete(lineId);
-        }
-        return next;
-      });
-    }
+    showCartAddToasts(result);
   }, [
     addItems,
     cart,
@@ -183,93 +155,6 @@ export const IngredientSidebar = ({
     recipeTitle,
     selectedOutputQuantity,
   ]);
-
-  const handleAddLineToCart = useCallback(
-    async (lineId: string) => {
-      if (inCartIds.has(lineId)) {
-        return;
-      }
-
-      const scaleFactor = selectedOutputQuantity / getScalingBase(output);
-
-      const newLines = collectAddableLines(
-        groups,
-        scaleFactor,
-        new Set([lineId]),
-      ).filter((line) => !inCartIds.has(line.recipeIngredientId));
-
-      if (newLines.length === 0) {
-        showCartAddToasts(
-          { cart, addedItems: [], skippedCount: 0 },
-          { emptyMessage: 'Ингредиент уже в корзине' },
-        );
-        return;
-      }
-
-      setAddingLineIds((current) => {
-        const next = new Set(current);
-        next.add(lineId);
-        return next;
-      });
-
-      try {
-        const result = await addItems({
-          recipeId,
-          recipeTitle,
-          outputQuantity: selectedOutputQuantity,
-          lines: newLines,
-        });
-
-        showCartAddToasts(result, {
-          emptyMessage: 'Ингредиент уже в корзине',
-        });
-      } finally {
-        setAddingLineIds((current) => {
-          const next = new Set(current);
-          next.delete(lineId);
-          return next;
-        });
-      }
-    },
-    [
-      addItems,
-      cart,
-      groups,
-      inCartIds,
-      output,
-      recipeId,
-      recipeTitle,
-      selectedOutputQuantity,
-    ],
-  );
-
-  const handleRemoveLineFromCart = useCallback(
-    async (lineId: string) => {
-      const itemId = itemIdsByLineId.get(lineId);
-
-      if (!itemId) {
-        return;
-      }
-
-      setRemovingLineIds((current) => {
-        const next = new Set(current);
-        next.add(lineId);
-        return next;
-      });
-
-      try {
-        await removeItem(itemId);
-        showCartRemovedToast();
-      } finally {
-        setRemovingLineIds((current) => {
-          const next = new Set(current);
-          next.delete(lineId);
-          return next;
-        });
-      }
-    },
-    [itemIdsByLineId, removeItem],
-  );
 
   const portionRecipe = hasRecipeServings(output);
   const unitLabel = portionRecipe ? 'порций' : output.unit.label;
@@ -296,12 +181,12 @@ export const IngredientSidebar = ({
         }
         list={
           <IngredientSidebarList
-            addingLineIds={addingLineIds}
             groups={scaledGroups}
-            inCartIds={inCartIds}
-            onAddLine={(lineId) => void handleAddLineToCart(lineId)}
-            onRemoveLine={(lineId) => void handleRemoveLineFromCart(lineId)}
-            removingLineIds={removingLineIds}
+            output={output}
+            recipeId={recipeId}
+            recipeTitle={recipeTitle}
+            selectedOutputQuantity={selectedOutputQuantity}
+            sourceGroups={groups}
           />
         }
       />
