@@ -1,28 +1,22 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback } from 'react';
 import type { RecipeIngredientGroupView } from '@/entities/recipe/model/types/recipe';
 import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
-import {
-  useCartActions,
-  useRecipeCartMeta,
-  useCartStore,
-} from '@/entities/cart';
+import { useCartActions, useRecipeCartMeta, useCartStore } from '@/entities/cart';
 import {
   collectAddableLines,
   CartUpdateDialog,
   IngredientSidebarMenu,
   showCartAddToasts,
-  showCartUpdatedToast,
 } from '@/features/add-to-cart';
 import { hasRecipeServings } from '@/entities/recipe/lib/has-recipe-servings';
 import { getScalingBase } from '../../model/lib/output-quantity';
+import { useCartOutputUpdateDialog } from '../../model/lib/use-cart-output-update-dialog';
 import { useRecipeOutputQuantity } from '../../model/lib/use-recipe-output-quantity';
 import { IngredientSidebarHeader } from '../ingredient-sidebar-header/ingredient-sidebar-header';
 import { IngredientSidebarLayout } from '../ingredient-sidebar-layout/ingredient-sidebar-layout';
 import { IngredientSidebarList } from '../ingredient-sidebar-list/ingredient-sidebar-list';
-
-const OUTPUT_CHANGE_DEBOUNCE_MS = 600;
 
 type IngredientSidebarProps = {
   recipeId: string;
@@ -38,7 +32,7 @@ export const IngredientSidebar = ({
   output,
 }: IngredientSidebarProps) => {
   const cart = useCartStore((state) => state.cart);
-  const { addItems, updateRecipeCartQuantities } = useCartActions();
+  const { addItems } = useCartActions();
   const { inCartIds, syncedOutputQuantity } = useRecipeCartMeta(recipeId);
 
   const {
@@ -49,78 +43,31 @@ export const IngredientSidebar = ({
     scaledGroups,
   } = useRecipeOutputQuantity(output, groups);
 
-  const hasUserChangedOutputRef = useRef(false);
-  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
-  const [dialogQuantities, setDialogQuantities] = useState({
-    previous: selectedOutputQuantity,
-    next: selectedOutputQuantity,
-  });
-
-  const markUserOutputChange = useCallback(() => {
-    hasUserChangedOutputRef.current = true;
-  }, []);
+  const { cartUpdateDialog, markOutputQuantityChanged } =
+    useCartOutputUpdateDialog({
+      cartIngredientCount: inCartIds.size,
+      recipeId,
+      selectedOutputQuantity,
+      syncedOutputQuantity,
+    });
 
   const wrappedSetOutputQuantity = useCallback(
     (value: number) => {
-      markUserOutputChange();
+      markOutputQuantityChanged();
       setOutputQuantity(value);
     },
-    [markUserOutputChange, setOutputQuantity],
+    [markOutputQuantityChanged, setOutputQuantity],
   );
 
   const wrappedIncreaseOutputQuantity = useCallback(() => {
-    markUserOutputChange();
+    markOutputQuantityChanged();
     increaseOutputQuantity();
-  }, [increaseOutputQuantity, markUserOutputChange]);
+  }, [increaseOutputQuantity, markOutputQuantityChanged]);
 
   const wrappedDecreaseOutputQuantity = useCallback(() => {
-    markUserOutputChange();
+    markOutputQuantityChanged();
     decreaseOutputQuantity();
-  }, [decreaseOutputQuantity, markUserOutputChange]);
-
-  useEffect(() => {
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
-
-    if (!hasUserChangedOutputRef.current) {
-      return;
-    }
-
-    if (
-      syncedOutputQuantity === null ||
-      syncedOutputQuantity === selectedOutputQuantity ||
-      inCartIds.size === 0
-    ) {
-      return;
-    }
-
-    debounceTimerRef.current = setTimeout(() => {
-      setDialogQuantities({
-        previous: syncedOutputQuantity,
-        next: selectedOutputQuantity,
-      });
-      setUpdateDialogOpen(true);
-    }, OUTPUT_CHANGE_DEBOUNCE_MS);
-
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-    };
-  }, [inCartIds.size, selectedOutputQuantity, syncedOutputQuantity]);
-
-  const handleConfirmCartUpdate = useCallback(async () => {
-    setUpdateDialogOpen(false);
-
-    const result = await updateRecipeCartQuantities({
-      recipeId,
-      newOutputQuantity: selectedOutputQuantity,
-    });
-
-    showCartUpdatedToast(result.updatedCount);
-  }, [recipeId, selectedOutputQuantity, updateRecipeCartQuantities]);
+  }, [decreaseOutputQuantity, markOutputQuantityChanged]);
 
   const handleAddAllLines = useCallback(async () => {
     const scaleFactor = selectedOutputQuantity / getScalingBase(output);
@@ -192,11 +139,7 @@ export const IngredientSidebar = ({
       />
 
       <CartUpdateDialog
-        nextQuantity={dialogQuantities.next}
-        onConfirm={() => void handleConfirmCartUpdate()}
-        onOpenChange={setUpdateDialogOpen}
-        open={updateDialogOpen}
-        previousQuantity={dialogQuantities.previous}
+        {...cartUpdateDialog}
         unitLabel={unitLabel}
       />
     </>
