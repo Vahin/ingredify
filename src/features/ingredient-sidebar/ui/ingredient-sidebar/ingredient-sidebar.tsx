@@ -1,11 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { RecipeIngredientGroupView } from '@/entities/recipe/model/types/recipe';
 import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
 import {
-  getRecipeCartLineIds,
-  getSyncedOutputQuantity,
+  useCartActions,
+  useRecipeCartMeta,
   useCartStore,
 } from '@/entities/cart';
 import {
@@ -39,28 +39,9 @@ export const IngredientSidebar = ({
   output,
 }: IngredientSidebarProps) => {
   const cart = useCartStore((state) => state.cart);
-  const addItems = useCartStore((state) => state.addItems);
-  const removeItem = useCartStore((state) => state.removeItem);
-  const updateRecipeCartQuantities = useCartStore(
-    (state) => state.updateRecipeCartQuantities,
-  );
-
-  const inCartIds = useMemo(
-    () => getRecipeCartLineIds(cart, recipeId),
-    [cart, recipeId],
-  );
-
-  const cartItemIdsByLineId = useMemo(() => {
-    const ids = new Map<string, string>();
-
-    for (const item of cart.items) {
-      if (item.sourceRecipeId === recipeId && item.recipeIngredientId) {
-        ids.set(item.recipeIngredientId, item.id);
-      }
-    }
-
-    return ids;
-  }, [cart.items, recipeId]);
+  const { addItems, removeItem, updateRecipeCartQuantities } = useCartActions();
+  const { inCartIds, itemIdsByLineId, syncedOutputQuantity } =
+    useRecipeCartMeta(recipeId);
 
   const {
     selectedOutputQuantity,
@@ -115,11 +96,9 @@ export const IngredientSidebar = ({
       return;
     }
 
-    const syncedOutput = getSyncedOutputQuantity(cart, recipeId);
-
     if (
-      syncedOutput === null ||
-      syncedOutput === selectedOutputQuantity ||
+      syncedOutputQuantity === null ||
+      syncedOutputQuantity === selectedOutputQuantity ||
       inCartIds.size === 0
     ) {
       return;
@@ -127,7 +106,7 @@ export const IngredientSidebar = ({
 
     debounceTimerRef.current = setTimeout(() => {
       setDialogQuantities({
-        previous: syncedOutput,
+        previous: syncedOutputQuantity,
         next: selectedOutputQuantity,
       });
       setUpdateDialogOpen(true);
@@ -138,7 +117,7 @@ export const IngredientSidebar = ({
         clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [cart, inCartIds.size, recipeId, selectedOutputQuantity]);
+  }, [inCartIds.size, selectedOutputQuantity, syncedOutputQuantity]);
 
   const handleConfirmCartUpdate = useCallback(async () => {
     setUpdateDialogOpen(false);
@@ -266,7 +245,7 @@ export const IngredientSidebar = ({
 
   const handleRemoveLineFromCart = useCallback(
     async (lineId: string) => {
-      const itemId = cartItemIdsByLineId.get(lineId);
+      const itemId = itemIdsByLineId.get(lineId);
 
       if (!itemId) {
         return;
@@ -289,7 +268,7 @@ export const IngredientSidebar = ({
         });
       }
     },
-    [cartItemIdsByLineId, removeItem],
+    [itemIdsByLineId, removeItem],
   );
 
   const portionRecipe = hasRecipeServings(output);

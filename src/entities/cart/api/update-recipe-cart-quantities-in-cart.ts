@@ -7,12 +7,12 @@ import type {
   SessionCart,
   UpdateRecipeCartQuantitiesResult,
 } from '../model/types/cart';
+import { getCart } from './get-cart';
 import { persistSessionCart } from './persist-cart';
 
 export type UpdateRecipeCartQuantitiesInput = {
   recipeId: string;
   newOutputQuantity: number;
-  currentCart: SessionCart;
 };
 
 /** Пересчитывает количества позиций рецепта в корзине */
@@ -20,8 +20,9 @@ export async function updateRecipeCartQuantitiesInCart(
   input: UpdateRecipeCartQuantitiesInput,
 ): Promise<UpdateRecipeCartQuantitiesResult & { cart: SessionCart }> {
   const user = await verifySession();
+  const currentCart = await getCart();
 
-  const result = updateRecipeCartQuantities(input.currentCart, {
+  const result = updateRecipeCartQuantities(currentCart, {
     recipeId: input.recipeId,
     newOutputQuantity: input.newOutputQuantity,
   });

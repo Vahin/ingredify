@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { mergeCartItems, type CartItemView } from '@/entities/cart';
 import { CartItemRow } from '@/entities/cart';
 import { Button } from '@/shared/ui/button';
@@ -10,7 +11,7 @@ type CartMergedTabProps = {
 };
 
 export const CartMergedTab = ({ items, onRemoveMerged }: CartMergedTabProps) => {
-  const mergedItems = mergeCartItems(items);
+  const mergedItems = useMemo(() => mergeCartItems(items), [items]);
 
   return (
     <div className='flex flex-col gap-2'>

@@ -8,7 +8,15 @@ export type {
   UpdateRecipeCartQuantitiesResult,
 } from './model/types/cart';
 export type { CartStore } from './model/types/cart-store';
-export { CartProvider, useCart, useCartStore } from './model/cart-provider';
+export {
+  CartProvider,
+  useCartActions,
+  useCartItemCount,
+  useCartItems,
+  useCartStore,
+  useRecipeCartMeta,
+} from './model/cart-provider';
+export { getRecipeCartMeta } from './lib/get-recipe-cart-meta';
 export { addItems } from './lib/add-items';
 export { emptyCart } from './lib/empty-cart';
 export { getRecipeCartLineIds } from './lib/get-recipe-cart-line-ids';

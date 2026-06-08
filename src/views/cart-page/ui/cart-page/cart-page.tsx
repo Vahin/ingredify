@@ -1,14 +1,13 @@
 'use client';
 
-import { useCartStore } from '@/entities/cart';
+import { useCartActions, useCartStore } from '@/entities/cart';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { CartByRecipeTab } from '../cart-by-recipe-tab/cart-by-recipe-tab';
 import { CartMergedTab } from '../cart-merged-tab/cart-merged-tab';
 
 export const CartPage = () => {
   const cart = useCartStore((state) => state.cart);
-  const removeItem = useCartStore((state) => state.removeItem);
-  const removeItems = useCartStore((state) => state.removeItems);
+  const { removeItem, removeItems } = useCartActions();
 
   if (cart.items.length === 0) {
     return (

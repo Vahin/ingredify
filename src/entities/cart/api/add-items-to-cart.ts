@@ -6,8 +6,8 @@ import { addItems } from '../lib/add-items';
 import type {
   AddableCartLine,
   AddItemsResult,
-  SessionCart,
 } from '../model/types/cart';
+import { getCart } from './get-cart';
 import { persistSessionCart } from './persist-cart';
 
 export type AddItemsToCartInput = {
@@ -15,7 +15,6 @@ export type AddItemsToCartInput = {
   recipeTitle: string;
   outputQuantity: number;
   lines: AddableCartLine[];
-  currentCart: SessionCart;
 };
 
 export type AddItemsToCartResult = AddItemsResult;
@@ -25,8 +24,9 @@ export async function addItemsToCart(
   input: AddItemsToCartInput,
 ): Promise<AddItemsToCartResult> {
   const user = await verifySession();
+  const currentCart = await getCart();
 
-  const result = addItems(input.currentCart, {
+  const result = addItems(currentCart, {
     recipeId: input.recipeId,
     recipeTitle: input.recipeTitle,
     outputQuantity: input.outputQuantity,

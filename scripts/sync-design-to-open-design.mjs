@@ -142,7 +142,7 @@ async function main() {
   const health = await fetch(`${DAEMON}/api/projects`);
   if (!health.ok) {
     console.error(`Open Design daemon недоступен: ${DAEMON}`);
-    console.error('Запустите: pnpm run design');
+    console.error('Запустите: npm run design');
     process.exit(1);
   }
 

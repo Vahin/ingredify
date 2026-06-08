@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import Link from 'next/link';
 import type { CartItemView, SessionCart } from '@/entities/cart';
 import { CartItemRow } from '@/entities/cart';
@@ -11,7 +12,7 @@ type CartByRecipeTabProps = {
 };
 
 export const CartByRecipeTab = ({ cart, onRemoveItem }: CartByRecipeTabProps) => {
-  const groups = groupItemsByRecipe(cart);
+  const groups = useMemo(() => groupItemsByRecipe(cart), [cart]);
 
   return (
     <div className='flex flex-col gap-4'>

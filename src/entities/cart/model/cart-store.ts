@@ -13,10 +13,7 @@ import {
   removeCartItemFromSession,
   removeCartItemsFromSession,
 } from '../lib/remove-cart-item';
-import {
-  readSessionCart,
-  writeSessionCart,
-} from '../lib/session-cart-storage';
+import { writeSessionCart } from '../lib/session-cart-storage';
 import { updateRecipeCartQuantities } from '../lib/update-recipe-cart-quantities';
 import type { SessionCart } from './types/cart';
 import type { CartStore } from './types/cart-store';
@@ -34,7 +31,7 @@ function getInitialCart({
     return initialCart ?? emptyCart();
   }
 
-  return readSessionCart();
+  return initialCart ?? emptyCart();
 }
 
 export function createCartStore(options: CreateCartStoreOptions) {
@@ -60,10 +57,7 @@ export function createCartStore(options: CreateCartStoreOptions) {
         const { cart, isAuthenticated } = get();
 
         if (isAuthenticated) {
-          const result = await addItemsToCart({
-            ...params,
-            currentCart: cart,
-          });
+          const result = await addItemsToCart(params);
           commitCart(result.cart);
           return result;
         }
@@ -79,10 +73,7 @@ export function createCartStore(options: CreateCartStoreOptions) {
         const { cart, isAuthenticated } = get();
 
         if (isAuthenticated) {
-          const result = await updateRecipeCartQuantitiesInCart({
-            ...params,
-            currentCart: cart,
-          });
+          const result = await updateRecipeCartQuantitiesInCart(params);
           commitCart(result.cart);
           return result;
         }
