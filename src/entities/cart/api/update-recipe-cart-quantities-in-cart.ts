@@ -1,12 +1,12 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import {
-  updateRecipeCartQuantities,
-  type SessionCart,
-  type UpdateRecipeCartQuantitiesResult,
-} from '@/entities/cart';
 import { verifySession } from '@/shared/lib/auth';
+import { updateRecipeCartQuantities } from '../lib/update-recipe-cart-quantities';
+import type {
+  SessionCart,
+  UpdateRecipeCartQuantitiesResult,
+} from '../model/types/cart';
 import { persistSessionCart } from './persist-cart';
 
 export type UpdateRecipeCartQuantitiesInput = {

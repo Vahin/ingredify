@@ -6,6 +6,7 @@ import type { RecipeOutput } from '@/entities/recipe/model/types/recipe-output';
 import {
   getRecipeCartLineIds,
   getSyncedOutputQuantity,
+  useCartStore,
 } from '@/entities/cart';
 import {
   collectAddableLines,
@@ -14,7 +15,6 @@ import {
   showCartAddToasts,
   showCartRemovedToast,
   showCartUpdatedToast,
-  useCartStore,
 } from '@/features/add-to-cart';
 import { hasRecipeServings } from '@/entities/recipe/lib/has-recipe-servings';
 import { getScalingBase } from '../../model/lib/output-quantity';

@@ -1,7 +1,7 @@
 import { Header } from '@/widgets/header';
 import { getCart } from '@/entities/cart/api/get-cart';
+import { CartProvider } from '@/entities/cart';
 import { getCurrentUser } from '@/entities/user';
-import { CartProvider } from '@/features/add-to-cart';
 import { Toaster } from '@/shared/ui/sonner';
 
 export default async function SiteLayout({

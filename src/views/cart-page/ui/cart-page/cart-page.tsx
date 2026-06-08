@@ -1,6 +1,6 @@
 'use client';
 
-import { useCartStore } from '@/features/add-to-cart';
+import { useCartStore } from '@/entities/cart';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { CartByRecipeTab } from '../cart-by-recipe-tab/cart-by-recipe-tab';
 import { CartMergedTab } from '../cart-merged-tab/cart-merged-tab';

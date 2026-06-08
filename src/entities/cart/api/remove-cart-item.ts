@@ -1,13 +1,13 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { getCart } from '@/entities/cart/api/get-cart';
+import { verifySession } from '@/shared/lib/auth';
 import {
   removeCartItemFromSession,
   removeCartItemsFromSession,
-  type SessionCart,
-} from '@/entities/cart';
-import { verifySession } from '@/shared/lib/auth';
+} from '../lib/remove-cart-item';
+import type { SessionCart } from '../model/types/cart';
+import { getCart } from './get-cart';
 import { persistSessionCart } from './persist-cart';
 
 /** Удаляет позицию из корзины авторизованного пользователя */

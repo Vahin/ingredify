@@ -1,22 +1,24 @@
 'use client';
 
 import { createStore } from 'zustand/vanilla';
-import {
-  addItems,
-  emptyCart,
-  readSessionCart,
-  removeCartItemFromSession,
-  removeCartItemsFromSession,
-  updateRecipeCartQuantities,
-  writeSessionCart,
-  type SessionCart,
-} from '@/entities/cart';
 import { addItemsToCart } from '../api/add-items-to-cart';
 import {
   removeCartItem as removeCartItemAction,
   removeCartItems as removeCartItemsAction,
 } from '../api/remove-cart-item';
 import { updateRecipeCartQuantitiesInCart } from '../api/update-recipe-cart-quantities-in-cart';
+import { addItems } from '../lib/add-items';
+import { emptyCart } from '../lib/empty-cart';
+import {
+  removeCartItemFromSession,
+  removeCartItemsFromSession,
+} from '../lib/remove-cart-item';
+import {
+  readSessionCart,
+  writeSessionCart,
+} from '../lib/session-cart-storage';
+import { updateRecipeCartQuantities } from '../lib/update-recipe-cart-quantities';
+import type { SessionCart } from './types/cart';
 import type { CartStore } from './types/cart-store';
 
 export type CreateCartStoreOptions = {

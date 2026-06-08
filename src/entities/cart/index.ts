@@ -7,6 +7,8 @@ export type {
   SessionCart,
   UpdateRecipeCartQuantitiesResult,
 } from './model/types/cart';
+export type { CartStore } from './model/types/cart-store';
+export { CartProvider, useCart, useCartStore } from './model/cart-provider';
 export { addItems } from './lib/add-items';
 export { emptyCart } from './lib/empty-cart';
 export { getRecipeCartLineIds } from './lib/get-recipe-cart-line-ids';

@@ -1,13 +1,13 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import {
-  addItems,
-  type AddableCartLine,
-  type AddItemsResult,
-  type SessionCart,
-} from '@/entities/cart';
 import { verifySession } from '@/shared/lib/auth';
+import { addItems } from '../lib/add-items';
+import type {
+  AddableCartLine,
+  AddItemsResult,
+  SessionCart,
+} from '../model/types/cart';
 import { persistSessionCart } from './persist-cart';
 
 export type AddItemsToCartInput = {

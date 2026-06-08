@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ShoppingCart } from 'lucide-react';
-import { useCartStore } from '../../model/cart-provider';
+import { useCartStore } from '@/entities/cart';
 import { CART_HEADER_LINK_ID } from '../../model/lib/use-cart-fly-animation';
 import { cn } from '@/shared/lib/utils';
 

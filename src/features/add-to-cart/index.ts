@@ -1,4 +1,3 @@
-export { CartProvider, useCart, useCartStore } from './model/cart-provider';
 export { CartHeaderLink } from './ui/cart-header-link/cart-header-link';
 export { CartUpdateDialog } from './ui/cart-update-dialog/cart-update-dialog';
 export { IngredientSidebarMenu } from './ui/ingredient-sidebar-menu/ingredient-sidebar-menu';

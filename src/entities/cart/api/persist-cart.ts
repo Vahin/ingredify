@@ -1,6 +1,6 @@
-import type { SessionCart } from '@/entities/cart';
-import { cartInclude, mapCartToSessionCart } from '@/entities/cart/lib/map-cart-to-session';
 import { prisma } from '@/shared/lib/prisma';
+import { cartInclude, mapCartToSessionCart } from '../lib/map-cart-to-session';
+import type { SessionCart } from '../model/types/cart';
 
 export async function getOrCreateCart(userId: string) {
   const existing = await prisma.cart.findUnique({

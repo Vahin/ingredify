@@ -2,8 +2,8 @@
 
 import { createContext, useContext, useState } from 'react';
 import { useStore } from 'zustand';
-import type { SessionCart } from '@/entities/cart';
 import { createCartStore } from './cart-store';
+import type { SessionCart } from './types/cart';
 import type { CartStore } from './types/cart-store';
 
 type CartStoreApi = ReturnType<typeof createCartStore>;
