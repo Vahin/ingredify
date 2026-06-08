@@ -10,7 +10,7 @@ interface InteractiveIngredientStickerProps {
   onRemoveFromCart?: () => void;
 }
 
-export const InteractiveIngredientSticker = (
+export const InteractiveRowSticker = (
   props: InteractiveIngredientStickerProps,
 ) => {
   const {

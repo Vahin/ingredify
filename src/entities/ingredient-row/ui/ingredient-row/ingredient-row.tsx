@@ -1,7 +1,7 @@
 import { type RecipeIngredientLine } from '@/entities/ingredient';
 import { IngredientName } from '../ingredient-name/ingredient-name';
 import { IngredientAmount } from '../ingredient-amount/ingredient-amount';
-import { InteractiveIngredientSticker } from '../interactive-sticker/interactive-sticker';
+import { InteractiveRowSticker } from '../interactive-sticker/interactive-sticker';
 import { IngredientWrapper } from '../ingredient-wrapper/ingredient-wrapper';
 
 type IngredientRowProps = {
@@ -29,7 +29,7 @@ export const IngredientRow = ({
       id={line.id}
     >
       <>
-        <InteractiveIngredientSticker
+        <InteractiveRowSticker
           name={line.name}
           sticker={line.sticker}
           isInCart={isInCart}
