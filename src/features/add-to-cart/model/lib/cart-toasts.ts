@@ -1,16 +1,16 @@
-import type { AddRecipeLinesResult } from '@/entities/cart';
+import type { AddItemsResult } from '@/entities/cart';
 import { toast } from 'sonner';
 
 export function showCartAddToasts(
-  result: AddRecipeLinesResult,
+  result: AddItemsResult,
   options?: { emptyMessage?: string },
 ) {
-  if (result.addedLines.length === 0) {
+  if (result.addedItems.length === 0) {
     toast.info(options?.emptyMessage ?? 'Ингредиенты уже в корзине');
     return;
   }
 
-  const count = result.addedLines.length;
+  const count = result.addedItems.length;
 
   if (count === 1) {
     toast.success('1 ингредиент добавлен в корзину');

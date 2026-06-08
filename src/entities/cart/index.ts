@@ -1,13 +1,13 @@
 export type {
   AddableCartLine,
-  AddRecipeLinesResult,
+  AddItemsResult,
   CartItemView,
   CartRecipeSyncView,
   MergedCartItemView,
   SessionCart,
   UpdateRecipeCartQuantitiesResult,
 } from './model/types/cart';
-export { addRecipeLines } from './lib/add-recipe-lines';
+export { addItems } from './lib/add-items';
 export { emptyCart } from './lib/empty-cart';
 export { getRecipeCartLineIds } from './lib/get-recipe-cart-line-ids';
 export {

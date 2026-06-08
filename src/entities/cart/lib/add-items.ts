@@ -1,6 +1,6 @@
 import type {
   AddableCartLine,
-  AddRecipeLinesResult,
+  AddItemsResult,
   SessionCart,
 } from '../model/types/cart';
 
@@ -18,8 +18,8 @@ const findCartItem = (
 const findRecipeSync = (cart: SessionCart, recipeId: string) =>
   cart.recipeSyncs.find((sync) => sync.recipeId === recipeId);
 
-/** Добавляет в корзину только новые строки рецепта */
-export function addRecipeLines(
+/** Добавляет в корзину только новые позиции рецепта */
+export function addItems(
   cart: SessionCart,
   params: {
     recipeId: string;
@@ -28,13 +28,13 @@ export function addRecipeLines(
     lines: AddableCartLine[];
     createId: () => string;
   },
-): AddRecipeLinesResult {
+): AddItemsResult {
   const { recipeId, recipeTitle, outputQuantity, lines, createId } = params;
 
   if (lines.length === 0) {
     return {
       cart,
-      addedLines: [],
+      addedItems: [],
       skippedCount: 0,
     };
   }
@@ -44,7 +44,7 @@ export function addRecipeLines(
     recipeSyncs: cart.recipeSyncs.map((sync) => ({ ...sync })),
   };
 
-  const addedLines: AddableCartLine[] = [];
+  const addedItems: AddableCartLine[] = [];
   let skippedCount = 0;
 
   for (const line of lines) {
@@ -65,10 +65,10 @@ export function addRecipeLines(
       unitId: line.unitId,
       isSubRecipe: line.isSubRecipe,
     });
-    addedLines.push(line);
+    addedItems.push(line);
   }
 
-  if (addedLines.length > 0) {
+  if (addedItems.length > 0) {
     const existingSync = findRecipeSync(nextCart, recipeId);
 
     if (existingSync) {
@@ -87,7 +87,7 @@ export function addRecipeLines(
 
   return {
     cart: nextCart,
-    addedLines,
+    addedItems,
     skippedCount,
   };
 }

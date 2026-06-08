@@ -2,47 +2,26 @@
 
 import { createStore } from 'zustand/vanilla';
 import {
-  addRecipeLines,
+  addItems,
   emptyCart,
   readSessionCart,
   removeCartItemFromSession,
   removeCartItemsFromSession,
   updateRecipeCartQuantities,
   writeSessionCart,
-  type AddableCartLine,
-  type AddRecipeLinesResult,
   type SessionCart,
-  type UpdateRecipeCartQuantitiesResult,
 } from '@/entities/cart';
-import { addRecipeLinesToCart } from '../api/add-recipe-lines-to-cart';
+import { addItemsToCart } from '../api/add-items-to-cart';
 import {
   removeCartItem as removeCartItemAction,
   removeCartItems as removeCartItemsAction,
 } from '../api/remove-cart-item';
 import { updateRecipeCartQuantitiesInCart } from '../api/update-recipe-cart-quantities-in-cart';
+import type { CartStore } from './types/cart-store';
 
 export type CreateCartStoreOptions = {
   isAuthenticated: boolean;
   initialCart?: SessionCart;
-};
-
-export type CartStore = {
-  cart: SessionCart;
-  isAuthenticated: boolean;
-  itemCount: number;
-  addRecipeLines: (params: {
-    recipeId: string;
-    recipeTitle: string;
-    outputQuantity: number;
-    lines: AddableCartLine[];
-  }) => Promise<AddRecipeLinesResult>;
-  updateRecipeCartQuantities: (params: {
-    recipeId: string;
-    newOutputQuantity: number;
-  }) => Promise<UpdateRecipeCartQuantitiesResult>;
-  removeItem: (itemId: string) => Promise<void>;
-  removeItems: (itemIds: string[]) => Promise<void>;
-  setCart: (cart: SessionCart) => void;
 };
 
 function getInitialCart({
@@ -75,11 +54,11 @@ export function createCartStore(options: CreateCartStoreOptions) {
       cart: initialCart,
       isAuthenticated: options.isAuthenticated,
       itemCount: initialCart.items.length,
-      addRecipeLines: async (params) => {
+      addItems: async (params) => {
         const { cart, isAuthenticated } = get();
 
         if (isAuthenticated) {
-          const result = await addRecipeLinesToCart({
+          const result = await addItemsToCart({
             ...params,
             currentCart: cart,
           });
@@ -87,7 +66,7 @@ export function createCartStore(options: CreateCartStoreOptions) {
           return result;
         }
 
-        const result = addRecipeLines(cart, {
+        const result = addItems(cart, {
           ...params,
           createId: () => crypto.randomUUID(),
         });

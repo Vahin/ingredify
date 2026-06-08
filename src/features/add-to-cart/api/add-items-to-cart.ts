@@ -2,15 +2,15 @@
 
 import { revalidatePath } from 'next/cache';
 import {
-  addRecipeLines,
+  addItems,
   type AddableCartLine,
-  type AddRecipeLinesResult,
+  type AddItemsResult,
   type SessionCart,
 } from '@/entities/cart';
 import { verifySession } from '@/shared/lib/auth';
 import { persistSessionCart } from './persist-cart';
 
-export type AddRecipeLinesToCartInput = {
+export type AddItemsToCartInput = {
   recipeId: string;
   recipeTitle: string;
   outputQuantity: number;
@@ -18,15 +18,15 @@ export type AddRecipeLinesToCartInput = {
   currentCart: SessionCart;
 };
 
-export type AddRecipeLinesToCartResult = AddRecipeLinesResult;
+export type AddItemsToCartResult = AddItemsResult;
 
-/** Добавляет строки рецепта в корзину авторизованного пользователя */
-export async function addRecipeLinesToCart(
-  input: AddRecipeLinesToCartInput,
-): Promise<AddRecipeLinesToCartResult> {
+/** Добавляет позиции рецепта в корзину авторизованного пользователя */
+export async function addItemsToCart(
+  input: AddItemsToCartInput,
+): Promise<AddItemsToCartResult> {
   const user = await verifySession();
 
-  const result = addRecipeLines(input.currentCart, {
+  const result = addItems(input.currentCart, {
     recipeId: input.recipeId,
     recipeTitle: input.recipeTitle,
     outputQuantity: input.outputQuantity,

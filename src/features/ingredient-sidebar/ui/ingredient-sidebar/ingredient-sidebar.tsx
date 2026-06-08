@@ -39,7 +39,7 @@ export const IngredientSidebar = ({
   output,
 }: IngredientSidebarProps) => {
   const cart = useCartStore((state) => state.cart);
-  const addRecipeLines = useCartStore((state) => state.addRecipeLines);
+  const addItems = useCartStore((state) => state.addItems);
   const removeItem = useCartStore((state) => state.removeItem);
   const updateRecipeCartQuantities = useCartStore(
     (state) => state.updateRecipeCartQuantities,
@@ -160,7 +160,7 @@ export const IngredientSidebar = ({
 
     if (newLines.length === 0) {
       showCartAddToasts(
-        { cart, addedLines: [], skippedCount: 0 },
+        { cart, addedItems: [], skippedCount: 0 },
         { emptyMessage: 'Все ингредиенты уже в корзине' },
       );
       return;
@@ -177,7 +177,7 @@ export const IngredientSidebar = ({
     });
 
     try {
-      const result = await addRecipeLines({
+      const result = await addItems({
         recipeId,
         recipeTitle,
         outputQuantity: selectedOutputQuantity,
@@ -195,7 +195,7 @@ export const IngredientSidebar = ({
       });
     }
   }, [
-    addRecipeLines,
+    addItems,
     cart,
     groups,
     inCartIds,
@@ -221,7 +221,7 @@ export const IngredientSidebar = ({
 
       if (newLines.length === 0) {
         showCartAddToasts(
-          { cart, addedLines: [], skippedCount: 0 },
+          { cart, addedItems: [], skippedCount: 0 },
           { emptyMessage: 'Ингредиент уже в корзине' },
         );
         return;
@@ -234,7 +234,7 @@ export const IngredientSidebar = ({
       });
 
       try {
-        const result = await addRecipeLines({
+        const result = await addItems({
           recipeId,
           recipeTitle,
           outputQuantity: selectedOutputQuantity,
@@ -253,7 +253,7 @@ export const IngredientSidebar = ({
       }
     },
     [
-      addRecipeLines,
+      addItems,
       cart,
       groups,
       inCartIds,

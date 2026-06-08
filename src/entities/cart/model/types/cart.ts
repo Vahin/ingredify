@@ -35,9 +35,9 @@ export type AddableCartLine = {
   isSubRecipe: boolean;
 };
 
-export type AddRecipeLinesResult = {
+export type AddItemsResult = {
   cart: SessionCart;
-  addedLines: AddableCartLine[];
+  addedItems: AddableCartLine[];
   skippedCount: number;
 };
 
