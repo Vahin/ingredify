@@ -9,6 +9,8 @@ import { fileURLToPath } from 'node:url';
 
 const DAEMON = process.env.OD_DAEMON_URL ?? 'http://127.0.0.1:17456';
 const PROJECT_ID = 'ingredify';
+const PROJECT_INSTRUCTIONS =
+  'Дизайн восстановлен из текущей кодовой базы Next.js (Ingredify). Источник токенов: src/app/globals.css. Основные экраны — recipe-page.html и cart-page.html. Изображения — из public/.';
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DESIGNS_DIR = path.join(ROOT, 'designs');
 const PUBLIC_DIR = path.join(ROOT, 'public');
@@ -22,6 +24,7 @@ const FILES = [
   { name: 'shared-tokens.css', artifact: false },
   { name: 'design-system.html', artifact: true },
   { name: 'recipe-page.html', artifact: true },
+  { name: 'cart-page.html', artifact: true },
   { name: 'login-page.html', artifact: true },
   { name: 'ingredient-line-variants.html', artifact: true },
 ];
@@ -151,12 +154,15 @@ async function main() {
       skillId: 'frontend-design',
       skipDiscoveryBrief: true,
       metadata: { kind: 'prototype' },
-      customInstructions:
-        'Дизайн восстановлен из текущей кодовой базы Next.js (Ingredify). Источник токенов: src/app/globals.css. Основной экран — recipe-page.html. Изображения — из public/.',
+      customInstructions: PROJECT_INSTRUCTIONS,
     });
     console.log(`Создан проект: ${PROJECT_ID}`);
   } else {
+    await api('PATCH', `/api/projects/${PROJECT_ID}`, {
+      customInstructions: PROJECT_INSTRUCTIONS,
+    });
     console.log(`Проект уже существует: ${PROJECT_ID}`);
+    console.log('Инструкции проекта обновлены');
   }
 
   const listed = await api('GET', `/api/projects/${PROJECT_ID}/files`);
